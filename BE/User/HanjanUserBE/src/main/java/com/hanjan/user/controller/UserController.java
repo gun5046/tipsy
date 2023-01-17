@@ -1,13 +1,27 @@
 package com.hanjan.user.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
+import com.hanjan.user.service.UserService;
+
+import lombok.RequiredArgsConstructor;
+
+@RestController()
+@RequestMapping("/user")
+@RequiredArgsConstructor
 public class UserController {
-
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
+	
+	private final UserService userService;
+	
+	@GetMapping("/login")
+	public Map<String,Object> loginUser(@RequestParam String code) {
+		HashMap<String, String> tokens = userService.getAccessToken(code);
+		return null;
 	}
-
 }
