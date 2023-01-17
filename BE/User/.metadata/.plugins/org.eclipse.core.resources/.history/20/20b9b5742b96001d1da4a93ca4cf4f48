@@ -1,0 +1,14 @@
+
+#Database
+spring.datasource.url=jdbc:mysql://localhost:3306/ssafy?serverTimezone=UTC
+spring.datasource.username=ssafy
+spring.datasource.password=ssafy
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+spring.datasource.type=org.apache.commons.dbcp2.BasicDataSource
+#server.port=9999
+
+
+#MyBatis
+mybatis.type-aliases-package=com.god.bo.test.vo
+mybatis.mapper-locations=mapper/UserMapper.xml
+

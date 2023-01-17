@@ -1,0 +1,5 @@
+package com.hanjan.user.dao;
+
+public class UserDao {
+
+}
