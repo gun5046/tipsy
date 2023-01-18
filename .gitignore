@@ -1,4 +1,5 @@
 /Servers/
+.metadata
 *.class
 *.log
 help.md
@@ -43,4 +44,5 @@ out/
 .vscode/
 
 #ENV Files
+
 application-KEY.properties

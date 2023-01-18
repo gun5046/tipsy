@@ -1,9 +1,14 @@
 package com.hanjan.user.service;
 
-import java.util.HashMap;
+import java.util.Map;
 
 public interface UserService {
 
-	HashMap<String, String> getAccessToken(String code);
+	String getAccessToken(String code);
+
+	Map<String,Object> getKakaoUserInfo(String access_token);
+
+	int checkUser(String code);
+
 	
 }
