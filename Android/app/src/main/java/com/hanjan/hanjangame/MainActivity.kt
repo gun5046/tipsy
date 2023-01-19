@@ -31,23 +31,5 @@ class MainActivity : AppCompatActivity() {
                         "\n생일: ${user.kakaoAccount?.birthday}")
             }
         }
-        UserApiClient.instance.scopes { scopeInfo, error->
-            if (error != null) {
-                Log.e(TAG, "동의 정보 확인 실패", error)
-            }else if (scopeInfo != null) {
-                Log.i(TAG, "동의 정보 확인 성공\n 현재 가지고 있는 동의 항목 $scopeInfo")
-            }
-        }
-        binding.logout.setOnClickListener {
-            UserApiClient.instance.unlink { error ->
-                if (error != null) {
-                    Log.e(TAG, "연결 끊기 실패", error)
-                }
-                else {
-                    Log.i(TAG, "연결 끊기 성공. SDK에서 토큰 삭제 됨")
-                }
-            }
-            finish()
-        }
     }
 }
