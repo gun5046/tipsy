@@ -64,5 +64,13 @@ class MainActivity : AppCompatActivity() {
             options.setPrompt("QR 코드를 인식해주세요")
             launcher.launch(options)
         }
+        binding.roomNumberEnterBtn.setOnClickListener {
+            if(binding.roomNumberText.text.isBlank()){
+                Toast.makeText(this, "방 코드를 확인해주세요", Toast.LENGTH_SHORT).show()
+
+            } else {
+                Toast.makeText(this, binding.roomNumberText.text, Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 }
