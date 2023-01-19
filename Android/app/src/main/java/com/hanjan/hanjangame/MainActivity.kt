@@ -3,6 +3,7 @@ package com.hanjan.hanjangame
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import com.bumptech.glide.Glide
 import com.hanjan.hanjangame.databinding.ActivityMainBinding
 import com.kakao.sdk.user.UserApiClient
 
@@ -29,6 +30,20 @@ class MainActivity : AppCompatActivity() {
                         "\n성별: ${user.kakaoAccount?.gender}" +
                         "\n연령대: ${user.kakaoAccount?.ageRange}" +
                         "\n생일: ${user.kakaoAccount?.birthday}")
+                Glide.with(this)
+                    .load(user.kakaoAccount?.profile?.profileImageUrl)
+                    .error(R.drawable.ic_launcher_foreground).into(binding.profileImg)
+            }
+        }
+        binding.logoutBtn.setOnClickListener {
+            UserApiClient.instance.logout { error ->
+                if (error != null) {
+                    Log.e(TAG, "로그아웃 실패. SDK에서 토큰 삭제됨", error)
+                }
+                else {
+                    Log.i(TAG, "로그아웃 성공. SDK에서 토큰 삭제됨")
+                    finish()
+                }
             }
         }
     }
