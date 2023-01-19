@@ -1,17 +1,13 @@
 package com.hanjan.user.data.vo;
 
-import com.hanjan.user.data.dto.UserDto;
-
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
 @Data
-@AllArgsConstructor
 @Builder
 public class UserVo {
 	private long uid;
-	private String email;
+	private String kakao_id;
 	private String name;
 	private String nickname;
 	private String image;

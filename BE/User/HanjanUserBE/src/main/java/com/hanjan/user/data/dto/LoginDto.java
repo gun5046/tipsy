@@ -9,7 +9,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class FriendsDto {
-	private Long user1;
-	private Long user2;
+public class LoginDto {
+	private Boolean userCheck;
+	private KakaoAccountDto accountDto;
+	private String accessToken;
+	private String refreshToken;
 }

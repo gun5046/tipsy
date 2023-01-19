@@ -13,6 +13,9 @@ import org.springframework.web.reactive.function.client.WebClient;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hanjan.user.dao.UserRepo;
+import com.hanjan.user.data.dto.KakaoAccountDto;
+import com.hanjan.user.data.dto.LoginDto;
+import com.hanjan.user.data.vo.UserVo;
 
 import lombok.RequiredArgsConstructor;
 
@@ -71,7 +74,7 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public Map<String, Object> getKakaoUserInfo(String access_token) {
+	public KakaoAccountDto getKakaoUserInfo(String access_token) {
 		String reqURL = "https://kapi.kakao.com";
 		try {
 			webClient = WebClient.create(reqURL);
@@ -83,10 +86,19 @@ public class UserServiceImpl implements UserService{
 			ObjectMapper objMapper = new ObjectMapper();
 			Map<String,Object> obj = objMapper.readValue(response.getBody(), new TypeReference<Map<String, Object>>(){});
 			
-			String kakao_id = (String)obj.get("id");
+			String kakao_id = Long.toString((Long)obj.get("id"));
+			Map<String,Object> account = objMapper.readValue((String)obj.get("kakao_account"), new TypeReference<Map<String, Object>>(){});
+			Map<String,Object> profile = objMapper.readValue((String)account.get("profile"), new TypeReference<Map<String, Object>>(){});
+			String image = (String)profile.get("profile_image_url");
 			
+			KakaoAccountDto accountDto = KakaoAccountDto.builder()
+					.kakao_id(kakao_id)
+					.image(image)
+					.gender((String)account.get("gender"))
+					.birth((String)account.get("birth"))
+					.build();
 			
-			return obj;
+			return accountDto;
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -94,12 +106,28 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public int checkUser(String id) {
-		if(userRepo.checkUser(id)==null) {
-			return 0;
+	public LoginDto checkUser(String type, KakaoAccountDto accountDto) {
+		LoginDto loginDto;
+		UserVo userVo = userRepo.checkUser(accountDto.getKakao_id());
+		if(type.equals("mobile")) {
+			
+			if(userVo == null) return null;
+			//토큰 받아와서 빌드
 		}else {
-			return 1;
+			if(userRepo.checkUser(accountDto.getKakao_id())==null)
+				loginDto = LoginDto.builder().userCheck(false).accountDto(accountDto).build();
+			
+			//토큰 받아와서 빌드
 		}
+		return null;
 	}
+	
+	
+	
+	@Override
+	public int registUser(UserVo userVo) {
+		return userRepo.registUser(userVo);
+	}
+
 	
 }
