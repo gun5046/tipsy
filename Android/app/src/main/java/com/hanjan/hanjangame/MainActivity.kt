@@ -1,10 +1,14 @@
 package com.hanjan.hanjangame
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.hanjan.hanjangame.databinding.ActivityMainBinding
+import com.journeyapps.barcodescanner.ScanContract
+import com.journeyapps.barcodescanner.ScanOptions
 import com.kakao.sdk.user.UserApiClient
 
 private const val TAG = "MainActivity"
@@ -45,6 +49,20 @@ class MainActivity : AppCompatActivity() {
                     finish()
                 }
             }
+        }
+        val launcher = registerForActivityResult(ScanContract()){
+                result -> if(result.contents != null){
+                    //방 번호가 존재하지 않으면 조치 필요
+                    Toast.makeText(this, result.contents, Toast.LENGTH_SHORT).show()
+            }
+        }
+        binding.qrTestBtn.setOnClickListener {
+            val options = ScanOptions()
+            options.setOrientationLocked(false)
+            options.setBeepEnabled(false)
+            options.setBarcodeImageEnabled(false)
+            options.setPrompt("QR 코드를 인식해주세요")
+            launcher.launch(options)
         }
     }
 }
