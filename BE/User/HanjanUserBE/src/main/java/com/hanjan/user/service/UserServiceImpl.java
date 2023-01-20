@@ -15,7 +15,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hanjan.user.dao.UserRepo;
 import com.hanjan.user.data.dto.KakaoAccountDto;
 import com.hanjan.user.data.dto.LoginDto;
+import com.hanjan.user.data.dto.TokenDto;
+import com.hanjan.user.data.vo.RefreshToken;
 import com.hanjan.user.data.vo.UserVo;
+import com.hanjan.user.provider.JwtTokenProvider;
 
 import lombok.RequiredArgsConstructor;
 
@@ -25,6 +28,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService{
 	
+	private final JwtTokenProvider jwtTokenProvider;
 	private final UserRepo userRepo;
 	
 	@Value("${REDIRECT.URI}")
@@ -110,16 +114,21 @@ public class UserServiceImpl implements UserService{
 		LoginDto loginDto;
 		UserVo userVo = userRepo.checkUser(accountDto.getKakao_id());
 		if(type.equals("mobile")) {
-			
 			if(userVo == null) return null;
-			//토큰 받아와서 빌드
+
 		}else {
 			if(userRepo.checkUser(accountDto.getKakao_id())==null)
-				loginDto = LoginDto.builder().userCheck(false).accountDto(accountDto).build();
-			
-			//토큰 받아와서 빌드
+				loginDto = LoginDto.builder().userCheck(false).userVo(new UserVo(accountDto)).build();	
 		}
-		return null;
+		TokenDto tokenDto = jwtTokenProvider.createToken(userVo);
+		RefreshToken refreshToken = new RefreshToken(Long.toString(userVo.getUid()), tokenDto.getRefreshToken());
+		
+		loginDto = LoginDto.builder()
+				.userCheck(true)
+				.userVo(userVo)
+				.tokenDto(tokenDto)
+				.build();
+		return loginDto;
 	}
 	
 	
@@ -129,5 +138,4 @@ public class UserServiceImpl implements UserService{
 		return userRepo.registUser(userVo);
 	}
 
-	
 }
