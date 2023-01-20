@@ -8,5 +8,11 @@
 			select * from user where kakao_id = #{id}
 		]]>
 	</select>
+	
+	<insert id = "insertUser" parameterType="UserVo">
+		<![CDATA[
+			insert into user values(#{kakao_id}, #{name}, #{nickname}, #{image}, #{birth}, #{gender}, #{interest})
+		]]>
+	</insert>
 </mapper>
 	

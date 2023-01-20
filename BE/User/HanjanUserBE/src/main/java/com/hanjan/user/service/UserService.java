@@ -1,14 +1,16 @@
 package com.hanjan.user.service;
 
-import java.util.Map;
+import com.hanjan.user.data.dto.KakaoAccountDto;
+import com.hanjan.user.data.dto.LoginDto;
+import com.hanjan.user.data.vo.UserVo;
 
 public interface UserService {
 
 	String getAccessToken(String code);
 
-	Map<String,Object> getKakaoUserInfo(String access_token);
+	KakaoAccountDto getKakaoUserInfo(String access_token);
 
-	int checkUser(String code);
+	LoginDto checkUser(String type, KakaoAccountDto accountDto);
 
-	
+	int registUser(UserVo userVo);
 }
