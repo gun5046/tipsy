@@ -35,7 +35,7 @@ public class UserController {
 	//"tokenDto":{
 	//		"accessToken":"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiYXV0aCI6WyLrsJXsooXqsbQiLCLsooUiXSwiZXhwIjoxNjc0MzY5NDM0fQ.mLUXsGJX9U6GYJacSwxLk4btVuFFiq1Cx2kI-fZg3Qc","refreshToken":"eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2NzQzNzI3MzR9.sykyqSWuHcepzL17KvSga_NjcPGdJmUsjQPSDoqK1mY","accessTokenExpiresIn":1674369434575,"authority":null
 		//}
-	//}q
+	//}
 	@GetMapping("/login")
 	@ApiOperation(value = "�� �α���", notes = "������ �α��� �� �� ���")
 	public LoginDto loginUser(@RequestParam(required = false) String code,
@@ -74,5 +74,16 @@ public class UserController {
 		LoginDto loginDto = userServiceImpl.checkUser("mobile", accountDto);
 	
 		return loginDto;
+	}
+	
+	@GetMapping("/mypage")
+	public UserVo getUserInfo() {
+		
+		UserVo userVo =  userServiceImpl.getUserInfo();
+	}
+	
+	@PutMapping("/info")
+	public Boolean updateUser(@RequestBody UserVo userVo) {
+		
 	}
 }
