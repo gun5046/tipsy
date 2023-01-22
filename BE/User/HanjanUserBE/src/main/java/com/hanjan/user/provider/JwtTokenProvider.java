@@ -30,20 +30,20 @@ public class JwtTokenProvider {
 	@Value("${SECRET-KEY}")
     private String secretKey;
 
-    // ¿¢¼¼½º ÅäÅ« À¯È¿½Ã°£ 5ºÐ
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å« ï¿½ï¿½È¿ï¿½Ã°ï¿½ 5ï¿½ï¿½
     private final long accessTokenValidTime = 30 * 10 * 1000L;
-    // ¸®ÇÁ·¹½Ã ÅäÅ« À¯È¿½Ã°£ 1½Ã°£
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å« ï¿½ï¿½È¿ï¿½Ã°ï¿½ 1ï¿½Ã°ï¿½
     private final long refreshTokenValidTime = 1000 * 60 * 60;
 
-    // °´Ã¼ ÃÊ±âÈ­, secretKey¸¦ Base64·Î ÀÎÄÚµùÇÑ´Ù.
+    // ï¿½ï¿½Ã¼ ï¿½Ê±ï¿½È­, secretKeyï¿½ï¿½ Base64ï¿½ï¿½ ï¿½ï¿½ï¿½Úµï¿½ï¿½Ñ´ï¿½.
     @PostConstruct
     protected void init() {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
 
-    // JWT ÅäÅ« »ý¼º 
+    // JWT ï¿½ï¿½Å« ï¿½ï¿½ï¿½ï¿½ 
     public TokenDto createToken(UserVo userVo) {
-        Claims claims = Jwts.claims().setSubject(Long.toString(userVo.getUid())); // JWT payload ¿¡ ÀúÀåµÇ´Â Á¤º¸´ÜÀ§, º¸Åë ¿©±â¼­ user¸¦ ½Äº°ÇÏ´Â °ªÀ» ³Ö´Â´Ù.
+        Claims claims = Jwts.claims().setSubject(Long.toString(userVo.getUid())); // JWT payload ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ç´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½â¼­ userï¿½ï¿½ ï¿½Äºï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´Â´ï¿½.
         List<String>info = new ArrayList<>();
         info.add(userVo.getName());
         info.add(userVo.getNickname());
@@ -61,7 +61,7 @@ public class JwtTokenProvider {
         		.setExpiration(new Date(now.getTime() + refreshTokenValidTime))
         		.signWith(SignatureAlgorithm.HS256, secretKey)
         		.compact();
-        
+        System.out.println("token : " + accessToken+ "          " +refreshToken );
         return TokenDto.builder()
         		.accessToken(accessToken)
         		.refreshToken(refreshToken)
@@ -69,23 +69,23 @@ public class JwtTokenProvider {
         		.build();
     }
 
-    // JWT ÅäÅ«¿¡¼­ ÀÎÁõ Á¤º¸ Á¶È¸
+    // JWT ï¿½ï¿½Å«ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¸
     public Authentication getAuthentication(String accessToken) {
     	
     	return new UsernamePasswordAuthenticationToken(getUserPk(accessToken), "");
     }
 
-    // ÅäÅ«¿¡¼­ È¸¿ø Á¤º¸ ÃßÃâ
+    // ï¿½ï¿½Å«ï¿½ï¿½ï¿½ï¿½ È¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     public String getUserPk(String accessToken) {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(accessToken).getBody().getSubject();
     }
 
-    // RequestÀÇ Header¿¡¼­ token °ªÀ» °¡Á®¿É´Ï´Ù. "Authorization" : "TOKEN°ª'
+    // Requestï¿½ï¿½ Headerï¿½ï¿½ï¿½ï¿½ token ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½É´Ï´ï¿½. "Authorization" : "TOKENï¿½ï¿½'
     public String resolveToken(HttpServletRequest request) {
         return request.getHeader("Authorization");
     }
 
-    // ÅäÅ«ÀÇ À¯È¿¼º + ¸¸·áÀÏÀÚ È®ÀÎ
+    // ï¿½ï¿½Å«ï¿½ï¿½ ï¿½ï¿½È¿ï¿½ï¿½ + ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½
     public boolean validateToken(String jwtToken) {
         try {
             Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwtToken);

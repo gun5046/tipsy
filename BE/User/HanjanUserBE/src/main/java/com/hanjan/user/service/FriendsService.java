@@ -23,5 +23,10 @@ public class FriendsService {
 	public int insertFriend(Long user1,Long user2) {
 		return friendsRepo.insertFriend(user1, user2);
 	}
+
+	public int deleteFriend(Long user1, Long user2) {
+		// TODO Auto-generated method stub
+		return friendsRepo.deleteFriend(user1,user2);
+	}
 	
 }

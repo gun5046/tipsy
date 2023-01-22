@@ -17,6 +17,7 @@ public class UserVo {
 	private String image;
 	private String birth;
 	private String gender; 
+	private String interest;
 	private int reportcnt;
 	
 	

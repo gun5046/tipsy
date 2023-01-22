@@ -9,4 +9,5 @@ public interface UserDao {
 	
 	UserVo findByKakaoID(String id);
 	int insertUser(UserVo userVo);
+	UserVo findByUid();
 }
