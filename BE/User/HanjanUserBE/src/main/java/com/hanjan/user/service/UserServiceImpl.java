@@ -2,6 +2,8 @@ package com.hanjan.user.service;
 
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -27,7 +29,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService{
-	
+	Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 	private final JwtTokenProvider jwtTokenProvider;
 	private final UserRepo userRepo;
 	
@@ -91,17 +93,17 @@ public class UserServiceImpl implements UserService{
 			Map<String,Object> obj = objMapper.readValue(response.getBody(), new TypeReference<Map<String, Object>>(){});
 			
 			String kakao_id = Long.toString((Long)obj.get("id"));
-			Map<String,Object> account = objMapper.readValue((String)obj.get("kakao_account"), new TypeReference<Map<String, Object>>(){});
-			Map<String,Object> profile = objMapper.readValue((String)account.get("profile"), new TypeReference<Map<String, Object>>(){});
+			Map<String, Object> kakao_account = (Map<String, Object>) obj.get("kakao_account");
+			Map<String,Object> profile = (Map<String, Object>) kakao_account.get("profile");
 			String image = (String)profile.get("profile_image_url");
 			
 			KakaoAccountDto accountDto = KakaoAccountDto.builder()
 					.kakao_id(kakao_id)
 					.image(image)
-					.gender((String)account.get("gender"))
-					.birth((String)account.get("birth"))
+					.gender((String)kakao_account.get("gender"))
+					.birth((String)kakao_account.get("birth"))
 					.build();
-			
+			logger.info(accountDto.toString());
 			return accountDto;
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -117,8 +119,10 @@ public class UserServiceImpl implements UserService{
 			if(userVo == null) return null;
 
 		}else {
-			if(userRepo.checkUser(accountDto.getKakao_id())==null)
+			if(userVo==null) {
 				loginDto = LoginDto.builder().userCheck(false).userVo(new UserVo(accountDto)).build();	
+				return loginDto;
+			}
 		}
 		TokenDto tokenDto = jwtTokenProvider.createToken(userVo);
 		RefreshToken refreshToken = new RefreshToken(Long.toString(userVo.getUid()), tokenDto.getRefreshToken());

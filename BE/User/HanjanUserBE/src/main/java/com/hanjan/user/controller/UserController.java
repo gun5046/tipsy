@@ -26,19 +26,28 @@ import lombok.RequiredArgsConstructor;
 public class UserController {
 	Logger logger = LoggerFactory.getLogger(UserController.class);
 	private final UserServiceImpl userServiceImpl;
-
+	// { ì¶œë ¥ ì˜ˆì‹œ 
+	//"userCheck":true,
+	//"userVo":
+		//{
+		// "uid":1,"kakao_id":"2542925662","name":"ë°•ì¢…ê±´","nickname":"ì¢…","image":"http://k.kakaocdn.net/dn/Qs7jd/btrMxCykHAJ/AyV40fXVb5uJegzLKRMzAk/img_640x640.jpg","birth":"0830","gender":"male","interest":"ë°¥","reportcnt":0
+		//},
+	//"tokenDto":{
+	//		"accessToken":"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiYXV0aCI6WyLrsJXsooXqsbQiLCLsooUiXSwiZXhwIjoxNjc0MzY5NDM0fQ.mLUXsGJX9U6GYJacSwxLk4btVuFFiq1Cx2kI-fZg3Qc","refreshToken":"eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2NzQzNzI3MzR9.sykyqSWuHcepzL17KvSga_NjcPGdJmUsjQPSDoqK1mY","accessTokenExpiresIn":1674369434575,"authority":null
+		//}
+	//}q
 	@GetMapping("/login")
-	@ApiOperation(value = "À¥ ·Î±×ÀÎ", notes = "À¥À¸·Î ·Î±×ÀÎ ÇÒ ¶§ »ç¿ë")
+	@ApiOperation(value = "ï¿½ï¿½ ï¿½Î±ï¿½ï¿½ï¿½", notes = "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Î±ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½")
 	public LoginDto loginUser(@RequestParam(required = false) String code,
 			@RequestParam(required = false) String state, @RequestParam(required = false) String error,
 			@RequestParam(required = false) String error_description) {
 		if (code == null)
-			logger.info("code null"); // error thow ÇÒ °Í
+			logger.info("code null"); // error thow ï¿½ï¿½ ï¿½ï¿½
 
 		String access_token = userServiceImpl.getAccessToken(code);
 
 		if (access_token != null) {
-			logger.info("token_null");// error thow ÇÒ °Í
+			logger.info("token_null");// error thow ï¿½ï¿½ ï¿½ï¿½
 		}
 		KakaoAccountDto accountDto = userServiceImpl.getKakaoUserInfo(access_token);
 		
@@ -46,11 +55,11 @@ public class UserController {
 	}
 
 	@PostMapping("/account")
-	@ApiOperation(value = "À¥ È¸¿ø °¡ÀÔ", notes = "È¸¿ø °¡ÀÔ ÇÒ ¶§ »ç¿ë, JWTToken ºÎ¿©")
+	@ApiOperation(value = "ï¿½ï¿½ È¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½", notes = "È¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½, JWTToken ï¿½Î¿ï¿½")
 	public boolean registUser(@RequestBody UserVo userVo) {
 		int n = userServiceImpl.registUser(userVo);
 		if(n!=0) {
-			logger.info("Ãß°¡ ¾ÈµÊ");
+			logger.info("ï¿½ß°ï¿½ ï¿½Èµï¿½");
 			return true;
 		}else {
 			return false;
@@ -58,9 +67,9 @@ public class UserController {
 	}
 	
 	@PostMapping("/check") // Mobile
-	@ApiOperation(value = "¸ð¹ÙÀÏ ·Î±×ÀÎ!", notes = "¸ð¹ÙÀÏ ·Î±×ÀÎ, JwtToken ºÎ¿©")
+	@ApiOperation(value = "ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Î±ï¿½ï¿½ï¿½!", notes = "ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Î±ï¿½ï¿½ï¿½, JwtToken ï¿½Î¿ï¿½")
 	public LoginDto checkUser(@RequestBody KakaoAccountDto accountDto) {
-		logger.info("Ã¼Å©À¯Àú");
+		logger.info("Ã¼Å©ï¿½ï¿½ï¿½ï¿½");
 		
 		LoginDto loginDto = userServiceImpl.checkUser("mobile", accountDto);
 	

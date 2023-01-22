@@ -18,4 +18,8 @@ public class KakaoAccountDto {
 	private String birth;
 	private String gender;
 	private String image;
+	
+	public String toString() {
+		return "kakao_id : "+ kakao_id +  " birth : " + birth+ " gender : " + gender + " image : " + image;
+	}
 }
