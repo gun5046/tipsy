@@ -1,5 +1,6 @@
 package com.hanjan.hanjangame
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -42,6 +43,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 else {
                     Log.i(TAG, "로그아웃 성공. SDK에서 토큰 삭제됨")
+                    startActivity(Intent(this, LoginActivity::class.java))
                     finish()
                 }
             }
