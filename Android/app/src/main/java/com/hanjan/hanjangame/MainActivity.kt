@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import com.bumptech.glide.Glide
+import com.hanjan.hanjangame.adapter.showGameListDialog
 import com.hanjan.hanjangame.databinding.ActivityMainBinding
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
@@ -71,6 +72,9 @@ class MainActivity : AppCompatActivity() {
             } else {
                 Toast.makeText(this, binding.roomNumberText.text, Toast.LENGTH_SHORT).show()
             }
+        }
+        binding.gameListBtn.setOnClickListener {
+            showGameListDialog(this)
         }
     }
 }
