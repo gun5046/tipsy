@@ -13,5 +13,5 @@ dependencyResolutionManagement {
         maven { url 'https://devrepo.kakao.com/nexus/content/groups/public/' }
     }
 }
-rootProject.name = "오늘 한잔 게임"
+rootProject.name = "Tipsy Game"
 include ':app'
