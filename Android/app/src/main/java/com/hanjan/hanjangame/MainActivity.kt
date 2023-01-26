@@ -4,8 +4,12 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import com.bumptech.glide.Glide
+import com.hanjan.hanjangame.adapter.showGameListDialog
 import com.hanjan.hanjangame.databinding.ActivityMainBinding
+import com.journeyapps.barcodescanner.ScanContract
+import com.journeyapps.barcodescanner.ScanOptions
 import com.kakao.sdk.user.UserApiClient
 
 private const val TAG = "MainActivity"
@@ -47,6 +51,35 @@ class MainActivity : AppCompatActivity() {
                     finish()
                 }
             }
+        }
+        val launcher = registerForActivityResult(ScanContract()){
+                result -> if(result.contents != null){
+                    //방 번호가 존재하지 않으면 조치 필요
+            val intent = Intent(this, GameRoomActivity::class.java)
+            intent.putExtra("roomNumber", result.contents)
+            startActivity(intent)
+            }
+        }
+        binding.qrTestBtn.setOnClickListener {
+            val options = ScanOptions()
+            options.setOrientationLocked(false)
+            options.setBeepEnabled(false)
+            options.setBarcodeImageEnabled(false)
+            options.setPrompt("QR 코드를 인식해주세요")
+            launcher.launch(options)
+        }
+        binding.roomNumberEnterBtn.setOnClickListener {
+            if(binding.roomNumberText.text.isBlank()){
+                Toast.makeText(this, "방 코드를 확인해주세요", Toast.LENGTH_SHORT).show()
+
+            } else {
+                val intent = Intent(this, GameRoomActivity::class.java)
+                intent.putExtra("roomNumber", binding.roomNumberText.text.toString())
+                startActivity(intent)
+            }
+        }
+        binding.gameListBtn.setOnClickListener {
+            showGameListDialog(this)
         }
     }
 }
