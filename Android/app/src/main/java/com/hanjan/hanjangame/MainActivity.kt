@@ -54,7 +54,9 @@ class MainActivity : AppCompatActivity() {
         val launcher = registerForActivityResult(ScanContract()){
                 result -> if(result.contents != null){
                     //방 번호가 존재하지 않으면 조치 필요
-                    Toast.makeText(this, result.contents, Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, GameRoomActivity::class.java)
+            intent.putExtra("roomNumber", result.contents)
+            startActivity(intent)
             }
         }
         binding.qrTestBtn.setOnClickListener {
@@ -70,7 +72,9 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "방 코드를 확인해주세요", Toast.LENGTH_SHORT).show()
 
             } else {
-                Toast.makeText(this, binding.roomNumberText.text, Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, GameRoomActivity::class.java)
+                intent.putExtra("roomNumber", binding.roomNumberText.text.toString())
+                startActivity(intent)
             }
         }
         binding.gameListBtn.setOnClickListener {
