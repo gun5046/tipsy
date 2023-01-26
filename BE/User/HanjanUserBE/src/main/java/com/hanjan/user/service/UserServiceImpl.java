@@ -2,6 +2,8 @@ package com.hanjan.user.service;
 
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -13,6 +15,12 @@ import org.springframework.web.reactive.function.client.WebClient;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hanjan.user.dao.UserRepo;
+import com.hanjan.user.data.dto.KakaoAccountDto;
+import com.hanjan.user.data.dto.LoginDto;
+import com.hanjan.user.data.dto.TokenDto;
+import com.hanjan.user.data.vo.RefreshToken;
+import com.hanjan.user.data.vo.UserVo;
+import com.hanjan.user.provider.JwtTokenProvider;
 
 import lombok.RequiredArgsConstructor;
 
@@ -21,7 +29,8 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService{
-	
+	Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+	private final JwtTokenProvider jwtTokenProvider;
 	private final UserRepo userRepo;
 	
 	@Value("${REDIRECT.URI}")
@@ -71,7 +80,7 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public Map<String, Object> getKakaoUserInfo(String access_token) {
+	public KakaoAccountDto getKakaoUserInfo(String access_token) {
 		String reqURL = "https://kapi.kakao.com";
 		try {
 			webClient = WebClient.create(reqURL);
@@ -83,10 +92,19 @@ public class UserServiceImpl implements UserService{
 			ObjectMapper objMapper = new ObjectMapper();
 			Map<String,Object> obj = objMapper.readValue(response.getBody(), new TypeReference<Map<String, Object>>(){});
 			
-			String kakao_id = (String)obj.get("id");
+			String kakao_id = Long.toString((Long)obj.get("id"));
+			Map<String, Object> kakao_account = (Map<String, Object>) obj.get("kakao_account");
+			Map<String,Object> profile = (Map<String, Object>) kakao_account.get("profile");
+			String image = (String)profile.get("profile_image_url");
 			
-			
-			return obj;
+			KakaoAccountDto accountDto = KakaoAccountDto.builder()
+					.kakao_id(kakao_id)
+					.image(image)
+					.gender((String)kakao_account.get("gender"))
+					.birth((String)kakao_account.get("birth"))
+					.build();
+			logger.info(accountDto.toString());
+			return accountDto;
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -94,12 +112,34 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public int checkUser(String id) {
-		if(userRepo.checkUser(id)==null) {
-			return 0;
+	public LoginDto checkUser(String type, KakaoAccountDto accountDto) {
+		LoginDto loginDto;
+		UserVo userVo = userRepo.checkUser(accountDto.getKakao_id());
+		if(type.equals("mobile")) {
+			if(userVo == null) return null;
+
 		}else {
-			return 1;
+			if(userVo==null) {
+				loginDto = LoginDto.builder().userCheck(false).userVo(new UserVo(accountDto)).build();	
+				return loginDto;
+			}
 		}
+		TokenDto tokenDto = jwtTokenProvider.createToken(userVo);
+		RefreshToken refreshToken = new RefreshToken(Long.toString(userVo.getUid()), tokenDto.getRefreshToken());
+		
+		loginDto = LoginDto.builder()
+				.userCheck(true)
+				.userVo(userVo)
+				.tokenDto(tokenDto)
+				.build();
+		return loginDto;
 	}
 	
+	
+	
+	@Override
+	public int registUser(UserVo userVo) {
+		return userRepo.registUser(userVo);
+	}
+
 }

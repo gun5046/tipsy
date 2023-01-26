@@ -47,6 +47,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 else {
                     Log.i(TAG, "로그아웃 성공. SDK에서 토큰 삭제됨")
+                    startActivity(Intent(this, LoginActivity::class.java))
                     finish()
                 }
             }

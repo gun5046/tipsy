@@ -7,5 +7,7 @@ import com.hanjan.user.data.vo.UserVo;
 @Mapper
 public interface UserDao {
 	
-	UserVo findByKakaoID();
+	UserVo findByKakaoID(String id);
+	int insertUser(UserVo userVo);
+	UserVo findByUid();
 }

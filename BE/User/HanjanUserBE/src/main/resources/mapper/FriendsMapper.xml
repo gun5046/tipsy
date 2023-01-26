@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hanjan.user.dao.FriendsDao">
+	<select id = "findFriendsInfoByUid" resultType="Long">
+		<![CDATA[
+		select u from `friends f  join user u on u.uid = f.user1` where f.user1 = #{uid}
+		]]>
+	</select>
+	
+	
+	<delete id="deleteFriendRequest">
+		<![CDATA[
+			delete from friendrequest where (sender = #{user1} and receiver = #{user2}) or (sender = #{user2} and receiver =#{user1})
+		]]>
+	</delete>
+	
+	<insert id = "insertFriends">
+		<![CDATA[
+			insert into friends values(#{user1}, #{user2})
+			insert into friends values(#{user2}, #{user1})
+		]]>
+	</insert>
+	
+	<delete id = "deleteFriend">
+		<![CDATA[
+			delete from friend where (user1 = #{user1} and user2 = #{user}) or (user1 = #{user2} and user2 = #{user1})
+		]]>
+	</delete>
+	
+</mapper>
+	

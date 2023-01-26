@@ -1,6 +1,6 @@
 package com.hanjan.user.data.vo;
 
-import com.hanjan.user.data.dto.UserDto;
+import com.hanjan.user.data.dto.KakaoAccountDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,11 +11,20 @@ import lombok.Data;
 @Builder
 public class UserVo {
 	private long uid;
-	private String email;
+	private String kakao_id;
 	private String name;
 	private String nickname;
 	private String image;
 	private String birth;
-	private boolean gender; // tinyint -> boolean  int
+	private String gender; 
+	private String interest;
 	private int reportcnt;
+	
+	
+	public UserVo(KakaoAccountDto accountDto) {
+		this.kakao_id = accountDto.getKakao_id();
+		this.gender = accountDto.getGender();
+		this.birth = accountDto.getBirth();
+		this.image = accountDto.getImage();
+	}
 }

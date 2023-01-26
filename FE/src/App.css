@@ -1,0 +1,38 @@
+.App {
+  text-align: center;
+  
+}
+
+.Preview {
+
+  text-align: center;
+  justify-content: center;
+  margin: 0px;
+}
+
+.Login {
+  align-items: center;
+  text-align: center;
+  color: white;
+  background-color: black;
+}
+
+.Login img {
+  width: 100px;
+  height: 100px;
+  border-radius: 70%
+}
+
+hr {
+  background: #A03BC4;
+  height:1px;
+  border:0;
+}
+ 
+input {
+  background-color: transparent;
+  border-color: #A03BC4;
+  border-width: 4px;
+  border-radius: 10%;
+  color: #A03BC4;
+}

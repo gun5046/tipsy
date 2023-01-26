@@ -1,7 +1,5 @@
 package com.hanjan.user.data.vo;
 
-import com.hanjan.user.data.dto.FriendsRequestDto;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
