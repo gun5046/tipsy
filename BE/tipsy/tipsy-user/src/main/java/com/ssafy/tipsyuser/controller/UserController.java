@@ -27,18 +27,18 @@ public class UserController {
 	private final UserServiceImpl userServiceImpl;
 
 	@GetMapping("/login")
-	@ApiOperation(value = "À¥ ·Î±×ÀÎ", notes = "À¥À¸·Î ·Î±×ÀÎ ÇÒ ¶§ »ç¿ë")
+	@ApiOperation(value = "ï¿½ï¿½ ï¿½Î±ï¿½ï¿½ï¿½", notes = "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Î±ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½")
 	public LoginDto loginUser(@RequestParam(required = false) String code,
 			@RequestParam(required = false) String state, @RequestParam(required = false) String error,
 			@RequestParam(required = false) String error_description) {
 		System.out.println(code);
 		if (code == null)
-			logger.info("code null"); // error thow ÇÒ °Í
+			logger.info("code null"); // error thow ï¿½ï¿½ ï¿½ï¿½
 
 		String access_token = userServiceImpl.getAccessToken(code);
 
-		if (access_token != null) {
-			logger.info("token_null");// error thow ÇÒ °Í
+		if (access_token == null) {
+			logger.info("token_null");// error thow ï¿½ï¿½ ï¿½ï¿½
 		}
 		KakaoAccountDto accountDto = userServiceImpl.getKakaoUserInfo(access_token);
 		
@@ -46,11 +46,11 @@ public class UserController {
 	}
 
 	@PostMapping("/account")
-	@ApiOperation(value = "À¥ È¸¿ø °¡ÀÔ", notes = "È¸¿ø °¡ÀÔ ÇÒ ¶§ »ç¿ë, JWTToken ºÎ¿©")
+	@ApiOperation(value = "ï¿½ï¿½ È¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½", notes = "È¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½, JWTToken ï¿½Î¿ï¿½")
 	public boolean registUser(@RequestBody UserVo userVo) {
 		int n = userServiceImpl.registUser(userVo);
 		if(n!=0) {
-			logger.info("Ãß°¡ ¾ÈµÊ");
+			logger.info("ï¿½ß°ï¿½ ï¿½Èµï¿½");
 			return true;
 		}else {
 			return false;
@@ -58,9 +58,9 @@ public class UserController {
 	}
 	
 	@PostMapping("/check") // Mobile
-	@ApiOperation(value = "¸ð¹ÙÀÏ ·Î±×ÀÎ!", notes = "¸ð¹ÙÀÏ ·Î±×ÀÎ, JwtToken ºÎ¿©")
+	@ApiOperation(value = "ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Î±ï¿½ï¿½ï¿½!", notes = "ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Î±ï¿½ï¿½ï¿½, JwtToken ï¿½Î¿ï¿½")
 	public LoginDto checkUser(@RequestBody KakaoAccountDto accountDto) {
-		logger.info("Ã¼Å©À¯Àú");
+		logger.info("Ã¼Å©ï¿½ï¿½ï¿½ï¿½");
 		
 		LoginDto loginDto = userServiceImpl.checkUser("mobile", accountDto);
 	

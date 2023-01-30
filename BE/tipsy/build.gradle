@@ -12,7 +12,7 @@ buildscript {
     }
 }
 
-// ÇÏÀ§ ¸ðµç ÇÁ·ÎÁ§Æ® °øÅë ¼¼ÆÃ
+// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 subprojects {
     apply plugin: 'java'
     apply plugin: 'idea'
@@ -29,10 +29,11 @@ subprojects {
         mavenCentral()
     }
 
-    // ÇÏÀ§ ¸ðµâ¿¡¼­ °øÅëÀ¸·Î »ç¿ëÇÏ´Â ¼¼ÆÃ Ãß°¡
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½â¿¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ß°ï¿½
     dependencies {
         compileOnly 'org.projectlombok:lombok'
         annotationProcessor 'org.projectlombok:lombok'
+        developmentOnly 'org.springframework.boot:spring-boot-devtools'
     }
 
     tasks.named('test') {
@@ -48,7 +49,7 @@ project(':core-web') {
         implementation 'org.springframework.boot:spring-boot-starter-web'
 		implementation 'org.springframework.boot:spring-boot-starter-web-services'
 		implementation 'org.springframework.boot:spring-boot-starter-security'
-
+		
 		implementation 'org.springframework.boot:spring-boot-starter-test'
 		implementation 'org.junit.jupiter:junit-jupiter-api:5.9.1'
 		developmentOnly 'org.springframework.boot:spring-boot-devtools'

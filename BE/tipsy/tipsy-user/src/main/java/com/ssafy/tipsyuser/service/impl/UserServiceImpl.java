@@ -85,13 +85,12 @@ public class UserServiceImpl implements UserService{
 					.uri(uriBuilder -> uriBuilder.path("/v2/user/me").build())
 					.header("Authorization", "Bearer "+access_token)
 					.retrieve().toEntity(String.class).block();
-			System.out.println(response);
 			ObjectMapper objMapper = new ObjectMapper();
 			Map<String,Object> obj = objMapper.readValue(response.getBody(), new TypeReference<Map<String, Object>>(){});
 			
 			String kakao_id = Long.toString((Long)obj.get("id"));
-			Map<String,Object> account = objMapper.readValue((String)obj.get("kakao_account"), new TypeReference<Map<String, Object>>(){});
-			Map<String,Object> profile = objMapper.readValue((String)account.get("profile"), new TypeReference<Map<String, Object>>(){});
+			Map<String,Object> account = (Map<String, Object>) obj.get("kakao_account");
+			Map<String,Object> profile = (Map<String, Object>) account.get("profile");
 			String image = (String)profile.get("profile_image_url");
 			
 			KakaoAccountDto accountDto = KakaoAccountDto.builder()
