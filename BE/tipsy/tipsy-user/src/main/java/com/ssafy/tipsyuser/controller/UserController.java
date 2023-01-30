@@ -31,6 +31,7 @@ public class UserController {
 	public LoginDto loginUser(@RequestParam(required = false) String code,
 			@RequestParam(required = false) String state, @RequestParam(required = false) String error,
 			@RequestParam(required = false) String error_description) {
+		System.out.println(code);
 		if (code == null)
 			logger.info("code null"); // error thow гр ╟м
 
