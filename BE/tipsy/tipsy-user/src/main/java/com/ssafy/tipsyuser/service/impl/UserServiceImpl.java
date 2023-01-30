@@ -13,7 +13,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.coreweb.dto.RefreshTokenDto;
-import com.ssafy.coreweb.dto.TokenDto;
+import com.ssafy.coreweb.dto.UserDto;
 import com.ssafy.coreweb.provider.JwtTokenProvider;
 import com.ssafy.domainrdb.dao.user.UserDao;
 import com.ssafy.domainrdb.vo.UserVo;
@@ -126,8 +126,10 @@ public class UserServiceImpl implements UserService{
 				loginDto = LoginDto.builder().userCheck(false).userVo(newUserVo).build();
 			}
 		}
-		TokenDto tokenDto = jwtTokenProvider.createToken(userVo.getUid());
-		RefreshTokenDto refreshToken = new RefreshTokenDto(Long.toString(userVo.getUid()), tokenDto.getRefreshToken());
+		//헤더에 담아서 줄것
+		
+		String accessToken = jwtTokenProvider.createAccessToken(new UserDto(userVo.getUid(),userVo.getName(),userVo.getNickname()));
+		String refreshToken = jwtTokenProvider.createRefreshToken();
 		
 		loginDto = LoginDto.builder()
 				.userCheck(true)

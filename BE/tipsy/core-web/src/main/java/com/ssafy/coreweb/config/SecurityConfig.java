@@ -4,28 +4,36 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.context.SecurityContextPersistenceFilter;
+
+import com.ssafy.coreweb.filter.JwtAuthorizationFilter;
+import com.ssafy.coreweb.provider.JwtTokenProvider;
+
+import lombok.RequiredArgsConstructor;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig{
-	@Bean
-	protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		http
-        .httpBasic().disable()
-        .csrf().disable();
-		
-		http
-                .csrf().disable()// 세션을 사용하지 않고 JWT 토큰을 활용하여 진행, csrf토큰검사를 비활성화
-                .authorizeRequests() // 인증절차에 대한 설정을 진행
-                .antMatchers("/**").permitAll() // 설정된 url은 인증되지 않더라도 누구든 접근 가능
-                .anyRequest().authenticated();// 위 페이지 외 인증이 되어야 접근가능(ROLE에 상관없이)
-//        http.headers().frameOptions().sameOrigin();
-        
-        return http.build();
-    }
+@RequiredArgsConstructor
+public class SecurityConfig extends WebSecurityConfigurerAdapter{
+	
+	private final JwtTokenProvider jwtTokenProvider;
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		// TODO Auto-generated method stub
+		http.addFilterBefore(new JwtAuthorizationFilter(jwtTokenProvider), SecurityContextPersistenceFilter.class);
+		http.csrf().disable(); //csrf토큰검사를 비활성화
+		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 세션을 사용하지 않음 Stateless 서버로 만듬
+		.and()
+		.formLogin().disable() //폼로그인 비활성화
+		.httpBasic().disable()
+		.authorizeRequests()
+		.anyRequest().permitAll();
+	}
 	
     @Bean // 패스워드 암호화 관련 메소드
     public PasswordEncoder passwordEncoder(){

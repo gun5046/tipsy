@@ -13,6 +13,7 @@ include 'tipsy-room'
 // repo
 include 'domain-rdb'
 include 'domain-nosql'
+include 'domain-auth'
 
 
 
