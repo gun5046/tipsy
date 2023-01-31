@@ -147,7 +147,7 @@ function Meeting() {
     scene.add(cat)
 
     const stats= Stats()
-    //document.body.appendChild(stats.dom)
+    document.body.appendChild(stats.dom)
 
     var data = {
         keyColor: [0, 255, 0],
@@ -290,58 +290,63 @@ function Meeting() {
 
         stats.update()
     }
-    //프로필 박스
-    const textBox = document.createElement('div')
-    const pTag = document.createElement('p')
-    const btnTag1 = document.createElement('button')
-    const brTag = document.createElement('br')
-    const btnTag2 = document.createElement('button')
-    btnTag1.innerText = '프로필'
-    btnTag2.innerText = '신고'
+  
 
-    textBox.prepend(btnTag2)
-    textBox.prepend(brTag)
-    textBox.prepend(btnTag1)
-    textBox.prepend(pTag)
-    document.body.prepend(textBox)
+  const textBox = document.createElement('div')
+  const pTag = document.createElement('p')
+  const btnTag1 = document.createElement('button')
+  const brTag = document.createElement('br')
+  const btnTag2 = document.createElement('button')
+  btnTag1.innerText = '프로필'
+  btnTag2.innerText = '신고'
 
-    btnTag1.onclick = () => {
-        document.getElementById('profileBox').style.display = 'block'
+  textBox.prepend(btnTag2)
+  textBox.prepend(brTag)
+  textBox.prepend(btnTag1)
+  textBox.prepend(pTag)
+  document.body.prepend(textBox)
 
+  btnTag1.onclick = () => {
+      document.getElementById('profileBox').style.display = 'block'
+      console.log(document.getElementById('profileBox'))
     }
 
-    function render() {
-        raycaster.setFromCamera( pointer, camera );
-        
-        const intersects = raycaster.intersectObjects( scene.children, false );
-        
-        if ( intersects.length > 0 ) {
-            if ( INTERSECTED !== intersects[ 0 ].object) {
-                INTERSECTED = intersects[ 0 ].object;
-                pTag.innerText = INTERSECTED.name
+  function render() {
+    raycaster.setFromCamera( pointer, camera );
+    const intersects = raycaster.intersectObjects( scene.children, false );
+    if ( intersects.length > 0 ) {
+      if ( INTERSECTED !== intersects[ 0 ].object.name) {
+      	INTERSECTED = intersects[ 0 ].object.name;
+        const text = INTERSECTED
+				pTag.innerText = INTERSECTED
+				if (text) {
+					textBox.style.display = 'none'
+				}
+				textBox.setAttribute(
+          'style',
+          `
+          position: fixed;
+          background-color: white;
+          left:${textboxPointer.x}px;
+          top:${textboxPointer.y}px;
+          width: 100px
+          `
+        )
+        if (INTERSECTED === '') {
+      	  textBox.style.display = 'none'
+        }
+      }
+    } 
+    renderer.render(scene, camera)
+  }
+  animate()
 
-                textBox.setAttribute(
-                    'style',
-                    `
-                    position: fixed;
-                    background-color: white;
-                    left:${textboxPointer.x}px;
-                    top:${textboxPointer.y}px;
-                    width: 100px
-                    `
-                )
-                if (INTERSECTED.name === '') {
-                    textBox.style.display = 'none'
-
-                }
-            }
-        } 
-        renderer.render(scene, camera)
-    }
-    animate()
-    return (
-        <Profile nickname={pTag.innerText}/>
-    )
+	
+  return (
+    <>
+      <Profile/>
+    </>
+  )
 }
 
 export default Meeting;
