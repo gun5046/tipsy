@@ -6,6 +6,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Preview from './pages/Preview';
 import Login from './pages/Login';
 import Mypage from './pages/Mypage';
+import Meeting from './pages/Meeting';
 
 //component
 
@@ -14,11 +15,11 @@ function App() {
     <BrowserRouter>
       <div>
         <p>App</p>
-
         <Routes>
           <Route path='/' element={<Preview/>}/>
           <Route path='/login' element={<Login/>}/>
           <Route path='/mypage' element={<Mypage/>}/>
+          <Route path='/meeting' element={<Meeting/>}/>
         </Routes>
       </div>
     </BrowserRouter>
