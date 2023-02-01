@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.domainrdb.dao.FriendsDao">
+	<select id = "findFriendsByUid" resultType="FriendsVo">
+		<![CDATA[
+		select * from user where uid in (select user2 from `friends` f where f.user1 = #{uid})
+			union
+		select * from user where uid in (select user1 from `friends` f where f.user2 = #{uid})
+		]]>
+	</select>
+	
+	<insert id = "insertFriends">
+		insert into friends values(#{user1}, #{user2});
+	</insert>
+	
+	<delete id = "deleteFriendsRequest">
+		
+	</delete>
+</mapper>
+	
