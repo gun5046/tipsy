@@ -151,5 +151,10 @@ public class UserServiceImpl implements UserService{
 	public int registUser(UserVo userVo) {
 		return userDao.insertUser(userVo);
 	}
+	
+	@Override
+	public UserVo getUserInfo(Long uid) {
+		return userDao.findUserByUid(uid);
+	}
 
 }

@@ -86,8 +86,13 @@ public class UserController {
 		return loginDto;
 	}
 	
-	@GetMapping("/test")
-	public void test() {
-		System.out.println("test");
+	@GetMapping("/token")
+	public void checkToken() {
+		return;
+	}
+	
+	@GetMapping("/mypage")
+	public UserVo getUserInfo(@RequestParam Long uid) {
+		return userServiceImpl.getUserInfo(uid);
 	}
 }

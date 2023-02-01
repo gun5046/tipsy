@@ -14,5 +14,11 @@
 			insert into user values(#{kakao_id}, #{name}, #{nickname}, #{image}, #{birth}, #{gender}, #{interest})
 		]]>
 	</insert>
+	
+	<select id="findUserByUid" resultType="UserVo">
+		<![CDATA[
+			select * from user where uid = #{uid}
+		]]>
+	</select>
 </mapper>
 	

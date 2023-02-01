@@ -1,5 +1,5 @@
 rootProject.name = 'tipsy'
-// web ¼³Á¤
+// web
 include 'core-web'
 include 'web-socket'
 
@@ -8,7 +8,7 @@ include 'web-socket'
 include 'tipsy-user'
 include 'tipsy-game'
 include 'tipsy-room'
-
+include 'tipsy-chat'
 
 // repo
 include 'domain-rdb'

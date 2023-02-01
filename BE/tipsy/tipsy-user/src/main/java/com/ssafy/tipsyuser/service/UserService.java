@@ -12,4 +12,6 @@ public interface UserService {
 	LoginDto checkUser(String type, KakaoAccountDto accountDto);
 
 	int registUser(UserVo userVo);
+	
+	UserVo getUserInfo(Long uid);
 }
