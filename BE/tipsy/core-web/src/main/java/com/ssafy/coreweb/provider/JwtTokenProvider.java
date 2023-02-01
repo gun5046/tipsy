@@ -30,6 +30,8 @@ public class JwtTokenProvider {
     private final long accessTokenValidTime = 30 * 10 * 1000L;
 
     private final long refreshTokenValidTime = 1000 * 60 * 60*24*7;
+    
+    public String test = "test";
 
  
     @PostConstruct
@@ -65,8 +67,6 @@ public class JwtTokenProvider {
     }
 
     public int getUserPk(String accessToken) {
-    	System.out.println(accessToken);
- 
         return (int)Jwts.parser().setSigningKey(secretKey).parseClaimsJws(accessToken).getBody().get("uid");
     	
     }
