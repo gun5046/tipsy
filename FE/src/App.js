@@ -14,7 +14,6 @@ function App() {
   return (
     <BrowserRouter>
       <div>
-        <p>App</p>
         <Routes>
           <Route path='/' element={<Preview/>}/>
           <Route path='/login' element={<Login/>}/>
