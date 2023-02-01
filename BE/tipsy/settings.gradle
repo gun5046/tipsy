@@ -1,0 +1,18 @@
+rootProject.name = 'tipsy'
+// web ¼³Á¤
+include 'core-web'
+include 'web-socket'
+
+
+// client
+include 'tipsy-user'
+include 'tipsy-game'
+include 'tipsy-room'
+
+
+// repo
+include 'domain-rdb'
+include 'domain-nosql'
+
+
+
