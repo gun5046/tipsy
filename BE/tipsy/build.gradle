@@ -12,7 +12,6 @@ buildscript {
     }
 }
 
-// 占쏙옙占쏙옙 占쏙옙占� 占쏙옙占쏙옙占쏙옙트 占쏙옙占쏙옙 占쏙옙占쏙옙
 subprojects {
     apply plugin: 'java'
     apply plugin: 'idea'
@@ -29,7 +28,6 @@ subprojects {
         mavenCentral()
     }
 
-    // 占쏙옙占쏙옙 占쏙옙藪∽옙占� 占쏙옙占쏙옙占쏙옙占쏙옙 占쏙옙占쏙옙求占� 占쏙옙占쏙옙 占쌩곤옙
     dependencies {
         compileOnly 'org.projectlombok:lombok'
         annotationProcessor 'org.projectlombok:lombok'
@@ -118,9 +116,7 @@ project(':domain-nosql'){
 
 project('domain-auth'){
 	dependencies{
-		implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
-		implementation 'org.springframework.boot:spring-boot-starter-jdbc'
-		implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.3.0'
-		runtimeOnly 'com.mysql:mysql-connector-j'
+		//domain-redis-auth
+		implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 	}
 }

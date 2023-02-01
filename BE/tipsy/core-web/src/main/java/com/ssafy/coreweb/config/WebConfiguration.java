@@ -14,15 +14,14 @@ public class WebConfiguration implements WebMvcConfigurer {
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
 //		System.out.println("CORS Setting");
-//		default ¼³Á¤.
+//		default ï¿½ï¿½ï¿½ï¿½.
 //		Allow all origins.
 //		Allow "simple" methods GET, HEAD and POST.
 //		Allow all headers.
 //		Set max age to 1800 seconds (30 minutes).
 		registry.addMapping("/**")
-		.allowCredentials(true) //³»¼­¹ö°¡ ÀÀ´äÀ» ÇÒ¶§ jsonÀ» ÀÚ¹Ù½ºÅ©¸³Æ®¿¡¼­ Ã³¸®ÇÒ ¼ö ÀÖ°Ô ÇÒÁö¸¦ °áÁ¤ÇÏ´Â°Í
-		.allowedOrigins("*") //¸ðµç ip¿¡ ÀÀ´äÀ» Çã¿ë
-		.allowedHeaders("*") // ¸ðµç header¿¡ ÀÀ´äÀ» Çã¿ë
+		.allowedOrigins("*") 
+		.allowedHeaders("*")  
 		.allowedOriginPatterns("*")
 			.allowedMethods("*")
 //			.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH", "HEAD")
@@ -30,8 +29,8 @@ public class WebConfiguration implements WebMvcConfigurer {
 		
 	}
 
-//	Swagger UI ½ÇÇà½Ã 404Ã³¸®
-//	Swagger2 ÀÏ°æ¿ì
+//	Swagger UI ï¿½ï¿½ï¿½ï¿½ï¿½ 404Ã³ï¿½ï¿½
+//	Swagger2 ï¿½Ï°ï¿½ï¿½
 	@Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		registry.addResourceHandler("/static/**")

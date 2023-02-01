@@ -1,18 +1,18 @@
 package com.ssafy.coreweb.provider;
 
+import static org.mockito.Mockito.timeout;
+
 import java.util.Base64;
 import java.util.Date;
 
 import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
-import com.ssafy.coreweb.dto.TokenDto;
 import com.ssafy.coreweb.dto.UserDto;
+import com.ssafy.domainauth.entity.Auth;
+import com.ssafy.domainauth.repo.AuthRepository;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -26,18 +26,18 @@ public class JwtTokenProvider {
 	@Value("${SECRET-KEY}")
     private String secretKey;
 
-    // 엑세스 토큰 유효시간 5분
+	private final AuthRepository authRepository;
     private final long accessTokenValidTime = 30 * 10 * 1000L;
-    // 리프레시 토큰 유효시간 7일
+
     private final long refreshTokenValidTime = 1000 * 60 * 60*24*7;
 
-    // 객체 초기화, secretKey를 Base64로 인코딩한다.
+ 
     @PostConstruct
     protected void init() {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
 
-    // JWT 토큰 생성 
+  
     public String createAccessToken(UserDto userDto) {
         Date now = new Date();
         
@@ -63,24 +63,26 @@ public class JwtTokenProvider {
         
         return refreshToken;
     }
-    
-    // JWT 토큰에서 인증 정보 조회
-    public Authentication getAuthentication(String accessToken) {
+
+    public int getUserPk(String accessToken) {
+    	System.out.println(accessToken);
+ 
+        return (int)Jwts.parser().setSigningKey(secretKey).parseClaimsJws(accessToken).getBody().get("uid");
     	
-    	return new UsernamePasswordAuthenticationToken(getUserPk(accessToken), "");
     }
 
-    // 토큰에서 회원 정보 추출
-    public String getUserPk(String accessToken) {
-        return (String) Jwts.parser().setSigningKey(secretKey).parseClaimsJws(accessToken).getBody().get("uid");
+    public String getUserName(String accessToken) {
+    	return (String) Jwts.parser().setSigningKey(secretKey).parseClaimsJws(accessToken).getBody().get("name");
+    	
     }
-
-    // Request의 Header에서 token 값을 가져옵니다. "Authorization" : "TOKEN값'
-    public String resolveToken(HttpServletRequest request) {
-        return request.getHeader("Authorization");
+    
+    public String getUserNickname(String accessToken) {
+        return (String) Jwts.parser().setSigningKey(secretKey).parseClaimsJws(accessToken).getBody().get("nickname");
     }
-
-    // 토큰의 유효성 + 만료일자 확인
+ 
+    public void saveRefreshToken(Long uid, String refreshToken) {
+    	authRepository.save(new Auth(uid,refreshToken));
+    }
     public boolean validateToken(String jwtToken) {
         try {
 //        	if(!jwtToken.startsWith("Bearer")) {

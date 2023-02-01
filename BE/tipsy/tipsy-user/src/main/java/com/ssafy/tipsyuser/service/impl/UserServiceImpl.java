@@ -5,6 +5,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.BodyInserters;
@@ -12,9 +13,11 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ssafy.coreweb.dto.RefreshTokenDto;
+import com.ssafy.coreweb.dto.TokenDto;
 import com.ssafy.coreweb.dto.UserDto;
 import com.ssafy.coreweb.provider.JwtTokenProvider;
+import com.ssafy.domainauth.entity.Auth;
+import com.ssafy.domainauth.repo.AuthRepository;
 import com.ssafy.domainrdb.dao.user.UserDao;
 import com.ssafy.domainrdb.vo.UserVo;
 import com.ssafy.tipsyuser.dto.KakaoAccountDto;
@@ -29,7 +32,6 @@ import lombok.RequiredArgsConstructor;
 public class UserServiceImpl implements UserService{
 	private final JwtTokenProvider jwtTokenProvider;
 	private final UserDao userDao;
-	
 	@Value("${REDIRECT.URI}")
     String redirect;
 	
@@ -107,6 +109,7 @@ public class UserServiceImpl implements UserService{
 		return null;
 	}
 
+	@Transactional
 	@Override
 	public LoginDto checkUser(String type, KakaoAccountDto accountDto) {
 		LoginDto loginDto;
@@ -126,11 +129,14 @@ public class UserServiceImpl implements UserService{
 				loginDto = LoginDto.builder().userCheck(false).userVo(newUserVo).build();
 			}
 		}
-		//헤더에 담아서 줄것
+
 		
 		String accessToken = jwtTokenProvider.createAccessToken(new UserDto(userVo.getUid(),userVo.getName(),userVo.getNickname()));
 		String refreshToken = jwtTokenProvider.createRefreshToken();
-		
+
+		jwtTokenProvider.saveRefreshToken(userVo.getUid(), refreshToken);
+
+		TokenDto tokenDto = new TokenDto(accessToken, refreshToken);
 		loginDto = LoginDto.builder()
 				.userCheck(true)
 				.userVo(userVo)

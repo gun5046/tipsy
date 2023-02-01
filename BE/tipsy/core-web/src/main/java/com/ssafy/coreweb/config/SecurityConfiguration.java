@@ -3,13 +3,13 @@ package com.ssafy.coreweb.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.context.SecurityContextPersistenceFilter;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.ssafy.coreweb.filter.JwtAuthorizationFilter;
 import com.ssafy.coreweb.provider.JwtTokenProvider;
@@ -19,23 +19,31 @@ import lombok.RequiredArgsConstructor;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-public class SecurityConfig extends WebSecurityConfigurerAdapter{
+
+public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 	
-	private final JwtTokenProvider jwtTokenProvider;
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		// TODO Auto-generated method stub
-		http.addFilterBefore(new JwtAuthorizationFilter(jwtTokenProvider), SecurityContextPersistenceFilter.class);
-		http.csrf().disable(); //csrf토큰검사를 비활성화
-		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 세션을 사용하지 않음 Stateless 서버로 만듬
+		http.csrf().disable(); //
+		
+		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 
 		.and()
-		.formLogin().disable() //폼로그인 비활성화
+		.formLogin().disable() 
 		.httpBasic().disable()
-		.authorizeRequests()
-		.anyRequest().permitAll();
+		.addFilterBefore(new JwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
 	}
-	
-    @Bean // 패스워드 암호화 관련 메소드
+	@Override
+	public void configure(WebSecurity web) throws Exception {    
+	    web.ignoring().antMatchers("/v2/api-docs/**");
+	    web.ignoring().antMatchers("/swagger.json");
+	    web.ignoring().antMatchers("/swagger-ui.html");
+	    web.ignoring().antMatchers("/swagger-resources/**");
+	    web.ignoring().antMatchers("/webjars/**");
+	    web.ignoring().antMatchers("/user/login","/user/account","/user/check");
+	    
+	}
+    @Bean 
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
