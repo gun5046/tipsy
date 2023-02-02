@@ -31,13 +31,13 @@ public class SwaggerConfiguration {
 	
 	private ApiInfo apiInfo() {
         return new ApiInfo(
-                "Title",
-                "Description",
-                "version 1.0",
-                "https://naver.com",
-                new Contact("Contact Me", "https://daum.net", "colt@colt.com"),
+                "Tipsy",
+                "싸피 공통 프로젝트",
+                "version1.0",
+                "",
+                new Contact("Contact Me", "", ""),
                 "Edit Licenses",
-                "https://naver.com",
+                "",
                 new ArrayList<>()
         );
     }

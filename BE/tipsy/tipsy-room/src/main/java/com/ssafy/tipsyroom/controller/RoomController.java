@@ -18,6 +18,7 @@ import com.ssafy.domainnosql.vo.MemberVo;
 import com.ssafy.domainnosql.vo.RoomVo;
 import com.ssafy.tipsyroom.service.RoomService;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 
@@ -26,6 +27,7 @@ import lombok.RequiredArgsConstructor;
 @RestController()
 @RequestMapping("/room")
 @RequiredArgsConstructor
+@Api(tags = {"미팅룸 관련 API"})
 public class RoomController {
 	private final Logger logger = LoggerFactory.getLogger(RoomController.class);
 
@@ -57,7 +59,7 @@ public class RoomController {
 	}
 
 	//create room
-	@PostMapping("/create")
+	@PostMapping()
 	@ApiOperation(value = "code[테이블정보], title[방제목], max[최대인원], (password[비밀번호]), antrance[입장효과], silence[침묵효과]", notes = "방 생성한다.")
 	public ResponseEntity<?> createRoom(@RequestBody RoomVo roomDto) {
 		try {
@@ -71,7 +73,7 @@ public class RoomController {
 	}
 
 	// change room setting
-	@PostMapping("/change")
+	@PostMapping("/setting")
 	@ApiOperation(value = "code[테이블정보], title[방제목], max[최대인원], (password[비밀번호]), antrance[입장효과], silence[침묵효과]", notes = "방 설정을 변경한다.")
 	public ResponseEntity<?> changeRoomSet(@RequestBody RoomVo roomvo) {
 		try {
@@ -83,7 +85,7 @@ public class RoomController {
 	}
 
 	//enter room
-	@PostMapping("/join")
+	@PostMapping("/entry")
 	@ApiOperation(value = "code[방코드], id[사용자id], (password[비밀번호]), position[의자위치]", notes = "방 입장한다.")
 	public ResponseEntity<?> enterRoom(@RequestBody MemberVo membervo) {
 		try {
