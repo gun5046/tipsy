@@ -6,4 +6,26 @@
     android:layout_height="match_parent"
     tools:context=".DrinkActivity">
 
+    <TextView
+        android:id="@+id/count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="횟수 : 0"
+        android:textSize="34sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/beer"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:translationX="-10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/count"
+        app:srcCompat="@drawable/beer" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
