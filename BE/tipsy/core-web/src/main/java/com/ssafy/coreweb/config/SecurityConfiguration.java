@@ -36,8 +36,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 		.and()
 		.formLogin().disable() 
 		.httpBasic().disable()
-		.csrf().disable()
-		.addFilterBefore(new JwtAuthorizationFilter(jwtTokenProvider, authRepository), UsernamePasswordAuthenticationFilter.class);
+		.csrf().disable();
+//		.addFilterBefore(new JwtAuthorizationFilter(jwtTokenProvider, authRepository), UsernamePasswordAuthenticationFilter.class);
 	}
 	@Override
 	public void configure(WebSecurity web) throws Exception {    

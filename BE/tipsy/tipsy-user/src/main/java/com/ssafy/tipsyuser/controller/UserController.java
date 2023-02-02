@@ -57,9 +57,6 @@ public class UserController {
 		cookie2.setHttpOnly(true);
 		response.addCookie(cookie1); 	///////// 나중에 따로 만들자
 		response.addCookie(cookie2);
-		System.out.println(jwt.getUserPk(loginDto.getTokenDto().getAccessToken()));
-		System.out.println(loginDto.getTokenDto().getAccessToken());
-		System.out.println(loginDto.getTokenDto().getRefreshToken());
 		return userInfoDto;
 
 	}
@@ -82,7 +79,12 @@ public class UserController {
 		logger.info("sdqds");
 		
 		LoginDto loginDto = userServiceImpl.checkUser("mobile", accountDto);
-	
+		Cookie cookie1 = new Cookie("Authorization",loginDto.getTokenDto().getAccessToken());		
+		Cookie cookie2 = new Cookie("RefreshToken", loginDto.getTokenDto().getRefreshToken());
+		cookie1.setHttpOnly(true);
+		cookie2.setHttpOnly(true);
+		response.addCookie(cookie1); 	///////// 나중에 따로 만들자
+		response.addCookie(cookie2);
 		return loginDto;
 	}
 	

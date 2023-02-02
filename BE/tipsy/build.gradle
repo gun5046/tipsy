@@ -96,6 +96,7 @@ project(':tipsy-game'){
 	dependencies{
 		implementation project(':core-web')
 		implementation project(':web-socket')
+		implementation project(':domain-nosql')
 		
 	}
 }
