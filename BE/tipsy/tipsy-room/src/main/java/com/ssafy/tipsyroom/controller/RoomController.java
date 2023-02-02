@@ -86,7 +86,7 @@ public class RoomController {
 
 	//enter room
 	@PostMapping("/entry")
-	@ApiOperation(value = "code[방코드], id[사용자id], (password[비밀번호]), position[의자위치]", notes = "방 입장한다.")
+	@ApiOperation(value = "code[방코드], id[사용자id], (password[비밀번호]), position[의자위치]", notes = "미팅룸 입장")
 	public ResponseEntity<?> enterRoom(@RequestBody MemberVo membervo) {
 		try {
 
@@ -112,7 +112,7 @@ public class RoomController {
 
 	// exit room
 	@PostMapping("/exit")
-	@ApiOperation(value = "code[방코드], id[사용자id]", notes = "방 나간다.")
+	@ApiOperation(value = "code[방코드], id[사용자id]", notes = "미팅룸 나간다.")
 	public ResponseEntity<?> exitRoom(@RequestBody Map<String, Object> param) {
 		try {
 			String roomcode = String.valueOf(param.get("code"));
