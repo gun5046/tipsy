@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,9 +44,9 @@ public class RoomController {
 		}
 	}
 
-	@GetMapping("/bno")
-	@ApiOperation(value = "테이블별 정보를 제공", notes = "실행 완료")
-	public ResponseEntity<?> getTable(int bno) {
+	@GetMapping("/{bno}")
+	@ApiOperation(value = "테이블별 정보를 제공", notes = "술집 내에서 테이블별 정보를 제공한다.")
+	public ResponseEntity<?> getTable(@PathVariable("bno") Integer bno) {
 		try {
 			List<Map<Object, Object>> TableInfo = roomService.getTable(bno);
 			logger.info("테이블별 정보");

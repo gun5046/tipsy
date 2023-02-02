@@ -241,11 +241,16 @@ public class RoomRepoImpl implements RoomRepo {
 		logger.info(bno + "번 건물에 있는 테이블 정보들");
 		
 		while(iter.hasNext()) {
-			String str = (String) iter.next();
+String str = (String) iter.next();
 			
 			Map<Object, Object> map = stringHashOperations.entries(str);
+			
+			// save max from object to int
+			Object max = stringHashOperations.get(str, "max");
+			map.remove("max");
+			map.put("max", Integer.parseInt(String.valueOf(max)));
+			
 			map.put("code", str.substring(5));
-			map.put("current", stringZSetOperations.zCard(str + ":member"));
 			map.put("hashtag", stringSetOperations.members("room:" + map.get("code") + ":hashtag"));
 			
 			logger.info(String.valueOf(map));
