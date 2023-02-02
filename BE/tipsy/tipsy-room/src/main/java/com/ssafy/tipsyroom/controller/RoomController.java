@@ -30,18 +30,8 @@ public class RoomController {
 
 	private final RoomService roomService;
 
-	@GetMapping("/test")
-	public ResponseEntity<?> Test() {
-		try {
-			roomService.test();
-			return new ResponseEntity<String>("success", HttpStatus.CREATED);
-		} catch (Exception e) {
-			return exceptionHandling(e);
-		}
-	}
-
 	@GetMapping()
-	@ApiOperation(value = "술집별 정보를 제공(현재 인원, 만석 테이블)", notes = "실행 완료")
+	@ApiOperation(value = "술집별 정보를 제공(현재 인원, 만석 테이블)", notes = "거리 페이지에서 술집별로 현재 들어간 인원, 합석하지 못하는 테이블을 제공한다.")
 	public ResponseEntity<?> getBuilding() {
 		
 		try {
