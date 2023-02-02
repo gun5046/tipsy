@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
+import com.hanjan.hanjangame.adapter.showGameResultDialog
 import com.hanjan.hanjangame.databinding.ActivityCrocodileBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -83,7 +84,7 @@ class CrocodileActivity : AppCompatActivity() {
                             }
                             delay(500)
                             runOnUiThread {
-                                finish()
+                                showGameResultDialog(this@CrocodileActivity, "test님이 걸렸습니다")
                             }
                         }
                     }

@@ -6,7 +6,10 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.Toast
+import com.hanjan.hanjangame.adapter.showGameResultRecyclerViewDialog
 import com.hanjan.hanjangame.databinding.ActivityOrderingBinding
+import com.hanjan.hanjangame.dto.GameResult
+import com.hanjan.hanjangame.dto.User
 import kotlinx.coroutines.*
 import java.text.DecimalFormat
 import java.util.*
@@ -68,8 +71,7 @@ class OrderingActivity : AppCompatActivity() {
             }
             runOnUiThread {
                 //서버에 데이터 보내고 다른 데이터 받을 때 까지 대기 필요
-                Toast.makeText(this@OrderingActivity, "실패했습니다.", Toast.LENGTH_SHORT).show()
-                this@OrderingActivity.finish()
+                showGameResultRecyclerViewDialog(this@OrderingActivity, listOf(GameResult(User("", "test"), "실패")))
             }
         }
     }
@@ -120,8 +122,7 @@ class OrderingActivity : AppCompatActivity() {
                     if(count == 15){
                         timer.cancel()
                         //서버에 데이터 보내고 다른 데이터 받을 때 까지 대기 필요
-                        Toast.makeText(this, binding.timer.text.toString(), Toast.LENGTH_SHORT).show()
-                        this.finish()
+                        showGameResultRecyclerViewDialog(this@OrderingActivity, listOf(GameResult(User("", "test"), binding.timer.text.toString())))
                     }
                     count++
 //                    btnList[i].visibility = View.INVISIBLE

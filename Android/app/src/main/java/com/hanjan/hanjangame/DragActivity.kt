@@ -6,7 +6,10 @@ import android.os.Bundle
 import android.view.View
 import android.widget.SeekBar
 import android.widget.Toast
+import com.hanjan.hanjangame.adapter.showGameResultRecyclerViewDialog
 import com.hanjan.hanjangame.databinding.ActivityDragBinding
+import com.hanjan.hanjangame.dto.GameResult
+import com.hanjan.hanjangame.dto.User
 import kotlinx.coroutines.*
 import java.text.DecimalFormat
 
@@ -95,8 +98,7 @@ class DragActivity : AppCompatActivity() {
             start = false
             runOnUiThread{
                 //서버로 데이터 보내고 결과 받을 때 까지 대기 필요
-                Toast.makeText(this@DragActivity, "Count : $count", Toast.LENGTH_SHORT).show()
-                this@DragActivity.finish()
+                showGameResultRecyclerViewDialog(this@DragActivity, listOf(GameResult(User("", "test"), "${count}회")))
             }
         }
     }

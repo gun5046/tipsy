@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import com.bluehomestudio.luckywheel.WheelItem
+import com.hanjan.hanjangame.adapter.showGameResultDialog
 import com.hanjan.hanjangame.databinding.ActivityRouletteBinding
 
 class RouletteActivity : AppCompatActivity() {
@@ -34,8 +35,7 @@ class RouletteActivity : AppCompatActivity() {
         }
         binding.luckyWheel.setLuckyWheelReachTheTarget {
             //룰렛 다 돌아간 이후 결과 창 떠야 함
-            Toast.makeText(this, wheelItems[point - 1].text, Toast.LENGTH_SHORT).show()
-            finish()
+            showGameResultDialog(this, "${ wheelItems[point - 1].text } 당첨")
         }
     }
 }

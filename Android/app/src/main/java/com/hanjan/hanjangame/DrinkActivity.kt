@@ -9,11 +9,13 @@ import android.hardware.SensorManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import com.hanjan.hanjangame.adapter.showGameResultRecyclerViewDialog
 import com.hanjan.hanjangame.databinding.ActivityDrinkBinding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import com.hanjan.hanjangame.dto.GameResult
+import com.hanjan.hanjangame.dto.User
+import kotlinx.coroutines.*
+import java.text.DecimalFormat
 
 private const val TAG = "DrinkActivity"
 
@@ -26,6 +28,8 @@ class DrinkActivity : AppCompatActivity() {
     private var lastZ : Float? = 0.0f
     private var lastTime = System.currentTimeMillis()
     private var count = 0
+    private lateinit var timer: Job
+    private var time = 1000
     private var check = false
     private val sensorEventListener = object : SensorEventListener {
         override fun onSensorChanged(p0: SensorEvent?) {
@@ -70,6 +74,55 @@ class DrinkActivity : AppCompatActivity() {
         setContentView(binding.root)
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
         sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION)
+        timer = CoroutineScope(Dispatchers.IO).launch {
+            runOnUiThread {
+                binding.drinkTimer3.visibility = View.VISIBLE
+                ObjectAnimator.ofFloat(binding.drinkTimer3, "alpha", 1f, 0f).apply {
+                    duration = 1000
+                    start()
+                }
+            }
+            delay(1000L)
+            runOnUiThread {
+                binding.drinkTimer3.visibility = View.GONE
+                binding.drinkTimer2.visibility = View.VISIBLE
+                ObjectAnimator.ofFloat(binding.drinkTimer2, "alpha", 1f, 0f).apply {
+                    duration = 1000
+                    start()
+                }
+            }
+            delay(1000L)
+            runOnUiThread {
+                binding.drinkTimer2.visibility = View.GONE
+                binding.drinkTimer1.visibility = View.VISIBLE
+                ObjectAnimator.ofFloat(binding.drinkTimer1, "alpha", 1f, 0f).apply {
+                    duration = 1000
+                    start()
+                }
+            }
+            delay(1000L)
+            runOnUiThread {
+                binding.drinkTimer1.visibility = View.GONE
+                binding.drinkTimerBackground.visibility = View.GONE
+            }
+            if(sensor != null){
+                sensorManager.registerListener(sensorEventListener, sensor, SensorManager.SENSOR_DELAY_NORMAL)
+            }
+            while (time>0){
+                time--
+                runOnUiThread {
+                    binding.drinkTimer.setText("${(time/100)}.${DecimalFormat("00").format((time % 100))}초")
+                }
+                delay(10L)
+            }
+            if(sensorManager != null){
+                sensorManager.unregisterListener(sensorEventListener, sensor)
+            }
+            runOnUiThread{
+                //서버로 데이터 보내고 결과 받을 때 까지 대기 필요
+                showGameResultRecyclerViewDialog(this@DrinkActivity, listOf(GameResult(User("", "test"), "${count}회")))
+            }
+        }
         val beer = CoroutineScope(Dispatchers.IO).launch {
             while (true){
                 runOnUiThread {
@@ -87,20 +140,6 @@ class DrinkActivity : AppCompatActivity() {
                 }
                 delay(200)
             }
-        }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        if(sensor != null){
-            sensorManager.registerListener(sensorEventListener, sensor, SensorManager.SENSOR_DELAY_NORMAL)
-        }
-    }
-
-    override fun onStop() {
-        super.onStop()
-        if(sensorManager != null){
-            sensorManager.unregisterListener(sensorEventListener, sensor)
         }
     }
 }

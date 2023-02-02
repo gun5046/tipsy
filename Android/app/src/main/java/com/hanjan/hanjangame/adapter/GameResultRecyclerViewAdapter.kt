@@ -18,7 +18,7 @@ class GameResultRecyclerViewAdapter(val gameResultList: List<GameResult>) :
         fun onBind(result: GameResult){
             //binding.userImg
             binding.userNickname.text = result.user.nickname
-            binding.userScore.text = "${result.score}"
+            binding.userScore.text = result.score
         }
     }
 

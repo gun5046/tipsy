@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.hanjan.hanjangame.adapter.LiarGameRecyclerViewAdapter
+import com.hanjan.hanjangame.adapter.showGameResultDialog
 import com.hanjan.hanjangame.databinding.ActivityLiarGameBinding
 import com.hanjan.hanjangame.dto.LiarGameData
 import com.hanjan.hanjangame.dto.User
@@ -55,8 +56,12 @@ class LiarGameActivity : AppCompatActivity() {
         binding.recyclerView.suppressLayout(true)
         binding.voteBtn.setOnClickListener {
             if (voteUser != null) {
-                Toast.makeText(this, voteUser?.nickname, Toast.LENGTH_SHORT).show()
-                finish()
+                //추후 결과 받으면 판단해서 결과 다시 띄울 예정
+                if(liarGameData.liar.nickname.equals(voteUser!!.nickname)){
+                    showGameResultDialog(this, "라이어 패배")
+                } else {
+                    showGameResultDialog(this, "라이어 승리")
+                }
             } else {
                 Toast.makeText(this, "투표할 사용자를 선택해주세요", Toast.LENGTH_SHORT).show()
             }
