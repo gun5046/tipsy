@@ -25,20 +25,20 @@ public class JwtTokenProvider {
 	@Value("${SECRET-KEY}")
     private String secretKey;
 
-    // ¿¢¼¼½º ÅäÅ« À¯È¿½Ã°£ 5ºĞ
+    // ì—‘ì„¸ìŠ¤ í† í° ìœ íš¨ì‹œê°„ 5ë¶„
     private final long accessTokenValidTime = 30 * 10 * 1000L;
-    // ¸®ÇÁ·¹½Ã ÅäÅ« À¯È¿½Ã°£ 7ÀÏ
+    // ë¦¬í”„ë ˆì‹œ í† í° ìœ íš¨ì‹œê°„ 7ì¼
     private final long refreshTokenValidTime = 1000 * 60 * 60*24*7;
 
-    // °´Ã¼ ÃÊ±âÈ­, secretKey¸¦ Base64·Î ÀÎÄÚµùÇÑ´Ù.
+    // ê°ì²´ ì´ˆê¸°í™”, secretKeyë¥¼ Base64ë¡œ ì¸ì½”ë”©í•œë‹¤.
     @PostConstruct
     protected void init() {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
 
-    // JWT ÅäÅ« »ı¼º 
+    // JWT í† í° ìƒì„± 
     public TokenDto createToken(Long uid) {
-        Claims claims = Jwts.claims().setSubject(Long.toString(uid)); // JWT payload ¿¡ ÀúÀåµÇ´Â Á¤º¸´ÜÀ§, º¸Åë ¿©±â¼­ user¸¦ ½Äº°ÇÏ´Â °ªÀ» ³Ö´Â´Ù.
+        Claims claims = Jwts.claims().setSubject(Long.toString(uid)); // JWT payload ì— ì €ì¥ë˜ëŠ” ì •ë³´ë‹¨ìœ„, ë³´í†µ ì—¬ê¸°ì„œ userë¥¼ ì‹ë³„í•˜ëŠ” ê°’ì„ ë„£ëŠ”ë‹¤.
 
         
         Date now = new Date();
@@ -61,23 +61,23 @@ public class JwtTokenProvider {
         		.build();
     }
 
-    // JWT ÅäÅ«¿¡¼­ ÀÎÁõ Á¤º¸ Á¶È¸
+    // JWT í† í°ì—ì„œ ì¸ì¦ ì •ë³´ ì¡°íšŒ
     public Authentication getAuthentication(String accessToken) {
     	
     	return new UsernamePasswordAuthenticationToken(getUserPk(accessToken), "");
     }
 
-    // ÅäÅ«¿¡¼­ È¸¿ø Á¤º¸ ÃßÃâ
+    // í† í°ì—ì„œ íšŒì› ì •ë³´ ì¶”ì¶œ
     public String getUserPk(String accessToken) {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(accessToken).getBody().getSubject();
     }
 
-    // RequestÀÇ Header¿¡¼­ token °ªÀ» °¡Á®¿É´Ï´Ù. "Authorization" : "TOKEN°ª'
+    // Requestì˜ Headerì—ì„œ token ê°’ì„ ê°€ì ¸ì˜µë‹ˆë‹¤. "Authorization" : "TOKENê°’'
     public String resolveToken(HttpServletRequest request) {
         return request.getHeader("Authorization");
     }
 
-    // ÅäÅ«ÀÇ À¯È¿¼º + ¸¸·áÀÏÀÚ È®ÀÎ
+    // í† í°ì˜ ìœ íš¨ì„± + ë§Œë£Œì¼ì í™•ì¸
     public boolean validateToken(String jwtToken) {
         try {
             Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwtToken);

@@ -1,4 +1,4 @@
-package com.ssafy.domainnosql.dao.room;
+package com.ssafy.domainnosql.room.repo;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -15,24 +15,40 @@ import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.SetOperations;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
+import org.springframework.stereotype.Component;
 
 import com.ssafy.domainnosql.vo.MemberVo;
 import com.ssafy.domainnosql.vo.RoomVo;
 
-public class RoomDaoImpl implements RoomDao {
+import lombok.RequiredArgsConstructor;
 
-	private final Logger logger = LoggerFactory.getLogger(RoomDaoImpl.class);
+@RequiredArgsConstructor
+@Component
+public class RoomRepoImpl implements RoomRepo {
+
+	private final Logger logger = LoggerFactory.getLogger(RoomRepoImpl.class);
 
 	@Autowired
-	private StringRedisTemplate stringRedisTemplate;
+	private final StringRedisTemplate stringRedisTemplate;
 
-	HashOperations<String, Object, Object> stringHashOperations = stringRedisTemplate.opsForHash();
-	SetOperations<String, String> stringSetOperations = stringRedisTemplate.opsForSet();
-	ZSetOperations<String, String> stringZSetOperations = stringRedisTemplate.opsForZSet();
-
+	HashOperations<String, Object, Object> stringHashOperations;
+	SetOperations<String, String> stringSetOperations;
+	ZSetOperations<String, String> stringZSetOperations;
+	
+	private void Hashinit() {
+		stringHashOperations = stringRedisTemplate.opsForHash();
+	}
+	private void Setinit() {
+		stringSetOperations = stringRedisTemplate.opsForSet();
+	}
+	private void ZSetinit() {
+		stringZSetOperations = stringRedisTemplate.opsForZSet();
+	}
+	
 	@Override
 	public void createRoom(RoomVo roomvo) {
-
+		Hashinit();
+		Setinit();
 		stringHashOperations.put("room:" + roomvo.getCode(), "title", roomvo.getTitle());
 		stringHashOperations.put("room:" + roomvo.getCode(), "max", String.valueOf(roomvo.getMax()));
 		if (roomvo.getPassword() != null)
@@ -51,6 +67,8 @@ public class RoomDaoImpl implements RoomDao {
 
 	@Override
 	public void changeSet(RoomVo roomvo) {
+		Hashinit();
+		Setinit();
 		stringHashOperations.put("room:" + roomvo.getCode(), "title", roomvo.getTitle());
 		stringHashOperations.put("room:" + roomvo.getCode(), "max", String.valueOf(roomvo.getMax()));
 		System.out.println("password = " + roomvo.getPassword());
@@ -76,7 +94,9 @@ public class RoomDaoImpl implements RoomDao {
 
 	@Override
 	public int enterRoom(MemberVo membervo) {
-
+		Hashinit();
+		Setinit();
+		ZSetinit();
 		String roomcode = membervo.getCode();
 		// no exist room
 		if (!isExists("room:" + roomcode)) {
@@ -120,8 +140,9 @@ public class RoomDaoImpl implements RoomDao {
 
 		return 0;
 	}
-
+	
 	private boolean chkPassword(String roomcode, String password) {
+		Hashinit();
 		Object pwd = stringHashOperations.get("room:" + roomcode, "password");
 		if (pwd != null) {
 			if (!pwd.equals(password)) {
@@ -133,6 +154,8 @@ public class RoomDaoImpl implements RoomDao {
 
 	@Override
 	public boolean exitRoom(String roomcode, String uid) {
+		Hashinit();
+		ZSetinit();
 		LocalDateTime now = LocalDateTime.now();
 		String formatNow = now.format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
 
@@ -155,12 +178,14 @@ public class RoomDaoImpl implements RoomDao {
 
 	@Override
 	public void banUser(String roomcode, String uid) {
+		Setinit();
 		stringSetOperations.add("room:" + roomcode + ":banlist", uid);
 	}
-	
-	// get info for each building on the mainpage
+
 	@Override
-	public int[][] getBuilding(){
+	public int[][] getBuilding() {
+		Hashinit();
+		ZSetinit();
 		int[][] table = new int[6][2];
 		
 		List<Map<Object, Object>>[] list = new ArrayList[6];
@@ -201,10 +226,11 @@ public class RoomDaoImpl implements RoomDao {
 		}
 		return table;
 	}
-	
-	// get info for each table on the pubpage
+
 	@Override
-	public List<Map<Object, Object>> getTable(int bno){
+	public List<Map<Object, Object>> getTable(int bno) {
+		Hashinit();
+		ZSetinit();
 		Set<String> set = stringRedisTemplate.keys("room:?????" + bno + "??");
 		List<Map<Object, Object>> list = new ArrayList<>();
 		
@@ -226,10 +252,11 @@ public class RoomDaoImpl implements RoomDao {
 		}
 		return list;
 	}
-	
+
 	@Override
 	public boolean isExists(String key) {
 		return stringRedisTemplate.hasKey(key);
 	}
+
 
 }

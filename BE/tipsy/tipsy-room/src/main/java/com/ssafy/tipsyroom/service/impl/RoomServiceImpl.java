@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ssafy.domainnosql.dao.room.RoomDao;
+import com.ssafy.domainnosql.room.repo.RoomRepo;
 import com.ssafy.domainnosql.vo.MemberVo;
 import com.ssafy.domainnosql.vo.RoomVo;
 import com.ssafy.tipsyroom.service.RoomService;
@@ -23,7 +23,7 @@ public class RoomServiceImpl implements RoomService {
 	private final Logger logger = LoggerFactory.getLogger(RoomServiceImpl.class);
 	
 	@Autowired
-	private final RoomDao roomDao;
+	private RoomRepo roomRepo;
 
 	@Override
 	public String createRoom(RoomVo roomvo) {
@@ -34,7 +34,7 @@ public class RoomServiceImpl implements RoomService {
 		String roomcode = "";
 		while(true) {
 			roomcode = getRandomCode() + roomvo.getCode();
-			if(!roomDao.isExists("room:"+roomcode)) {
+			if(!roomRepo.isExists("room:"+roomcode)) {
 				break;
 			}
 		}
@@ -42,7 +42,7 @@ public class RoomServiceImpl implements RoomService {
 		roomvo.setCode(roomcode);
 		
 		// 생성
-		roomDao.createRoom(roomvo);
+		roomRepo.createRoom(roomvo);
 		
 		
 		logger.info(roomvo.getCode() + "방이 생성되었습니다.");
@@ -67,12 +67,12 @@ public class RoomServiceImpl implements RoomService {
 	
 	@Override
 	public void changeSet(RoomVo roomvo) {
-		roomDao.changeSet(roomvo);	
+		roomRepo.changeSet(roomvo);	
 	}
 	
 	@Override
 	public int enterRoom(MemberVo membervo) {
-		return roomDao.enterRoom(membervo);
+		return roomRepo.enterRoom(membervo);
 	}
 	
 	
@@ -94,25 +94,25 @@ public class RoomServiceImpl implements RoomService {
 	@Override
 	public void exitRoom(String roomcode, String uid) {
 
-		if(roomDao.exitRoom(roomcode, uid)) {
+		if(roomRepo.exitRoom(roomcode, uid)) {
 			logger.info("남아있는 사람이 없어 " + roomcode + "방을 삭제하였습니다.");
 		}
 	}
 
 	@Override
 	public void banUser(String roomcode, String uid) {
-		roomDao.banUser(roomcode, uid);
-		roomDao.exitRoom(roomcode, uid);
+		roomRepo.banUser(roomcode, uid);
+		roomRepo.exitRoom(roomcode, uid);
 	}
 	
 	@Override
 	public List<Map<Object, Object>> getTable(int bno) {
-		return roomDao.getTable(bno);
+		return roomRepo.getTable(bno);
 	}
 	
 	@Override
 	public int[][] getBuilding() {
-		return roomDao.getBuilding();
+		return roomRepo.getBuilding();
 //		for (int i = 0; i < 6; i++) {
 //			logger.info(i + "번 건물에 생성되어 있는 테이블 정보들");
 //			for (Map<Object, Object> map : list[i]) {

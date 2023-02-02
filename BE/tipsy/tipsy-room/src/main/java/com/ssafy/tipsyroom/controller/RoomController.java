@@ -20,7 +20,7 @@ import com.ssafy.tipsyroom.service.RoomService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 
-//http://localhost:8082/swagger-ui.html
+//http://localhost:8081/swagger-ui.html
 
 @RestController()
 @RequestMapping("/room")

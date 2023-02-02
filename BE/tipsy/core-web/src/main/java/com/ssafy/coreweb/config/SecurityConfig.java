@@ -4,27 +4,38 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.context.SecurityContextPersistenceFilter;
+
+import com.ssafy.coreweb.filter.JwtAuthorizationFilter;
+import com.ssafy.coreweb.provider.JwtTokenProvider;
+
+import lombok.RequiredArgsConstructor;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig{
-	@Bean
-	protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf().disable()// ¼¼¼ÇÀ» »ç¿ëÇÏÁö ¾Ê°í JWT ÅäÅ«À» È°¿ëÇÏ¿© ÁøÇà, csrfÅäÅ«°Ë»ç¸¦ ºñÈ°¼ºÈ­
-                .authorizeRequests() // ÀÎÁõÀıÂ÷¿¡ ´ëÇÑ ¼³Á¤À» ÁøÇà
-                .antMatchers("/**").permitAll() // ¼³Á¤µÈ urlÀº ÀÎÁõµÇÁö ¾Ê´õ¶óµµ ´©±¸µç Á¢±Ù °¡´É
-                .anyRequest().authenticated();// À§ ÆäÀÌÁö ¿Ü ÀÎÁõÀÌ µÇ¾î¾ß Á¢±Ù°¡´É(ROLE¿¡ »ó°ü¾øÀÌ)
-        
-//        http.headers().frameOptions().sameOrigin();
-        
-        return http.build();
-    }
+@RequiredArgsConstructor
+public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	
-    @Bean // ÆĞ½º¿öµå ¾ÏÈ£È­ °ü·Ã ¸Ş¼Òµå
+	private final JwtTokenProvider jwtTokenProvider;
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		// TODO Auto-generated method stub
+		http.addFilterBefore(new JwtAuthorizationFilter(jwtTokenProvider), SecurityContextPersistenceFilter.class);
+		http.csrf().disable(); //csrfí† í°ê²€ì‚¬ë¥¼ ë¹„í™œì„±í™”
+		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // ì„¸ì…˜ì„ ì‚¬ìš©í•˜ì§€ ì•ŠìŒ Stateless ì„œë²„ë¡œ ë§Œë“¬
+		.and()
+		.formLogin().disable() //í¼ë¡œê·¸ì¸ ë¹„í™œì„±í™”
+		.httpBasic().disable()
+		.authorizeRequests()
+		.anyRequest().permitAll();
+	}
+	
+    @Bean // íŒ¨ìŠ¤ì›Œë“œ ì•”í˜¸í™” ê´€ë ¨ ë©”ì†Œë“œ
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }

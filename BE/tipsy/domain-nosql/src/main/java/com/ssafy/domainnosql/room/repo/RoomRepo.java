@@ -1,4 +1,4 @@
-package com.ssafy.domainnosql.dao.room;
+package com.ssafy.domainnosql.room.repo;
 
 import java.util.List;
 import java.util.Map;
@@ -6,7 +6,7 @@ import java.util.Map;
 import com.ssafy.domainnosql.vo.MemberVo;
 import com.ssafy.domainnosql.vo.RoomVo;
 
-public interface RoomDao {
+public interface RoomRepo {
 	void createRoom(RoomVo roomvo);
 	void changeSet(RoomVo roomvo);
 

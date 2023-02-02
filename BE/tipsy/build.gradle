@@ -12,7 +12,6 @@ buildscript {
     }
 }
 
-// ���� ��� ������Ʈ ���� ����
 subprojects {
     apply plugin: 'java'
     apply plugin: 'idea'
@@ -29,10 +28,11 @@ subprojects {
         mavenCentral()
     }
 
-    // ���� ��⿡�� �������� ����ϴ� ���� �߰�
     dependencies {
         compileOnly 'org.projectlombok:lombok'
         annotationProcessor 'org.projectlombok:lombok'
+        developmentOnly 'org.springframework.boot:spring-boot-devtools'
+        
     }
 
     tasks.named('test') {
@@ -48,7 +48,7 @@ project(':core-web') {
         implementation 'org.springframework.boot:spring-boot-starter-web'
 		implementation 'org.springframework.boot:spring-boot-starter-web-services'
 		implementation 'org.springframework.boot:spring-boot-starter-security'
-
+		
 		implementation 'org.springframework.boot:spring-boot-starter-test'
 		implementation 'org.junit.jupiter:junit-jupiter-api:5.9.1'
 		developmentOnly 'org.springframework.boot:spring-boot-devtools'
