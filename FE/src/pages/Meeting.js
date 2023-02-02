@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-//import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import {RGBELoader} from 'three/examples/jsm/loaders/RGBELoader'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import Stats from 'three/examples/jsm/libs/stats.module'
@@ -14,17 +14,17 @@ function Meeting() {
   const scene = new THREE.Scene()
   scene.background = new THREE.Color(0xeeeeee)
 
-  const camera = new THREE.PerspectiveCamera(65, window.innerWidth / window.innerHeight, 0.1, 1000)
-  camera.position.set(-1, 10, 10)
-	camera.constrainVertical = true
-	console.log(camera)
+
+  //카메라ㅏㅏ
+  const camera = new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 0.1, 1000)
+  camera.position.set(3, 9, 13)
 	
 
   const renderer = new THREE.WebGLRenderer()
   renderer.setSize(window.innerWidth, window.innerHeight)
   document.body.appendChild(renderer.domElement)
 
-  //const controls = new OrbitControls(camera, renderer.domElement)
+  const controls = new OrbitControls(camera, renderer.domElement)
 
   const gridHelper = new THREE.GridHelper(20, 20)   //바닥 격자 크기, 갯수
   gridHelper.position.y = 0
@@ -145,7 +145,7 @@ function Meeting() {
   //scene.add(cam2)
 
   const stats= Stats()
-  document.body.appendChild(stats.dom)
+  //document.body.appendChild(stats.dom)
   /* 
   var data = {
       keyColor: [0, 255, 0],
@@ -276,12 +276,13 @@ function Meeting() {
 			const chair4 = chair.clone()
 			
 			chair.position.set(0,0,0)
-			chair2.position.set(5,0,0)
-			chair3.position.set(5,0,10)
-			chair4.position.set(0,0,10)
+			chair2.position.set(-6,0,4)
+			chair3.position.set(7,0,4)
+			chair4.position.set(2,0,12)
 			
+      chair2.rotateY(1)
+			chair3.rotateY(-1)
 			chair4.rotateY(Math.PI)
-			chair3.rotateY(Math.PI)
 			
 			scene.add( chair );
 			scene.add( chair2 )
@@ -299,7 +300,30 @@ function Meeting() {
 	}
 	chairMake('dining_chair_02')
 
-
+  function sojumaker(tableFolder){
+  	const tableLoader = new GLTFLoader()
+  	const diff = textureLoader.load(`3d/${tableFolder}_4k/textures/${tableFolder}_diff_4k.jpg`)
+  	tableLoader.load( `3d/${tableFolder}_4k/${tableFolder}_4k.gltf`,
+  	  gltf2 => {
+  	    //gltf.scene.scale(3,3,3)
+  	    var table = gltf2.scene;
+  	    table.traverse ( ( o ) => {
+  	      if ( o.isMesh ) {
+  	          //note: for a multi-material mesh, `o.material` may be an array,
+  	          // in which case you'd need to set `.map` on each value.
+  	          // 텍스쳐 요소들 넣기
+  	          //o.material.map = diff;
+              o.transmission = 1
+              console.log(o)
+  	      }
+  	    });
+  	  table.scale.set(20,20,20)
+  	  table.position.set(2,10,5)
+  	  scene.add(table)
+      table.rotation.y = 1
+  	})
+	}
+  sojumaker('jiro_soju')
   let raycaster = new THREE.Raycaster()
   document.addEventListener( 'click', onPointerMove );
   function onPointerMove( event ) {
@@ -337,7 +361,8 @@ function Meeting() {
   textBox.prepend(btnTag1)
   textBox.prepend(pTag)
   document.body.prepend(textBox)
-
+  textBox.style.display = 'none'
+  console.log(textBox.style)
   btnTag1.onclick = () => {
       document.getElementById('profileBox').style.display = 'block'
     }
@@ -350,6 +375,7 @@ function Meeting() {
       	INTERSECTED = intersects[ 0 ].object.name;
         const text = INTERSECTED
 				pTag.innerText = INTERSECTED
+        console.log(text)
 				if (text) {
 					textBox.style.display = 'none'
 				}
@@ -372,25 +398,28 @@ function Meeting() {
   }
 
 	window.addEventListener("keydown", e => {
-		if (e.key === 'ArrowLeft' && camera.rotation.y < 1){
-			camera.rotateY(0.1)
-		} else if (e.key === 'ArrowRight' && camera.rotation.y > -1){
-			camera.rotateY(-0.1)
+		if (e.key === 'ArrowLeft' && camera.rotation.y < 1.75){
+			camera.rotation.y += 0.25
+		} else if (e.key === 'ArrowRight' && camera.rotation.y > -1.5){
+			camera.rotation.y -= 0.25
 		}
+    if (camera.rotation.y <= 0.75 && camera.rotation.y >= -0.25) {
+      if (e.key === 'ArrowUp' && camera.rotation.x < 0.25){
+        camera.rotation.x += 0.25
+      } else if (e.key === 'ArrowDown' && camera.rotation.x > -0.75){
+        camera.rotation.x -=0.25
+      }
+    } else {
+      if (camera.rotation.x < 0){
+        camera.rotation.x += 0.25
+      } else if (camera.rotation.x > 0){
+        camera.rotation.x -= 0.25
+      }
+    }
+    console.log(camera.rotation.x, camera.rotation.y, camera.rotation.z)
 	})
-	window.addEventListener('mousedown', e => {
-		window.addEventListener('mousemove', (e) => {
-			console.log(e)
-			camera.rotateY( -0.0005)})
-	})
-	window.addEventListener('mouseup', () => {
-		console.log('up')
-		window.removeEventListener('mousemove', () => {camera.rotateY( -0.0005)})
-	})
-
 
 	animate()
-
 	
   return (
     <>
