@@ -300,30 +300,41 @@ function Meeting() {
 	}
 	chairMake('dining_chair_02')
 
-  function sojumaker(tableFolder){
-  	const tableLoader = new GLTFLoader()
-  	const diff = textureLoader.load(`3d/${tableFolder}_4k/textures/${tableFolder}_diff_4k.jpg`)
-  	tableLoader.load( `3d/${tableFolder}_4k/${tableFolder}_4k.gltf`,
+  function sojumaker(){
+  	const bottleLoader = new GLTFLoader()
+  	bottleLoader.load( '3d/jiro_soju_4k/jiro_bottle.gltf',
   	  gltf2 => {
-  	    //gltf.scene.scale(3,3,3)
-  	    var table = gltf2.scene;
-  	    table.traverse ( ( o ) => {
+  	    var bottle = gltf2.scene;
+  	    bottle.traverse ( ( o ) => {
   	      if ( o.isMesh ) {
-  	          //note: for a multi-material mesh, `o.material` may be an array,
-  	          // in which case you'd need to set `.map` on each value.
-  	          // 텍스쳐 요소들 넣기
-  	          //o.material.map = diff;
-              o.transmission = 1
-              console.log(o)
+              o.material.transparent = true
+              o.material.opacity = 0.28
   	      }
   	    });
-  	  table.scale.set(20,20,20)
-  	  table.position.set(2,10,5)
-  	  scene.add(table)
-      table.rotation.y = 1
+  	  bottle.scale.set(30, 30, 30)
+  	  bottle.position.set(2, 6, 1)
+  	  scene.add(bottle)
+      bottle.rotation.x = -Math.PI/2
   	})
+    const labelLoader = new GLTFLoader()
+    labelLoader.load( '3d/jiro_soju_4k/jiro_label.gltf',
+    gltf2 => {
+      var label = gltf2.scene;
+      label.traverse ( ( o ) => {
+        if ( o.isMesh ) {
+            //note: for a multi-material mesh, `o.material` may be an array,
+            // in which case you'd need to set `.map` on each value.
+            // 텍스쳐 요소들 넣기
+            //o.material.map = diff;
+        }
+      });
+    label.scale.set(30, 30, 30)
+    label.position.set(2, 6, 1)
+    scene.add(label)
+    label.rotation.x = -Math.PI/2
+  })
 	}
-  sojumaker('jiro_soju')
+  sojumaker()
   let raycaster = new THREE.Raycaster()
   document.addEventListener( 'click', onPointerMove );
   function onPointerMove( event ) {
@@ -347,6 +358,24 @@ function Meeting() {
     stats.update()
     }
   
+
+  const foodLoader = new GLTFLoader()
+  foodLoader.load( '3d/pizza/pizza.gltf',
+    gltf2 => {
+      var pizza = gltf2.scene;
+      //bottle.scale.set(30,30,30)
+      pizza.position.set(0,6.4,5)
+      scene.add(pizza)
+  })
+  foodLoader.load( '3d/pizza/frenchfries.gltf',
+  gltf2 => {
+    var pizza = gltf2.scene;
+    //bottle.scale.set(30,30,30)
+    pizza.position.set(3,6.4,5)
+    scene.add(pizza)
+  })
+
+
 
   const textBox = document.createElement('div')
   const pTag = document.createElement('p')
@@ -416,7 +445,6 @@ function Meeting() {
         camera.rotation.x -= 0.25
       }
     }
-    console.log(camera.rotation.x, camera.rotation.y, camera.rotation.z)
 	})
 
 	animate()
