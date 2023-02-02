@@ -120,10 +120,10 @@ public class RoomController {
 	// exit room
 	@PostMapping("/exit")
 	@ApiOperation(value = "code[방코드], id[사용자id]", notes = "방 나간다.")
-	public ResponseEntity<?> exitRoom(@RequestBody Map<String, String> param) {
+	public ResponseEntity<?> exitRoom(@RequestBody Map<String, Object> param) {
 		try {
-			String roomcode = param.get("code");
-			String uid = param.get("id");
+			String roomcode = String.valueOf(param.get("code"));
+			String uid = String.valueOf(param.get("id"));
 			roomService.exitRoom(roomcode, uid);
 			logger.info(uid + "님이 " + roomcode + "방을 나갔습니다.");
 			return new ResponseEntity<String>("success", HttpStatus.CREATED);
@@ -135,10 +135,10 @@ public class RoomController {
 	// ban user
 	@PostMapping("/ban")
 	@ApiOperation(value = "code[방코드], id[강퇴할 사용자 id]", notes = "강퇴하기")
-	public ResponseEntity<?> banUser(@RequestBody Map<String, String> param) {
+	public ResponseEntity<?> banUser(@RequestBody Map<String, Object> param) {
 		try {
-			String roomcode = param.get("code");
-			String uid = param.get("id");
+			String roomcode = String.valueOf(param.get("code"));
+			String uid = String.valueOf(param.get("id"));
 			roomService.banUser(roomcode, uid);
 			logger.info(uid + "님이 " + roomcode + "방에서 강퇴되었습니다.");
 			return new ResponseEntity<String>("success", HttpStatus.CREATED);

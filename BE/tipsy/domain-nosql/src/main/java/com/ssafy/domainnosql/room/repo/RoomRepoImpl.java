@@ -170,6 +170,8 @@ public class RoomRepoImpl implements RoomRepo {
 		Long cur = stringZSetOperations.zCard("room:"+roomcode+":member");
 		if(cur == 0) {
 			stringRedisTemplate.delete("room:" + roomcode);
+			stringRedisTemplate.delete("room:" + roomcode + ":banlist");
+			stringRedisTemplate.delete("room:" + roomcode + ":hashtag");
 			return true;
 		}
 		
