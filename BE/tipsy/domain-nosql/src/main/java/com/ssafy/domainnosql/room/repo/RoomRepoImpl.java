@@ -251,6 +251,7 @@ String str = (String) iter.next();
 			map.put("max", Integer.parseInt(String.valueOf(max)));
 			
 			map.put("code", str.substring(5));
+			map.put("current", stringZSetOperations.zCard(str + ":member"));
 			map.put("hashtag", stringSetOperations.members("room:" + map.get("code") + ":hashtag"));
 			
 			logger.info(String.valueOf(map));
