@@ -1,6 +1,5 @@
 package com.ssafy.tipsyroom.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -114,43 +113,6 @@ public class RoomServiceImpl implements RoomService {
 	@Override
 	public int[][] getBuilding() {
 		return roomRepo.getBuilding();
-//		for (int i = 0; i < 6; i++) {
-//			logger.info(i + "번 건물에 생성되어 있는 테이블 정보들");
-//			for (Map<Object, Object> map : list[i]) {
-//				logger.info(String.valueOf(map));
-//			}
-//		}
 	}
 	
-	@Override
-	public List<Long> assessList(String roomcode, long uid) {
-		return roomRepo.assessList(roomcode, uid);
-	}
-	
-	
-	@Override
-	public void test() {
-		
-//		try {
-//
-//			ZSetOperations<String, String> stringZSetOperations = stringRedisTemplate.opsForZSet();
-//			
-//			String Date = String.valueOf(stringZSetOperations.score("room:"+roomcode+":member", uid));
-//			Date date = new SimpleDateFormat("yyyyMMDDHHmmss").parse(Date);
-//	        long time = date.getTime();
-//
-//	        Timestamp ts = new Timestamp(time);
-//
-//	        System.out.println(ts);
-//			
-//	        stringZSetOperations.range
-//	        
-//	        
-//		} catch (ParseException e) {
-//			e.printStackTrace();
-//		}
-		
-	}
-
-
 }

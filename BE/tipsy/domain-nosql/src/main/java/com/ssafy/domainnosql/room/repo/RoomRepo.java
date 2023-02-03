@@ -20,5 +20,4 @@ public interface RoomRepo {
 	
 	boolean isExists(String key);
 	
-	List<Long> assessList(String roomcode, long uid);
 }

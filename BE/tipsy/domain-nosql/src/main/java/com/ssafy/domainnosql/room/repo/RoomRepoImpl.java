@@ -1,13 +1,8 @@
 package com.ssafy.domainnosql.room.repo;
 
-import java.sql.Timestamp;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -269,77 +264,6 @@ public class RoomRepoImpl implements RoomRepo {
 	@Override
 	public boolean isExists(String key) {
 		return stringRedisTemplate.hasKey(key);
-	}
-	
-	@Override
-	public List<Long> assessList(String roomcode, long uid) {
-		List<Long> assesslist = new ArrayList<>();
-	
-		try {
-			Hashinit();
-			ZSetinit();
-			
-			Date entertime = getDate(String.valueOf(stringHashOperations.get("room:" + roomcode + ":member:" + uid, "entertime")));
-			Date exittime = getDate(String.valueOf(stringHashOperations.get("room:" + roomcode + ":member:" + uid, "exittime")));
-
-			if(canAssess(exittime, entertime)) {
-				logger.info(uid + "님은 " + roomcode + "방에 30분 미만 참가하여 평가를 할 수 없습니다.");
-				return null;
-			}
-			
-			Set<String> remain = stringZSetOperations.range("room:" + roomcode + ":member", 0, -1);
-			
-			// 평가를 할 수 있는 유저인지 판단
-			Set<String> members = stringRedisTemplate.keys("room:" + roomcode + ":member:*");
-			
-			Iterator iter = members.iterator();
-			while(iter.hasNext()) {
-				String str = (String) iter.next();
-				
-				// 본인은 넘어가기
-				if(str.equals("room:" + roomcode + ":member:" + uid)) {
-					continue;
-				}
-
-				Date entertime2 = getDate(String.valueOf(stringHashOperations.get(str, "entertime")));			
-				
-				// 아직 안나가고 있는 유저들
-				if(remain.contains(str.substring(21))) {
-					long diffSec = (entertime.getTime() - entertime2.getTime()) / 1000;
-					// 본인보다 먼저 들어온 사람들
-					if(diffSec >= 0){
-						assesslist.add(Long.parseLong(str.substring(21)));
-					} else {
-						// 사람들이 들어오고 내가 나가기까지 30분 이상 소요되었다면
-						if(canAssess(entertime2, exittime)) {
-							assesslist.add(Long.parseLong(str.substring(21)));
-						}
-					}
-					continue;
-				}
-
-				Date exittime2 = getDate(String.valueOf(stringHashOperations.get(str, "exittime")));
-				if(canAssess(entertime, exittime2)) {
-					assesslist.add(Long.parseLong(str.substring(21)));
-				}
-			}
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return assesslist;
-	}
-	
-	private boolean canAssess(Date entertime, Date exittime) {
-		long diffMin = (exittime.getTime() - entertime.getTime()) / 60000; //분 차이
-		
-		if(diffMin < 30)
-			return false;
-		return true;
-	}
-	private Date getDate(String Date) throws ParseException {
-		Date date = new SimpleDateFormat("yyyyMMDDHHmmss").parse(Date);
-		return date;
 	}
 
 }
