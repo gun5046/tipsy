@@ -76,6 +76,7 @@ class MainActivity : AppCompatActivity() {
                 val intent = Intent(this, GameRoomActivity::class.java)
                 intent.putExtra("roomNumber", binding.roomNumberText.text.toString())
                 startActivity(intent)
+                binding.roomNumberText.text.clear()
             }
         }
         binding.gameListBtn.setOnClickListener {

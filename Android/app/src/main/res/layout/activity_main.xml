@@ -44,7 +44,7 @@
         android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toStartOf="@+id/profile_nickname"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_baseline_logout_24" />
+        app:srcCompat="@drawable/ic_launcher_foreground" />
 
     <TextView
         android:id="@+id/profile_nickname"
@@ -76,7 +76,7 @@
         android:ems="10"
         android:hint="방 번호"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/qr_test_btn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/main_logo_img" />
@@ -88,7 +88,7 @@
         app:layout_constraintBottom_toTopOf="@+id/room_number_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/game_list_btn"
         tools:srcCompat="@tools:sample/avatars" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -49,7 +49,10 @@ class LoginActivity : AppCompatActivity() {
 //                    login()
 //                }
 //            }
-            serverTest()
+//            serverTest()
+            val intent = Intent(this@LoginActivity, MainActivity::class.java)
+            startActivity(intent)
+            finish()
         }
     }
 

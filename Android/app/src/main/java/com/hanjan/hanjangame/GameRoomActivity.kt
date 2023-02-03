@@ -4,20 +4,28 @@ import android.app.AlertDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.fasterxml.jackson.core.type.TypeReference
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 import com.hanjan.hanjangame.adapter.UserListAdapter
 import com.hanjan.hanjangame.adapter.showGameListDialog
 import com.hanjan.hanjangame.databinding.ActivityGameRoomBinding
 import com.hanjan.hanjangame.databinding.GameExitDialogBinding
-import com.hanjan.hanjangame.dto.UserWithData
+import com.hanjan.hanjangame.dto.GameUserDto
+import org.json.JSONObject
+
+private const val TAG = "GameRoomActivity"
 
 class GameRoomActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityGameRoomBinding
     val userList = listOf(
-        UserWithData("", "사용자 1", true, false),
-        UserWithData("", "사용자 2", false, false),
-        UserWithData("", "사용자 3", false, true)
+        GameUserDto("", "사용자 1", true, false),
+        GameUserDto("", "사용자 2", false, false),
+        GameUserDto("", "사용자 3", false, true)
     )
     private var host = false
     private var ready = false
@@ -27,6 +35,24 @@ class GameRoomActivity : AppCompatActivity() {
         binding = ActivityGameRoomBinding.inflate(layoutInflater)
         setContentView(binding.root)
         val roomNumber = intent.getStringExtra("roomNumber")
+        Log.d(TAG, "onCreate: $roomNumber")
+        GlobalApplication.connectStomp()
+        GlobalApplication.stompClient?.topic("/game/room/${roomNumber}")?.subscribe{
+            Log.d(TAG, "onCreate: ${it.payload}")
+            val list = jacksonObjectMapper().readValue<List<GameUserDto>>(it.payload)
+            runOnUiThread {
+                binding.recyclerView.adapter = UserListAdapter(list)
+            }
+        }
+        val data = JSONObject()
+        data.put("type", "Enter")
+        val userJson = JSONObject()
+        userJson.put("img", "")
+        userJson.put("nickname", "test")
+        userJson.put("host", false)
+        userJson.put("ready", false)
+        data.put("gameUserDto", userJson)
+        GlobalApplication.stompClient!!.send("/game/room/${roomNumber}", data.toString())?.subscribe()
         binding.gameStartBtn.setOnClickListener {
             startActivity(Intent(this, GameListActivity::class.java))
         }
@@ -82,6 +108,7 @@ class GameRoomActivity : AppCompatActivity() {
         val dialog = builder.show()
         dialogBinding.dialogExitBtn.setOnClickListener {
             dialog.dismiss()
+            GlobalApplication.stompClient?.disconnect()
             finish()
         }
         dialogBinding.dialogCancelBtn.setOnClickListener {

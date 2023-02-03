@@ -17,7 +17,7 @@ import java.util.*
 class OrderingActivity : AppCompatActivity() {
     private lateinit var binding: ActivityOrderingBinding
     private lateinit var timer: Job
-    private var time = 3000
+    private var time = 1500
     private val list = mutableListOf<Int>()
     private val btnList = mutableListOf<Button>()
     private var count = 1

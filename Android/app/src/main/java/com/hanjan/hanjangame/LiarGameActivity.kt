@@ -33,16 +33,22 @@ class LiarGameActivity : AppCompatActivity() {
         CoroutineScope(Dispatchers.Main).launch {
             val builder = AlertDialog.Builder(this@LiarGameActivity)
             builder.setTitle("주제는 ${liarGameData.topic}입니다.")
+            binding.categoryText.text = "주제는 ${liarGameData.topic}입니다."
             if(liarGameData.liar.nickname == ""){
                 //라이어인지 구별 로그인 연동하고 나면 앱에 가지고 있는 사용자 정보와 비교할 예정
                 builder.setMessage("당신은 라이어입니다.")
+                binding.wordText.text = "당신은 라이어입니다."
             } else {
                 builder.setMessage("단어는 ${liarGameData.word}입니다.")
+                binding.wordText.text = "단어는 ${liarGameData.word}입니다."
             }
             val dialog = builder.show()
             dialog.setCancelable(false)
             delay(3000)
             dialog.dismiss()
+            binding.liarGameTimer.visibility = View.VISIBLE
+            binding.categoryText.visibility = View.VISIBLE
+            binding.wordText.visibility = View.VISIBLE
             while (time>0){
                 time--
                 runOnUiThread {

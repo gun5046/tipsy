@@ -2,17 +2,16 @@ package com.hanjan.hanjangame.adapter
 
 import android.graphics.Color
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.hanjan.hanjangame.databinding.UserListItemBinding
-import com.hanjan.hanjangame.dto.UserWithData
+import com.hanjan.hanjangame.dto.GameUserDto
 
-class UserListAdapter(val userList: List<UserWithData>) : RecyclerView.Adapter<UserListAdapter.UserViewHolder>() {
+class UserListAdapter(val userList: List<GameUserDto>) : RecyclerView.Adapter<UserListAdapter.UserViewHolder>() {
     private lateinit var binding: UserListItemBinding
 
     inner class UserViewHolder(binding: UserListItemBinding) : RecyclerView.ViewHolder(binding.root){
-        fun onBind(user: UserWithData){
+        fun onBind(user: GameUserDto){
 //            binding.userImg 이미지 교체 필요
             binding.userNickname.text = user.nickname
             if(!user.host){

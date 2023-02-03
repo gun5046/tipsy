@@ -25,6 +25,8 @@
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
         android:text="닉네임"
+        android:textColor="@color/icon"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/user_img"
         app:layout_constraintTop_toTopOf="parent" />
@@ -38,6 +40,7 @@
         android:layout_marginBottom="16dp"
         android:text="Host"
         android:textColor="@color/icon"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
