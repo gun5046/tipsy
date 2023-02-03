@@ -1,5 +1,7 @@
 package com.ssafy.tipsygame.controller;
 
+import java.util.List;
+
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -7,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ssafy.tipsygame.dto.CommonGameDto;
 import com.ssafy.tipsygame.dto.CrocoDto;
 import com.ssafy.tipsygame.dto.GameCommDto;
 import com.ssafy.tipsygame.dto.LiarRequestDto;
@@ -18,7 +21,6 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-
 public class GameController {
 
 	private final GameServiceImpl gameServiceImpl;
@@ -78,13 +80,21 @@ public class GameController {
 	}
 
 	@MessageMapping("/game/play/drink-game/{rid}")
-	public void playDrinkGame() {
-		
+	public void playDrinkGame(@PathVariable String rid, CommonGameDto commonGameDto) {
+		gameServiceImpl.putRecord(rid, commonGameDto);
+		if(gameServiceImpl.countUser(rid)) {
+			List<CommonGameDto> list = gameServiceImpl.sortRecord(rid);
+			simpMessagingTemplate.convertAndSend("/game/play/drink-game/"+rid, list);
+		}
 	}
 
 	@MessageMapping("/game/play/drag-game/{rid}")
-	public void playDragGame() {
-
+	public void playDragGame(@PathVariable String rid, CommonGameDto commonGameDto) {
+		gameServiceImpl.putRecord(rid, commonGameDto);
+		if(gameServiceImpl.countUser(rid)) {
+			List<CommonGameDto> list = gameServiceImpl.sortRecord(rid);
+			simpMessagingTemplate.convertAndSend("/game/play/drag-game/"+rid, list);
+		}
 	}
 
 	@MessageMapping("/game/play/roulette-game/{rid}")
@@ -93,7 +103,11 @@ public class GameController {
 	}
 
 	@MessageMapping("/game/play/ordering-game/{rid}")
-	public void playOrderingGame() {
-
+	public void playOrderingGame(@PathVariable String rid, CommonGameDto commonGameDto) {
+		gameServiceImpl.putRecord(rid, commonGameDto);
+		if(gameServiceImpl.countUser(rid)) {
+			List<CommonGameDto> list = gameServiceImpl.sortRecord(rid);
+			simpMessagingTemplate.convertAndSend("/game/play/drag-game/"+rid, list);
+		}
 	}
 }

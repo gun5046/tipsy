@@ -1,17 +1,21 @@
 package com.ssafy.tipsygame.service.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.stereotype.Service;
 
 import com.ssafy.domainnosql.entity.Member;
 import com.ssafy.domainnosql.repo.RoomRepository;
 import com.ssafy.tipsygame.constant.Constant;
+import com.ssafy.tipsygame.dto.CommonGameDto;
 import com.ssafy.tipsygame.dto.GameCommDto;
 import com.ssafy.tipsygame.dto.GameDto;
 import com.ssafy.tipsygame.dto.GameUserDto;
@@ -30,13 +34,16 @@ public class GameServiceImpl implements GameService{
 	private Map<String, Integer> count;
 	private Map<String, Map<String,Integer>> vote;
 	private Map<String, Integer> crocoIdx;
-	
+	private Map<String, List<CommonGameDto>> commonData;
 	private Constant constant;
+	
+	@PostConstruct
 	public void init() {
 		roomList=new HashMap<>();
 		count = new HashMap<String, Integer>();
 		vote = new HashMap<String, Map<String,Integer>>();
-		
+		crocoIdx = new HashMap<String, Integer>();
+		commonData = new HashMap<String, List<CommonGameDto>>();
 	}
 	public String checkGameRoom(Long uid, String rid) {
 		List<Member> memberList = roomRepository.findAllById(rid);
@@ -222,7 +229,22 @@ public class GameServiceImpl implements GameService{
 		
 		return false;
 	}
+	public void putRecord(String rid,CommonGameDto commonGameDto) {
+
+		if(!commonData.containsKey(rid)){
+			List<CommonGameDto> list = new ArrayList<CommonGameDto>();
+			list.add(commonGameDto);
+			commonData.put(rid, list);
+		}else {
+			commonData.get(rid).add(commonGameDto);
+		}
+	}
 	
-	
+	public List<CommonGameDto> sortRecord(String rid) {
+		List <CommonGameDto> list = commonData.get(rid);
+		commonData.remove(rid);
+		Collections.sort(list,Collections.reverseOrder());
+		return list;
+	}
 	
 }
