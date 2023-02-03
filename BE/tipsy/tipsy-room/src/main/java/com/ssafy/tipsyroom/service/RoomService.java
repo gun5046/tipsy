@@ -14,5 +14,7 @@ public interface RoomService {
 	void changeSet(RoomVo roomvo);
 	List<Map<Object, Object>> getTable(int bno);
 	int[][] getBuilding();
+	//평가 user의 입장시간+30분보다 퇴장시간이 늦는 사람
+	List<Long> assessList(String roomcode, long uid); 
 	void test();
 }

@@ -140,6 +140,23 @@ public class RoomController {
 		}
 	}
 
+	// assessList
+	@PostMapping("/assessment")
+	@ApiOperation(value = "code[방코드], id[평가를 진행할 사용자 id]", notes = "유저 평가")
+	public ResponseEntity<?> assessList(@RequestBody Map<Object, Object> param) {
+		try {
+			String roomcode = String.valueOf(param.get("code"));
+			long uid = Long.parseLong(String.valueOf(param.get("id")));
+			List<Long> assesslist = roomService.assessList(roomcode, uid);
+			logger.info(uid + "님이 평가할 수 있는 유저들");
+			logger.info(String.valueOf(assesslist));
+			return new ResponseEntity<List<Long>>(assesslist, HttpStatus.CREATED);
+			
+		} catch (Exception e) {
+			return exceptionHandling(e);
+		}
+	}
+	
 	private ResponseEntity<String> exceptionHandling(Exception e) {
 		e.printStackTrace();
 		return new ResponseEntity<String>("Sorry: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);

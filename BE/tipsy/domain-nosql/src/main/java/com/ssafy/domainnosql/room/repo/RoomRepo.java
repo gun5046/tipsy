@@ -19,4 +19,6 @@ public interface RoomRepo {
 	List<Map<Object, Object>> getTable(int bno);
 	
 	boolean isExists(String key);
+	
+	List<Long> assessList(String roomcode, long uid);
 }
