@@ -20,9 +20,11 @@ class GlobalApplication: Application() {
 
         fun connectStomp(){
             val url = "ws://10.0.2.2:8081/ws/chat/websocket"
-            if(stompClient == null || stompClient!!.isConnected){
+            if(stompClient == null){
                 Log.d(TAG, "connectStomp: ")
                 stompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, url)
+            }
+            if(!stompClient!!.isConnected){
                 stompClient?.connect()
             }
         }
