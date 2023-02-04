@@ -81,7 +81,7 @@ public class GameServiceImpl implements GameService{
 			}else {
 				roomList.get(rid).getGameUserList().add(gameUser);
 			}
-			return  roomList.get(rid).getGameUserList();
+			return roomList.get(rid).getGameUserList();
 		case "Ready" :
 			roomList.get(rid).getGameUserList().forEach(e -> {
 				if(e.getNickname().equals(gameUser.getNickname())) {
@@ -92,20 +92,33 @@ public class GameServiceImpl implements GameService{
 		case "Start" :
 			roomList.get(rid).setPlaying(true);
 			count.put(rid, 0);
+			roomList.get(rid).getGameUserList().forEach(e -> {
+				if(e.getNickname().equals(gameUser.getNickname())) {
+					e.setReady(gameUser.getReady());
+				}
+			});
 			return roomList.get(rid).getGameUserList();
 		case "Exit" :
 			List<GameUserDto> list = roomList.get(rid).getGameUserList();
+			Boolean host = false;
 			for(int i=0; i<list.size(); i++) {
 				if(list.get(i).getNickname().equals(gameUser.getNickname())) {
-					if(list.get(i).getHost()) {
-						if(i>0) {
-							roomList.get(rid).getGameUserList().get(i-1).setHost(true);
-						}
-					}
+					host = list.get(i).getHost();
 					roomList.get(rid).getGameUserList().remove(i);
 				}
 			}
-			return roomList.get(rid).getGameUserList();
+			if(roomList.get(rid).getGameUserList().size() > 0) {
+				if(host) {
+					roomList.get(rid).getGameUserList().get(0).setHost(true);
+				}
+			} else {
+				roomList.remove(rid);
+			}
+			if(roomList.containsKey(rid)) {
+				return roomList.get(rid).getGameUserList();	
+			} else {
+				return null;
+			}
 		}
 		return null;
 	}

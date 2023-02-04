@@ -2,6 +2,7 @@ package com.ssafy.tipsygame.controller;
 
 import java.util.List;
 
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,8 +33,8 @@ public class GameController {
 	}
 
 	@MessageMapping("/game/room/{rid}")
-	public void communicationInGameRoom(@PathVariable String rid, GameCommDto gameCommDto) {
-		simpMessagingTemplate.convertAndSend("/game/room/" + rid,
+	public void communicationInGameRoom(@DestinationVariable String rid, GameCommDto gameCommDto) {
+		simpMessagingTemplate.convertAndSend("/sub/room/" + rid,
 				gameServiceImpl.communicateInGameRoom(rid, gameCommDto));
 	}
 
