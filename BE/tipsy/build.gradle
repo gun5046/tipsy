@@ -1,0 +1,132 @@
+buildscript {
+    ext {
+        springBootVersion = '2.7.8'
+    }
+    repositories {
+	    maven { url 'https://jitpack.io' }
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+        classpath "io.spring.gradle:dependency-management-plugin:1.0.11.RELEASE"
+    }
+}
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'idea'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+
+    group 'com.ssafy'
+    version = '0.0.1-SNAPSHOT'
+
+    sourceCompatibility = '11'
+    compileJava.options.encoding = 'UTF-8'
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        compileOnly 'org.projectlombok:lombok'
+        annotationProcessor 'org.projectlombok:lombok'
+        developmentOnly 'org.springframework.boot:spring-boot-devtools'
+        
+    }
+
+    tasks.named('test') {
+		useJUnitPlatform()
+	}
+}
+project(':core-web') {
+    bootJar { enabled = false }
+    jar { enabled = true }
+
+    dependencies {
+    	implementation 'org.springframework.boot:spring-boot-starter'
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+		implementation 'org.springframework.boot:spring-boot-starter-web-services'
+		implementation 'org.springframework.boot:spring-boot-starter-security'
+		
+		implementation 'org.springframework.boot:spring-boot-starter-test'
+		implementation 'org.junit.jupiter:junit-jupiter-api:5.9.1'
+		developmentOnly 'org.springframework.boot:spring-boot-devtools'
+		implementation 'org.springframework.security:spring-security-test'
+		implementation group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
+		implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
+		implementation 'io.jsonwebtoken:jjwt:0.9.1'
+		implementation 'org.springframework.boot:spring-boot-starter-webflux'
+		
+		implementation project(':domain-auth')
+    }
+}
+
+project(':tipsy-user') {
+    dependencies {
+    	implementation project(':core-web')
+    	implementation project(':domain-rdb')
+    	
+    }
+}
+
+project(':domain-rdb'){
+
+	bootJar { enabled = false }
+    jar { enabled = true }
+	dependencies {
+		implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.3.0'
+		implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
+		implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+		runtimeOnly 'com.mysql:mysql-connector-j'
+	}
+}
+
+project(':web-socket'){
+	bootJar{ enabled = false }
+	jar { enabled = true }
+	dependencies{
+		implementation 'org.springframework.boot:spring-boot-starter-websocket'
+		implementation 'org.webjars:sockjs-client:1.5.1'
+    	implementation 'org.webjars:stomp-websocket:2.3.4'
+	}
+}
+
+project(':tipsy-game'){
+	dependencies{
+		implementation project(':core-web')
+		implementation project(':web-socket')
+		implementation project(':domain-nosql')
+		
+	}
+}
+
+project(':tipsy-room'){
+	dependencies{
+		implementation project(':core-web')
+		implementation project(':web-socket')
+		implementation project(':domain-nosql')
+	}
+}
+
+project(':domain-nosql'){
+	dependencies{
+		implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	}
+}
+
+project(':domain-auth'){
+	dependencies{
+		//domain-redis-auth
+		implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	}
+}
+
+project(':tipsy-chat'){
+	dependencies{
+		implementation project(':core-web')
+		implementation project(':web-socket')
+		implementation project(':domain-nosql')
+		implementation project(':domain-rdb')
+	}
+}
