@@ -1,7 +1,9 @@
 buildscript {
+    
     ext {
         springBootVersion = '2.7.8'
     }
+    
     repositories {
 	    maven { url 'https://jitpack.io' }
         mavenCentral()
@@ -10,20 +12,24 @@ buildscript {
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
         classpath "io.spring.gradle:dependency-management-plugin:1.0.11.RELEASE"
     }
+    
 }
 
 subprojects {
-    apply plugin: 'java'
-    apply plugin: 'idea'
+    apply plugin: 'java-library'
     apply plugin: 'org.springframework.boot'
     apply plugin: 'io.spring.dependency-management'
-
+    
     group 'com.ssafy'
     version = '0.0.1-SNAPSHOT'
 
     sourceCompatibility = '11'
     compileJava.options.encoding = 'UTF-8'
-
+	configurations {
+		compileOnly {
+			extendsFrom annotationProcessor
+		}
+	}
     repositories {
         mavenCentral()
     }
@@ -31,7 +37,7 @@ subprojects {
     dependencies {
         compileOnly 'org.projectlombok:lombok'
         annotationProcessor 'org.projectlombok:lombok'
-        developmentOnly 'org.springframework.boot:spring-boot-devtools'
+        developmentOnly 'org.springframework.boot:spring-boot-devtools'		
         
     }
 
@@ -44,18 +50,21 @@ project(':core-web') {
     jar { enabled = true }
 
     dependencies {
-    	implementation 'org.springframework.boot:spring-boot-starter'
-        implementation 'org.springframework.boot:spring-boot-starter-web'
-		implementation 'org.springframework.boot:spring-boot-starter-web-services'
+    	
 		implementation 'org.springframework.boot:spring-boot-starter-security'
-		
-		implementation 'org.springframework.boot:spring-boot-starter-test'
-		implementation 'org.junit.jupiter:junit-jupiter-api:5.9.1'
-		developmentOnly 'org.springframework.boot:spring-boot-devtools'
 		implementation 'org.springframework.security:spring-security-test'
+
 		implementation group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
 		implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
 		implementation 'io.jsonwebtoken:jjwt:0.9.1'
+		
+		implementation 'org.springframework.boot:spring-boot-starter'
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+		implementation 'org.springframework.boot:spring-boot-starter-web-services'
+		implementation 'org.springframework.boot:spring-boot-starter-test'
+		implementation 'org.junit.jupiter:junit-jupiter-api:5.9.1'
+		
+		
 		implementation 'org.springframework.boot:spring-boot-starter-webflux'
 		
 		implementation project(':domain-auth')
@@ -65,6 +74,7 @@ project(':core-web') {
 project(':tipsy-user') {
     dependencies {
     	implementation project(':core-web')
+    	annotationProcessor(':core-web')
     	implementation project(':domain-rdb')
     	
     }
@@ -110,12 +120,16 @@ project(':tipsy-room'){
 }
 
 project(':domain-nosql'){
+bootJar{ enabled = false }
+	jar { enabled = true }
 	dependencies{
 		implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 	}
 }
 
 project(':domain-auth'){
+bootJar{ enabled = false }
+	jar { enabled = true }
 	dependencies{
 		//domain-redis-auth
 		implementation 'org.springframework.boot:spring-boot-starter-data-redis'
@@ -124,6 +138,7 @@ project(':domain-auth'){
 
 project(':tipsy-chat'){
 	dependencies{
+		
 		implementation project(':core-web')
 		implementation project(':web-socket')
 		implementation project(':domain-nosql')

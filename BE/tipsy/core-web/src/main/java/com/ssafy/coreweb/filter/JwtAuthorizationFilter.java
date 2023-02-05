@@ -9,6 +9,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.ssafy.coreweb.dto.UserDto;
@@ -29,7 +30,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain chain)
 			throws IOException, ServletException {
-
+		
 		if (req.getCookies() != null) {
 			Cookie cookie[] = req.getCookies();
 
@@ -60,17 +61,17 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
 				// refrestoken 검사
 
-				Optional<Auth> originRefreshToken = authRepository.findById(uid);
-				if (!originRefreshToken.isPresent()) {
+//				Optional<Auth> originRefreshToken = authRepository.findById(uid);
+//				if (!originRefreshToken.isPresent()) {
 					System.out.println("refreshToken Not Exist");
 					res.setStatus(403);
-					return;
-				}
-				if (!originRefreshToken.get().getRefreshToken().equals(refreshToken)) {
+//					return;
+//				}
+//				if (!originRefreshToken.get().getRefreshToken().equals(refreshToken)) {
 					System.out.println("refreshToken Not Equal");
 					res.setStatus(403);
-					return;
-				}
+//					return;
+//				}
 
 				if (!jwtTokenProvider.validateToken(refreshToken)) {
 					System.out.println("refreshToken NotValid");
