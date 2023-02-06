@@ -5,7 +5,7 @@ export default createStore(function(state, action) {
         return {
             nickname: '',
             profile: '',
-            interest: []
+            interest: [],
         }
     }
     if (action.type === 'submit') {

@@ -1,4 +1,6 @@
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import store from "../store";
 
 const searchParams = new URLSearchParams(window.location.search);
 let code;
@@ -7,21 +9,25 @@ for (const param of searchParams) {
 }
 
 function Temp(){
-    axios.get('http://127.0.0.1:8081/user/login', 0, {params:{
-        code : `${code}` 
-    }})
-    .then(res =>{
-        if(!res.data.userCheck){
-            // 회원가입 페이지 location.href
-            // 요거는 kakao 유저 정보를 들고 가셔야함 ex) birth, image
-        }else{
-            // 메인 페이지 location.href
-            // token같은거 처리해줘야함
-        }
+	const navigate = useNavigate()
+  //axios.get(`http://i8d207.p.ssafy.io:8081/user/login?code=${code}`)
+  axios.get(`http://127.0.0.1:8081/user/login?code=${code}`)
+  .then(res =>{
+    if(!res.data.userCheck){
+			//처음 로그인시!
+      console.log(res.data.userVo)
+			navigate('/login', {state: res.data.userVo})
+    }else{
+			//console.log(res.data)
+      // 메인 페이지 location.href
+      // token같은거 처리해줘야함
+			navigate('/map')
+    }
     })
-    return (
-        <div></div>
-    )
+  .catch(err => {
+		navigate('/')
+  })
+
 }
 
 export default Temp
