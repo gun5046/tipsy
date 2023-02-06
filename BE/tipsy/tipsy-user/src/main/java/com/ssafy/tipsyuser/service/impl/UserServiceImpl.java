@@ -51,7 +51,7 @@ public class UserServiceImpl implements UserService{
 	    dataForAccess.add("grant_type", "authorization_code");
 	    dataForAccess.add("client_id", apiKey);
 	    dataForAccess.add("redirect_uri", redirect);
-	    
+	    	
 	    try {
 	    	 webClient = WebClient.create(reqURL);
 	    	
@@ -127,6 +127,7 @@ public class UserServiceImpl implements UserService{
 						.birth(accountDto.getBirth())
 						.build();
 				loginDto = LoginDto.builder().userCheck(false).userVo(newUserVo).build();
+				return loginDto;
 			}
 		}
 
