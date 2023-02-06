@@ -2,8 +2,11 @@ package com.hanjan.hanjangame.adapter
 
 import android.app.Activity
 import android.app.AlertDialog
+import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.hanjan.hanjangame.databinding.GameResultDialogBinding
@@ -12,12 +15,14 @@ import com.hanjan.hanjangame.databinding.GameResultListDialogBinding
 import com.hanjan.hanjangame.dto.GameResult
 import kotlinx.coroutines.*
 
+private const val TAG = "GameResultRecyclerViewA"
+
 class GameResultRecyclerViewAdapter(val gameResultList: List<GameResult>) :
     RecyclerView.Adapter<GameResultRecyclerViewAdapter.GameResultViewHolder>() {
     inner class GameResultViewHolder(val binding: GameResultItemBinding) : RecyclerView.ViewHolder(binding.root){
         fun onBind(result: GameResult){
             //binding.userImg
-            binding.userNickname.text = result.user.nickname
+            binding.userNickname.text = result.nickname
             binding.userScore.text = result.score
         }
     }
@@ -36,9 +41,6 @@ class GameResultRecyclerViewAdapter(val gameResultList: List<GameResult>) :
 }
 
 fun showGameResultRecyclerViewDialog(activity: Activity, resultList: List<GameResult>){
-    //게임 결과 창
-    //시간이나 횟수가 중요한 게임들만 이 창을 쓰고
-    //누가 당첨되었거나, 누가 이겼는지만 표시되면 되는 창은 다시 만들어야 함
     val builder = AlertDialog.Builder(activity)
     val binding = GameResultListDialogBinding.inflate(LayoutInflater.from(activity))
     builder.setView(binding.root)
@@ -50,8 +52,8 @@ fun showGameResultRecyclerViewDialog(activity: Activity, resultList: List<GameRe
         delay(3000)
         activity.runOnUiThread {
             dialog.dismiss()
-            activity.finish()
         }
+        activity.finish()
     }
 }
 

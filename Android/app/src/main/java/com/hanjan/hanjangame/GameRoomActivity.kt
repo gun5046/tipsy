@@ -23,14 +23,10 @@ private const val TAG = "GameRoomActivity"
 class GameRoomActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityGameRoomBinding
-    var userList = listOf(
-        GameUserDto("", "사용자 1", true, false),
-        GameUserDto("", "사용자 2", false, false),
-        GameUserDto("", "사용자 3", false, true)
-    )
-    private var roomNumber = ""
-    private var img = ""
-    private var nickname = "test"
+    var userList = listOf<GameUserDto>()
+    private var roomNumber = GlobalApplication.roomNumber
+    private val img = GlobalApplication.user.img
+    private val nickname = GlobalApplication.user.nickname
     private var host = false
     private var ready = false
 
@@ -38,29 +34,9 @@ class GameRoomActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityGameRoomBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        roomNumber = intent.getStringExtra("roomNumber") ?: ""
         Log.d(TAG, "onCreate: $roomNumber")
         GlobalApplication.connectStomp()
-        GlobalApplication.stompClient?.topic("/sub/room/${roomNumber}")?.subscribe{
-            Log.d(TAG, "onCreate: ${it.payload}")
-            val list = jacksonObjectMapper().readValue<List<GameUserDto>>(it.payload)
-            userList = list
-            runOnUiThread {
-                binding.recyclerView.adapter = UserListAdapter(list)
-            }
-            list.forEach {
-                if(it.nickname.equals(nickname)){
-                    host = it.host
-                    ready = it.ready
-                }
-                if(it.host && it.ready){
-                    startGame()
-                }
-            }
-            runOnUiThread {
-                renameButton()
-            }
-        }
+        subscribeStomp()
         sendMessage("Enter")
         binding.gameStartBtn.setOnClickListener {
             startActivity(Intent(this, GameListActivity::class.java))
@@ -74,7 +50,6 @@ class GameRoomActivity : AppCompatActivity() {
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
         binding.recyclerView.adapter = UserListAdapter(userList)
         binding.recyclerView.suppressLayout(true)
-        host = true // 테스트용으로 host를 임시 지정
         renameButton()
         binding.gameStartBtn.setOnClickListener {
             //host인 경우
@@ -104,6 +79,14 @@ class GameRoomActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        GlobalApplication.reconnectStomp()
+        ready = false
+        subscribeStomp()
+        sendMessage("Ready")
     }
 
     override fun onBackPressed() {
@@ -163,5 +146,28 @@ class GameRoomActivity : AppCompatActivity() {
             }
         }
         return true
+    }
+
+    fun subscribeStomp(){
+        GlobalApplication.stompClient?.topic("/sub/room/${roomNumber}")?.subscribe{
+            Log.d(TAG, "onCreate: ${it.payload}")
+            val list = jacksonObjectMapper().readValue<List<GameUserDto>>(it.payload)
+            userList = list
+            runOnUiThread {
+                binding.recyclerView.adapter = UserListAdapter(list)
+            }
+            list.forEach {
+                if(it.nickname.equals(nickname)){
+                    host = it.host
+                    ready = it.ready
+                }
+                if(it.host && it.ready){
+                    startGame()
+                }
+            }
+            runOnUiThread {
+                renameButton()
+            }
+        }
     }
 }

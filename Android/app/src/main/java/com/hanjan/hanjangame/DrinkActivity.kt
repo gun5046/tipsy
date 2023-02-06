@@ -10,11 +10,14 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 import com.hanjan.hanjangame.adapter.showGameResultRecyclerViewDialog
 import com.hanjan.hanjangame.databinding.ActivityDrinkBinding
 import com.hanjan.hanjangame.dto.GameResult
 import com.hanjan.hanjangame.dto.User
 import kotlinx.coroutines.*
+import org.json.JSONObject
 import java.text.DecimalFormat
 
 private const val TAG = "DrinkActivity"
@@ -31,6 +34,7 @@ class DrinkActivity : AppCompatActivity() {
     private lateinit var timer: Job
     private var time = 1000
     private var check = false
+    private var wait: Job? = null
     private val sensorEventListener = object : SensorEventListener {
         override fun onSensorChanged(p0: SensorEvent?) {
             if(p0?.sensor?.type == Sensor.TYPE_LINEAR_ACCELERATION){
@@ -72,9 +76,26 @@ class DrinkActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityDrinkBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        GlobalApplication.stompClient?.topic("/sub/play/drink-game/${GlobalApplication.roomNumber}")?.subscribe {
+            val result = jacksonObjectMapper().readValue<List<GameResult>>(it.payload)
+            wait?.cancel()
+            runOnUiThread {
+                binding.drinkTimerBackground.visibility = View.GONE
+                binding.waiting.visibility = View.GONE
+                showGameResultRecyclerViewDialog(this, result)
+            }
+        }
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
         sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION)
         timer = CoroutineScope(Dispatchers.IO).launch {
+            runOnUiThread {
+                binding.drinkTitle.visibility = View.VISIBLE
+                ObjectAnimator.ofFloat(binding.drinkTitle, "alpha", 1f, 0f).apply {
+                    duration = 1000
+                    start()
+                }
+            }
+            delay(1000L)
             runOnUiThread {
                 binding.drinkTimer3.visibility = View.VISIBLE
                 ObjectAnimator.ofFloat(binding.drinkTimer3, "alpha", 1f, 0f).apply {
@@ -118,9 +139,28 @@ class DrinkActivity : AppCompatActivity() {
             if(sensorManager != null){
                 sensorManager.unregisterListener(sensorEventListener, sensor)
             }
-            runOnUiThread{
-                //서버로 데이터 보내고 결과 받을 때 까지 대기 필요
-                showGameResultRecyclerViewDialog(this@DrinkActivity, listOf(GameResult(User("", "test"), "${count}회")))
+            runOnUiThread {
+                sendResult()
+                binding.drinkTimerBackground.visibility = View.VISIBLE
+                binding.waiting.visibility = View.VISIBLE
+                wait = CoroutineScope(Dispatchers.IO).launch {
+                    while (true){
+                        runOnUiThread {
+                            ObjectAnimator.ofFloat(binding.waiting, "alpha", 1f, 0f).apply {
+                                duration = 500
+                                start()
+                            }
+                        }
+                        delay(500)
+                        runOnUiThread {
+                            ObjectAnimator.ofFloat(binding.waiting, "alpha", 0f, 1f).apply {
+                                duration = 500
+                                start()
+                            }
+                        }
+                        delay(500)
+                    }
+                }
             }
         }
         val beer = CoroutineScope(Dispatchers.IO).launch {
@@ -141,5 +181,17 @@ class DrinkActivity : AppCompatActivity() {
                 delay(200)
             }
         }
+    }
+
+    override fun onBackPressed() {
+
+    }
+
+    fun sendResult(){
+        val data = JSONObject()
+        data.put("nickname", GlobalApplication.user.nickname)
+        data.put("image", GlobalApplication.user.img)
+        data.put("score", count)
+        GlobalApplication.stompClient?.send("/game/play/drink-game/${GlobalApplication.roomNumber}", data.toString())?.subscribe()
     }
 }

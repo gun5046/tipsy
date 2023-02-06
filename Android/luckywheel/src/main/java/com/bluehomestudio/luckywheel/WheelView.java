@@ -242,21 +242,21 @@ final class WheelView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        if(mWheelItems != null){
+            drawWheelBackground(canvas);
+            initComponents();
 
-        drawWheelBackground(canvas);
-        initComponents();
+            float tempAngle = 0;
+            float sweepAngle = 360 / mWheelItems.size();
 
-        float tempAngle = 0;
-        float sweepAngle = 360 / mWheelItems.size();
-
-        for (int i = 0; i < mWheelItems.size(); i++) {
-            archPaint.setColor(mWheelItems.get(i).color);
-            canvas.drawArc(range, tempAngle, sweepAngle, true, archPaint);
-            drawImage(canvas, tempAngle, mWheelItems.get(i).bitmap);
-            drawText(canvas, tempAngle, sweepAngle, mWheelItems.get(i).text == null ? "" : mWheelItems.get(i).text);
-            tempAngle += sweepAngle;
+            for (int i = 0; i < mWheelItems.size(); i++) {
+                archPaint.setColor(mWheelItems.get(i).color);
+                canvas.drawArc(range, tempAngle, sweepAngle, true, archPaint);
+                drawImage(canvas, tempAngle, mWheelItems.get(i).bitmap);
+                drawText(canvas, tempAngle, sweepAngle, mWheelItems.get(i).text == null ? "" : mWheelItems.get(i).text);
+                tempAngle += sweepAngle;
+            }
         }
-
     }
 
     @Override

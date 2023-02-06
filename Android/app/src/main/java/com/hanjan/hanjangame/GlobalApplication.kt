@@ -2,6 +2,7 @@ package com.hanjan.hanjangame
 
 import android.app.Application
 import android.util.Log
+import com.hanjan.hanjangame.dto.User
 import com.kakao.sdk.common.KakaoSdk
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -17,6 +18,8 @@ class GlobalApplication: Application() {
     companion object{
         lateinit var retrofit: Retrofit
         var stompClient: StompClient? = null
+        val user = User("", "test")
+        var roomNumber = ""
 
         fun connectStomp(){
             val url = "ws://10.0.2.2:8081/ws/chat/websocket"
@@ -25,7 +28,15 @@ class GlobalApplication: Application() {
                 stompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, url)
             }
             if(!stompClient!!.isConnected){
+                stompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, url)
                 stompClient?.connect()
+            }
+        }
+
+        fun reconnectStomp(){
+            if(stompClient?.isConnected ?: false){
+                stompClient?.disconnect()
+                connectStomp()
             }
         }
     }

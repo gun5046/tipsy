@@ -56,7 +56,7 @@ class MainActivity : AppCompatActivity() {
                 result -> if(result.contents != null){
                     //방 번호가 존재하지 않으면 조치 필요
             val intent = Intent(this, GameRoomActivity::class.java)
-            intent.putExtra("roomNumber", result.contents)
+            GlobalApplication.roomNumber = result.contents
             startActivity(intent)
             }
         }
@@ -74,7 +74,7 @@ class MainActivity : AppCompatActivity() {
 
             } else {
                 val intent = Intent(this, GameRoomActivity::class.java)
-                intent.putExtra("roomNumber", binding.roomNumberText.text.toString())
+                GlobalApplication.roomNumber = binding.roomNumberText.text.toString()
                 startActivity(intent)
                 binding.roomNumberText.text.clear()
             }

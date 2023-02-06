@@ -1,4 +1,4 @@
 package com.hanjan.hanjangame.dto
 
-class GameResult(val user: User, val score: String) {
+class GameResult(val nickname: String, val image: String, val score: String) {
 }

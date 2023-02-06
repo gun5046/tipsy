@@ -3,14 +3,23 @@ package com.hanjan.hanjangame
 import android.animation.ObjectAnimator
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.Settings.Global
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
 import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.fasterxml.jackson.module.kotlin.jacksonMapperBuilder
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
+import com.hanjan.hanjangame.adapter.GameResultRecyclerViewAdapter
 import com.hanjan.hanjangame.adapter.showGameResultRecyclerViewDialog
 import com.hanjan.hanjangame.databinding.ActivityOrderingBinding
+import com.hanjan.hanjangame.databinding.GameResultListDialogBinding
 import com.hanjan.hanjangame.dto.GameResult
 import com.hanjan.hanjangame.dto.User
 import kotlinx.coroutines.*
+import org.json.JSONObject
 import java.text.DecimalFormat
 import java.util.*
 
@@ -21,6 +30,7 @@ class OrderingActivity : AppCompatActivity() {
     private val list = mutableListOf<Int>()
     private val btnList = mutableListOf<Button>()
     private var count = 1
+    private var wait: Job? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,8 +41,34 @@ class OrderingActivity : AppCompatActivity() {
         randomList()
         changeButtonText()
         buttonSetOnClick()
+        GlobalApplication.stompClient?.topic("/sub/play/ordering-game/${GlobalApplication.roomNumber}")?.subscribe {
+            val result = jacksonObjectMapper().readValue<List<GameResult>>(it.payload)
+            wait?.cancel()
+            runOnUiThread {
+                binding.timerBackground.visibility = View.GONE
+                binding.waiting.visibility = View.GONE
+//                val binding = GameResultListDialogBinding.inflate(layoutInflater)
+//                setContentView(binding.root)
+//                binding.recyclerView.adapter = GameResultRecyclerViewAdapter(result)
+//                binding.recyclerView.layoutManager = LinearLayoutManager(this)
+//                CoroutineScope(Dispatchers.IO).launch {
+//                    delay(3000)
+//                    finish()
+//                }
+                showGameResultRecyclerViewDialog(this, result)
+            }
+        }
         timer = CoroutineScope(Dispatchers.IO).launch {
             runOnUiThread {
+                binding.orderingTitle.visibility = View.VISIBLE
+                ObjectAnimator.ofFloat(binding.orderingTitle, "alpha", 1f, 0f).apply {
+                    duration = 1000
+                    start()
+                }
+            }
+            delay(1000L)
+            runOnUiThread {
+                binding.orderingTitle.visibility = View.GONE
                 binding.timer3.visibility = View.VISIBLE
                 ObjectAnimator.ofFloat(binding.timer3, "alpha", 1f, 0f).apply {
                     duration = 1000
@@ -70,8 +106,8 @@ class OrderingActivity : AppCompatActivity() {
                 delay(10L)
             }
             runOnUiThread {
+                sendResult()
                 //서버에 데이터 보내고 다른 데이터 받을 때 까지 대기 필요
-                showGameResultRecyclerViewDialog(this@OrderingActivity, listOf(GameResult(User("", "test"), "실패")))
             }
         }
     }
@@ -121,11 +157,30 @@ class OrderingActivity : AppCompatActivity() {
                 if(count == btnList[i].text.toString().toInt()){
                     if(count == 15){
                         timer.cancel()
+                        sendResult()
+                        binding.timerBackground.visibility = View.VISIBLE
+                        binding.waiting.visibility = View.VISIBLE
+                        wait = CoroutineScope(Dispatchers.IO).launch {
+                            while (true){
+                                runOnUiThread {
+                                    ObjectAnimator.ofFloat(binding.waiting, "alpha", 1f, 0f).apply {
+                                        duration = 500
+                                        start()
+                                    }
+                                }
+                                delay(500)
+                                runOnUiThread {
+                                    ObjectAnimator.ofFloat(binding.waiting, "alpha", 0f, 1f).apply {
+                                        duration = 500
+                                        start()
+                                    }
+                                }
+                                delay(500)
+                            }
+                        }
                         //서버에 데이터 보내고 다른 데이터 받을 때 까지 대기 필요
-                        showGameResultRecyclerViewDialog(this@OrderingActivity, listOf(GameResult(User("", "test"), binding.timer.text.toString())))
                     }
                     count++
-//                    btnList[i].visibility = View.INVISIBLE
                     ObjectAnimator.ofFloat(btnList[i], "scaleX", 1.0f, 0f).apply {
                         duration = 500
                         start()
@@ -137,5 +192,17 @@ class OrderingActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    fun sendResult(){
+        val data = JSONObject()
+        data.put("nickname", GlobalApplication.user.nickname)
+        data.put("image", GlobalApplication.user.img)
+        data.put("score", time)
+        GlobalApplication.stompClient?.send("/game/play/ordering-game/${GlobalApplication.roomNumber}", data.toString())?.subscribe()
+    }
+
+    override fun onBackPressed() {
+
     }
 }

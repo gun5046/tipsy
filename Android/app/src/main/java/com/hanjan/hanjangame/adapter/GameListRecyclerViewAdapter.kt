@@ -40,8 +40,7 @@ class GameListRecyclerViewAdapter(var host: Boolean, var activity: Activity?):
                 binding.startBtn.visibility = View.GONE
             } else {
                 binding.startBtn.setOnClickListener {
-                    activity?.startActivity(Intent(activity!!, activityList[position]))
-                    activity?.finish()
+                    GlobalApplication.stompClient?.send("/game/select/${GlobalApplication.roomNumber}", "${position + 1}")?.subscribe()
                 }
             }
         }
