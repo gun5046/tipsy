@@ -15,7 +15,7 @@ public class CommonGameDto implements Comparable {
 	private int score;
 
 	public Integer getScore() {
-		return (Integer) this.getScore();
+		return this.score;
 	}
 
 	@Override

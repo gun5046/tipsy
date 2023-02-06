@@ -40,7 +40,8 @@ public class GameController {
 
 	@MessageMapping("/game/select/{rid}")
 	public void selectGame(@DestinationVariable String rid, int gid) {
-		simpMessagingTemplate.convertAndSend("/game/select/" + rid, gid);
+		simpMessagingTemplate.convertAndSend("/sub/select/" + rid, gid);
+		gameServiceImpl.onGameStart(rid);
 	}
 
 	@MessageMapping("/game/play/liar-game/{rid}")
@@ -49,33 +50,33 @@ public class GameController {
 		if (type.equals("Enter")) {
 			if (gameServiceImpl.countUser(rid)) {
 				LiarResponseDto liarResponseDto = gameServiceImpl.getLiarData(rid);
-				simpMessagingTemplate.convertAndSend("/game/play/liar-game/" + rid, liarResponseDto);
+				simpMessagingTemplate.convertAndSend("/sub/play/liar-game/" + rid, liarResponseDto);
 			}
 		} else {
 			String nickname = liarRequestDto.getNickname();
 			LiarResultDto result = gameServiceImpl.voteLiar(rid, nickname);
 			if (result != null) {
-				simpMessagingTemplate.convertAndSend("/game/play/liar-game/" + rid, result);
+				simpMessagingTemplate.convertAndSend("/sub/play/liar-game/" + rid, result);
 			}
 		}
 	}
 
 	@MessageMapping("/game/play/croco-game/{rid}")
 	public void playCrocoGame(@DestinationVariable String rid, CrocoDto crocoDto) {
-
 		if (crocoDto.getType().equals("Start")) {
 			if (gameServiceImpl.countUser(rid)) {
+				gameServiceImpl.getCrocoTeeth(rid);
 				String next = gameServiceImpl.findNextUser(rid, "");
-				simpMessagingTemplate.convertAndSend("/game/play/croco-game/" + rid, new CrocoDto("Start", next, 0));
+				simpMessagingTemplate.convertAndSend("/sub/play/croco-game/" + rid, new CrocoDto("Start", next, 0));
 			}
 		} else if (crocoDto.getType().equals("Play")) {
 			Boolean check = gameServiceImpl.checkCrocoIdx(rid, crocoDto.getIdx());
 			if (!check) {
 				String next = gameServiceImpl.findNextUser(rid, crocoDto.getNickname());
-				simpMessagingTemplate.convertAndSend("/game/play/croco-game/" + rid,
+				simpMessagingTemplate.convertAndSend("/sub/play/croco-game/" + rid,
 						new CrocoDto("Turn", next, crocoDto.getIdx()));
 			}else {
-				simpMessagingTemplate.convertAndSend("/game/play/croco-game/"+rid,new CrocoDto("Result", crocoDto.getNickname(),0));
+				simpMessagingTemplate.convertAndSend("/sub/play/croco-game/"+rid,new CrocoDto("Result", crocoDto.getNickname(),0));
 			}
 		}
 	}
@@ -85,7 +86,7 @@ public class GameController {
 		gameServiceImpl.putRecord(rid, commonGameDto);
 		if(gameServiceImpl.countUser(rid)) {
 			List<CommonGameDto> list = gameServiceImpl.sortRecord(rid);
-			simpMessagingTemplate.convertAndSend("/game/play/drink-game/"+rid, list);
+			simpMessagingTemplate.convertAndSend("/sub/play/drink-game/"+rid, list);
 		}
 	}
 
@@ -94,13 +95,22 @@ public class GameController {
 		gameServiceImpl.putRecord(rid, commonGameDto);
 		if(gameServiceImpl.countUser(rid)) {
 			List<CommonGameDto> list = gameServiceImpl.sortRecord(rid);
-			simpMessagingTemplate.convertAndSend("/game/play/drag-game/"+rid, list);
+			simpMessagingTemplate.convertAndSend("/sub/play/drag-game/"+rid, list);
 		}
 	}
 
 	@MessageMapping("/game/play/roulette-game/{rid}")
-	public void playRouletteGame() {
-
+	public void playRouletteGame(@DestinationVariable String rid, String type) {
+		if(type.equals("Enter")) {
+			if(gameServiceImpl.countUser(rid)) {
+				simpMessagingTemplate.convertAndSend("/sub/play/roulette-game/"+rid,
+						gameServiceImpl.getRouletteResponseDto(rid));
+			}
+		} else {
+			if(gameServiceImpl.countUser(rid)) {
+				//type == nickname send response to frontend
+			}
+		}
 	}
 
 	@MessageMapping("/game/play/ordering-game/{rid}")
@@ -108,7 +118,7 @@ public class GameController {
 		gameServiceImpl.putRecord(rid, commonGameDto);
 		if(gameServiceImpl.countUser(rid)) {
 			List<CommonGameDto> list = gameServiceImpl.sortRecord(rid);
-			simpMessagingTemplate.convertAndSend("/game/play/drag-game/"+rid, list);
+			simpMessagingTemplate.convertAndSend("/sub/play/ordering-game/"+rid, list);
 		}
 	}
 }

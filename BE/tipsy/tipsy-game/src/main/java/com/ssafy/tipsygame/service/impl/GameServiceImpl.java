@@ -21,6 +21,7 @@ import com.ssafy.tipsygame.dto.GameDto;
 import com.ssafy.tipsygame.dto.GameUserDto;
 import com.ssafy.tipsygame.dto.LiarResponseDto;
 import com.ssafy.tipsygame.dto.LiarResultDto;
+import com.ssafy.tipsygame.dto.RouletteResponseDto;
 import com.ssafy.tipsygame.service.GameService;
 
 import lombok.RequiredArgsConstructor;
@@ -44,6 +45,7 @@ public class GameServiceImpl implements GameService{
 		vote = new HashMap<String, Map<String,Integer>>();
 		crocoIdx = new HashMap<String, Integer>();
 		commonData = new HashMap<String, List<CommonGameDto>>();
+		constant = new Constant();
 	}
 	public String checkGameRoom(Long uid, String rid) {
 		List<Member> memberList = roomRepository.findAllById(rid);
@@ -124,11 +126,15 @@ public class GameServiceImpl implements GameService{
 	}
 	
 	public Boolean countUser(String rid) {
-		int size = roomList.get(rid).getGameUserList().size();
-		count.replace(rid, count.get(rid)+1);
-		if(count.get(rid)==size) {
-			count.remove(rid);
-			return true;
+		if(!count.containsKey(rid)) {
+			count.put(rid, 1);
+		} else {
+			int size = roomList.get(rid).getGameUserList().size();
+			count.replace(rid, count.get(rid)+1);
+			if(count.get(rid)==size) {
+				count.remove(rid);
+				return true;
+			}
 		}
 		return false;
 	}
@@ -260,4 +266,15 @@ public class GameServiceImpl implements GameService{
 		return list;
 	}
 	
+	public RouletteResponseDto getRouletteResponseDto(String rid) {
+		List<GameUserDto> list = roomList.get(rid).getGameUserList();
+		int index = (int)(Math.random() * list.size()) + 1;
+		return new RouletteResponseDto(index, list);
+	}
+	
+	public void onGameStart(String rid) {
+		roomList.get(rid).getGameUserList().forEach((e) -> {
+			e.setReady(false);
+		});
+	}
 }
