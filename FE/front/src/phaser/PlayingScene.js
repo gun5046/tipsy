@@ -1,23 +1,23 @@
 import Phaser from 'phaser';
 
-import bar_wall from '../assets/map/bar_walls.png';
-import bar_floor from '../assets/map/bar_floors.png';
-import bar_wine from '../assets/map/bar_wineInterior.png';
-import bar_furniture from '../assets/map/bar_furniture.png';
-import bar_furniture_deco from '../assets/map/bar_furniture_deco.png';
-import bar_deco from '../assets/map/bar_floor_wall_deco.png';
-import bar_food from '../assets/map/bar_food.png';
-import bar_chair from '../assets/map/bar_chairs.png';
+import bar_wall from '../assets/barMap/bar_walls.png';
+import bar_floor from '../assets/barMap/bar_floors.png';
+import bar_wine from '../assets/barMap/bar_wineInterior.png';
+import bar_furniture from '../assets/barMap/bar_furniture.png';
+import bar_furniture_deco from '../assets/barMap/bar_furniture_deco.png';
+import bar_deco from '../assets/barMap/bar_floor_wall_deco.png';
+import bar_food from '../assets/barMap/bar_food.png';
+import bar_chair from '../assets/barMap/bar_chairs.png';
 
-// import face from './assets/map/face.png'
+// import face from './assets/barMap/face.png'
 import jsonash from '../assets/character/ash.json'
 import imageash from '../assets/character/ash.png'
 import jsonlucy from '../assets/character/lucy.json'
 import imagelucy from '../assets/character/lucy.png'
 
-import map1 from '../assets/map/map1.json';
+import bar_map from '../assets/barMap/bar_map.json';
 
-import profile from '../assets/map/profile.png'
+import profile from '../assets/barMap/profile.png'
 
 
 let sit = -1; // 전역변수 : 선택한 의자의 방향
@@ -51,7 +51,7 @@ class PlayingScene extends Phaser.Scene {
         this.load.image('tilesFood', bar_food);
 
         // 타일맵 Json 불러오기
-        this.load.tilemapTiledJSON('map', map1)
+        this.load.tilemapTiledJSON('map', bar_map)
         // this.load.tilemapTiledJSON('map', map2)
 
         // chairObject의 의자 이미지 불러오기
