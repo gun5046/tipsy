@@ -14,4 +14,8 @@ public interface UserService {
 	int registUser(UserVo userVo);
 	
 	UserVo getUserInfo(Long uid);
+	
+	int checkNickname(String nickname);
+
+	int updateUserInfo(UserVo userVo);
 }

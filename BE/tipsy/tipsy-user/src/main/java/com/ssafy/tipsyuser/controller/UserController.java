@@ -6,10 +6,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -98,9 +97,9 @@ public class UserController {
 		logger.info("sdqds");
 
 		LoginDto loginDto = userServiceImpl.checkUser("mobile", accountDto);
+		if (loginDto.getUserCheck()) {
 		Cookie cookie1 = new Cookie("Authorization", loginDto.getTokenDto().getAccessToken());
 		Cookie cookie2 = new Cookie("RefreshToken", loginDto.getTokenDto().getRefreshToken());
-		if (loginDto.getUserCheck()) {
 			cookie1.setHttpOnly(true);
 			cookie2.setHttpOnly(true);
 			response.addCookie(cookie1); ///////// 나중에 따로 만들자
@@ -117,5 +116,13 @@ public class UserController {
 	@GetMapping("/mypage")
 	public UserVo getUserInfo(@RequestParam Long uid) {
 		return userServiceImpl.getUserInfo(uid);
+	}
+	
+	@PutMapping("/mypage/modify")
+	public Boolean updateUserInfo(@RequestBody UserVo userVo) {
+		if(userServiceImpl.updateUserInfo(userVo)==0) return false;
+		else {
+			return true;
+		}
 	}
 }

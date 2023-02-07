@@ -158,9 +158,14 @@ public class UserServiceImpl implements UserService{
 		return userDao.findUserByUid(uid);
 	}
 
+	@Override
 	public int checkNickname(String nickname) {
-		// TODO Auto-generated method stub
-		return userDao.findUserCountByNickname(nickname);
+		return userDao.findUserCountByNickname(nickname)!=null? 1:0;
+	}
+
+	@Override
+	public int updateUserInfo(UserVo userVo) {
+		return userDao.updateUserInfo(userVo);
 	}
 
 }

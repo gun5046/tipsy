@@ -8,7 +8,7 @@ import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactor
 
 @Configuration
 public class RedisConfiguration {
-	@Value("localhost")
+	@Value("i8d207.p.ssafy.io")
 	private String host;
 	
 	@Value("6379")

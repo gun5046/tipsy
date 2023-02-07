@@ -21,10 +21,18 @@
 		]]>
 	</select>
 	
-	<select id="findUserCountByNickname">
+	<select id="findUserCountByNickname" resultType="UserVo">
 		<![CDATA[
-			select count(*) from user where nickname = #{nickname}
+			select * from user where nickname = #{nickname}
 		]]>
 	</select>
+	
+	<update id="updateUserInfo" parameterType="UserVo">
+		<![CDATA[
+			update user set nickname=#{nickname} and name =#{name}
+			 and gender=#{gender} and interest = #{interest} and birth = #{birth} and 
+			 image =#{image} where uid = #{uid}
+		]]>
+	</update>
 </mapper>
 	
