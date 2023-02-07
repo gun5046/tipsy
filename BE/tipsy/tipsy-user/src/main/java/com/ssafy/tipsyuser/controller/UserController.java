@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -68,8 +69,9 @@ public class UserController {
 	}
 
 	@PostMapping("/account")
-	@ApiOperation(value = "asdq", notes = "asdq")
+	@ApiOperation(value = "회원 가입", notes = "kakao_id, name, nickname 은 NonNull")
 	public boolean registUser(@RequestBody UserVo userVo) {
+		System.out.println(userVo.getGender());
 		int n = userServiceImpl.registUser(userVo);
 		if (n != 0) {
 			logger.info("sdq");
@@ -79,6 +81,16 @@ public class UserController {
 		}
 	}
 
+	@GetMapping("/nickname")
+	public boolean checkName(@RequestParam String nickname) {
+		int n =userServiceImpl.checkNickname(nickname);
+		if(n==0) {
+			
+		}else {
+			
+		}
+	}
+	
 	@PostMapping("/check") // Mobile
 	@ApiOperation(value = "sdq!", notes = "sdqdq")
 	public LoginDto checkUser(HttpServletRequest request, HttpServletResponse response,

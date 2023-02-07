@@ -10,4 +10,5 @@ public interface UserDao {
 	UserVo findByKakaoID(String id);
 	int insertUser(UserVo userVo);
 	UserVo findUserByUid(Long uid);
+	int findUserCountByNickname(String nickname);
 }

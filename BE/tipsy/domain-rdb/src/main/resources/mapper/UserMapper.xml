@@ -11,13 +11,19 @@
 	
 	<insert id = "insertUser" parameterType="UserVo">
 		<![CDATA[
-			insert into user values(#{kakao_id}, #{name}, #{nickname}, #{image}, #{birth}, #{gender}, #{interest})
+			insert into user(kakao_id,name,nickname,image,birth,gender,interest) values(#{kakao_id}, #{name}, #{nickname}, #{image}, #{birth}, #{gender}, #{interest})
 		]]>
 	</insert>
 	
 	<select id="findUserByUid" resultType="UserVo">
 		<![CDATA[
 			select * from user where uid = #{uid}
+		]]>
+	</select>
+	
+	<select id="findUserCountByNickname">
+		<![CDATA[
+			select count(*) from user where nickname = #{nickname}
 		]]>
 	</select>
 </mapper>
