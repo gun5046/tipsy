@@ -18,7 +18,7 @@ class GlobalApplication: Application() {
     companion object{
         lateinit var retrofit: Retrofit
         var stompClient: StompClient? = null
-        val user = User("", "test")
+        val user = User("", "test2")
         var roomNumber = ""
 
         fun connectStomp(){
