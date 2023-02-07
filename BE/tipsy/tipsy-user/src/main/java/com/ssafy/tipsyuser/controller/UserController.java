@@ -85,9 +85,9 @@ public class UserController {
 	public boolean checkName(@RequestParam String nickname) {
 		int n =userServiceImpl.checkNickname(nickname);
 		if(n==0) {
-			
+			return true;
 		}else {
-			
+			return false;
 		}
 	}
 	
