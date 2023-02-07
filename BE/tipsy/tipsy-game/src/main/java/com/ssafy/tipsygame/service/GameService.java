@@ -13,7 +13,7 @@ public interface GameService {
 	public List<GameUserDto> communicateInGameRoom(String rid, GameCommDto gameCommDto);
 	public Boolean countUser(String rid);
 	public LiarResponseDto getLiarData(String rid);
-	public LiarResultDto voteLiar(String rid,String nickname);
+	public String voteLiar(String rid,String nickname);
 	public void getCrocoTeeth(String rid);
 	public String findNextUser(String rid, String nickname);
 	public Boolean checkCrocoIdx(String rid, int idx);

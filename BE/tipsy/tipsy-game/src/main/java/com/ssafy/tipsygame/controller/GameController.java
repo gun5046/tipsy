@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ssafy.tipsygame.dto.CommonGameDto;
 import com.ssafy.tipsygame.dto.CrocoDto;
 import com.ssafy.tipsygame.dto.GameCommDto;
+import com.ssafy.tipsygame.dto.GameUserDto;
 import com.ssafy.tipsygame.dto.LiarRequestDto;
 import com.ssafy.tipsygame.dto.LiarResponseDto;
 import com.ssafy.tipsygame.dto.LiarResultDto;
@@ -34,8 +35,9 @@ public class GameController {
 
 	@MessageMapping("/game/room/{rid}")
 	public void communicationInGameRoom(@DestinationVariable String rid, GameCommDto gameCommDto) {
-		simpMessagingTemplate.convertAndSend("/sub/room/" + rid,
-				gameServiceImpl.communicateInGameRoom(rid, gameCommDto));
+		List<GameUserDto> data = gameServiceImpl.communicateInGameRoom(rid, gameCommDto);
+		if(data != null)
+			simpMessagingTemplate.convertAndSend("/sub/room/" + rid, data);
 	}
 
 	@MessageMapping("/game/select/{rid}")
@@ -54,7 +56,7 @@ public class GameController {
 			}
 		} else {
 			String nickname = liarRequestDto.getNickname();
-			LiarResultDto result = gameServiceImpl.voteLiar(rid, nickname);
+			String result = gameServiceImpl.voteLiar(rid, nickname);
 			if (result != null) {
 				simpMessagingTemplate.convertAndSend("/sub/play/liar-game/" + rid, result);
 			}

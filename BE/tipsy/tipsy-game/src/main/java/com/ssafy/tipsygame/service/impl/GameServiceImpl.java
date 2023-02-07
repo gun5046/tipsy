@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 import javax.annotation.PostConstruct;
@@ -33,6 +34,7 @@ public class GameServiceImpl implements GameService{
 	private final RoomRepository roomRepository;
 	private Map<String, GameDto> roomList;
 	private Map<String, Integer> count;
+	private Map<String, String> liarNickname;
 	private Map<String, Map<String,Integer>> vote;
 	private Map<String, Integer> crocoIdx;
 	private Map<String, List<CommonGameDto>> commonData;
@@ -42,6 +44,7 @@ public class GameServiceImpl implements GameService{
 	public void init() {
 		roomList=new HashMap<>();
 		count = new HashMap<String, Integer>();
+		liarNickname = new HashMap<String, String>();
 		vote = new HashMap<String, Map<String,Integer>>();
 		crocoIdx = new HashMap<String, Integer>();
 		commonData = new HashMap<String, List<CommonGameDto>>();
@@ -159,6 +162,7 @@ public class GameServiceImpl implements GameService{
 			
 			randomIdx = (int)(Math.random()*usize);
 			String liar = roomList.get(rid).getGameUserList().get(randomIdx).getNickname();
+			liarNickname.put(rid, liar);
 			
 			List<GameUserDto>list = roomList.get(rid).getGameUserList();
 			
@@ -172,43 +176,47 @@ public class GameServiceImpl implements GameService{
 		}
 		return null;
 	}
-	public LiarResultDto voteLiar(String rid,String nickname) {
+	public String voteLiar(String rid,String nickname) {
 		if(!vote.containsKey(rid)) {
-			Map<String, Integer> m = new TreeMap<String, Integer>();
-			m.put(nickname, -1);
+			Map<String, Integer> m = new HashMap<String, Integer>();
+			m.put(nickname, 1);
 			vote.put(rid, m);
 		}else {
 			if(!vote.get(rid).containsKey(nickname)) {
-				vote.get(rid).put(nickname, -1);
+				vote.get(rid).put(nickname, 1);
 			}else {
-				vote.get(rid).replace(nickname, vote.get(rid).get(nickname)-1);
+				vote.get(rid).replace(nickname, vote.get(rid).get(nickname)+1);
 			}
 		}
 		
 		if(countUser(rid)) {
-			Iterator<String>keys = vote.get(rid).keySet().iterator();
-			int temp=0;
+			Iterator<String> itr = vote.get(rid).keySet().iterator();
 			int v1=0,v2=0;
 			String u1="", u2="";
-			while(keys.hasNext()) {
-				if(temp==0) {
-					u1=keys.next();
-					v1= vote.get(rid).get(keys.next());
-				}else {
-					u2=keys.next();
-					v2= vote.get(rid).get(keys.next());				
-					break;
+			while(itr.hasNext()) {
+				String s = itr.next();
+				int t = vote.get(rid).get(s);
+				if(t > v1) {
+					u1 = s;
+					v1 = t;
+				} else if (t == v1) {
+					u2 = s;
+					v2 = t;
 				}
-				temp++;
+			}
+			String result = "";
+			String liar = liarNickname.get(rid);
+			if(v1 > v2) {
+				if(liar.equals(u1)) {
+					result = "Lose";//liar lose
+				} else {
+					result = "Win";//liar win
+				}
+			} else {
+				result = "Win";
 			}
 			
-			LiarResultDto result =  LiarResultDto.builder()
-					.user1(u1)
-					.user2(u2)
-					.vote1(v1)
-					.vote2(v2)
-					.build();
-			return result;
+			return result + "," + liarNickname.get(rid);
 		}
 		return null;
 	}
