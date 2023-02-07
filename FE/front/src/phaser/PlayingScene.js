@@ -61,7 +61,7 @@ class PlayingScene extends Phaser.Scene {
             frameHeight: 32,
         })
 
-        // this.load.image('profile', profile);
+        this.load.image('profile', profile);
     }
     
     // 생성하기
@@ -122,9 +122,7 @@ class PlayingScene extends Phaser.Scene {
         
         //// chairObject 레이어 생성
         const chairLayer = map.getObjectLayer('chairObject');
-        const chairs = this.physics.add.staticGroup({
-            key: 'chair'
-        });
+        const chairs = this.physics.add.staticGroup();
 
         const people = [0, 11, 13, 21, 32];
         chairLayer.objects.forEach((chairObj, i) => {
@@ -132,9 +130,9 @@ class PlayingScene extends Phaser.Scene {
             const id = Number(`${i}`)            
             item.id = id
             item.sit = chairObj.gid- chairTileset.firstgid
-            console.log(people.includes(id))
-            if (people.indexOf(id) >= 0){
-                // this.add.image(item.x, item.y, 'profile').setDepth(10);
+
+            if (people.includes(id)){
+                this.add.image(item.x, item.y, 'profile').setDepth(10);
             }
             else{
                 this.physics.add.overlap(this.player, item, ()=>this.seat(item), null, this);
@@ -249,10 +247,25 @@ class PlayingScene extends Phaser.Scene {
             // console.log(this.overlapChair)
 
             // 나중에 의자 모양에 따라 모션이 바뀌는 걸로 조정 !!!!!!!!!!!!!!!!!!!!!!
-            if (sit === 3) {this.player.anims.play(`${this.characterKey}_sit_left`, true)}
-            else if (sit === 1) {this.player.anims.play(`${this.characterKey}_sit_right`, true)}
-            else if (sit === 2) {this.player.anims.play(`${this.characterKey}_sit_up`, true)}
-            else if (sit === 0) {this.player.anims.play(`${this.characterKey}_sit_down`, true)}
+            switch(sit){
+                case 0:
+                    this.player.anims.play(`${this.characterKey}_sit_down`, true)
+                    break
+                case 1:
+                    this.player.anims.play(`${this.characterKey}_sit_right`, true)
+                    break
+                case 2:
+                    this.player.anims.play(`${this.characterKey}_sit_up`, true)
+                    break
+                case 3:
+                    this.player.anims.play(`${this.characterKey}_sit_left`, true)
+                    break
+            }
+            // if (sit === 3) {this.player.anims.play(`${this.characterKey}_sit_left`, true)}
+            // else if (sit === 1) {this.player.anims.play(`${this.characterKey}_sit_right`, true)}
+            // else if (sit === 2) {this.player.anims.play(`${this.characterKey}_sit_up`, true)}
+            // else if (sit === 0) {this.player.anims.play(`${this.characterKey}_sit_down`, true)}
+            
             // 의자에 위치에 맞게 아바타 앉히기
             this.player.setPosition(chair_x, chair_y - 12)
             console.log(current_chair, current_table) 
