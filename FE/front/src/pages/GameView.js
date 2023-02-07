@@ -8,12 +8,12 @@ import phaserConfig from '../phaser/Config';
 // 게임 화면 뷰 영역 컴포넌트
 
 // 스타일이 적용된 <section> 렌더링
-const GameViewContainer = styled.section`
-  z-index: -1;
-  position: absolute;
-  top: 0;
-  left: 0;
-`;
+// const GameViewContainer = styled.section`
+//   z-index: -1;
+//   position: absolute;
+//   top: 0;
+//   left: 0;
+// `;
 
 const GameView = () => {
   // 게임 화면 초기화
@@ -41,9 +41,9 @@ const GameView = () => {
   return (
     <div>
       <Link to="/">Home</Link>
-      <GameViewContainer>
+      {/* <GameViewContainer> */}
         <div ref={phaserEl} className="game-container"></div>
-      </GameViewContainer>
+      {/* </GameViewContainer> */}
     </div>
   );
 };
