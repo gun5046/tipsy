@@ -19,6 +19,7 @@ import com.ssafy.tipsygame.dto.LiarResponseDto;
 import com.ssafy.tipsygame.dto.LiarResultDto;
 import com.ssafy.tipsygame.service.impl.GameServiceImpl;
 
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -29,6 +30,7 @@ public class GameController {
 	private final SimpMessagingTemplate simpMessagingTemplate;
 
 	@GetMapping("/game/room")
+	@ApiOperation(value = "방 정보 확인", notes = "요청받은 rid의 방 정보를 확인하고 결과 반환")
 	public String checkGameRoom(@RequestParam Long uid, @RequestParam String rid) {
 		gameServiceImpl.room();
 		return gameServiceImpl.checkGameRoom(uid, rid);
