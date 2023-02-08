@@ -15,13 +15,15 @@ function Temp(){
   .then(res =>{
     if(!res.data.userCheck){
 			//처음 로그인시!
-      console.log(res.data.userVo)
 			navigate('/login', {state: res.data.userVo})
     }else{
-			//console.log(res.data)
       // 메인 페이지 location.href
       // token같은거 처리해줘야함
-			navigate('/map')
+      axios.post(`http://127.0.0.1:8081/user/check`, res.data.userVo)
+      .then((re) => {
+        store.dispatch({type:'submit', state:res.data.userVo })
+        navigate('/map', {state: res.data.userVo})
+      })
     }
     })
   .catch(err => {

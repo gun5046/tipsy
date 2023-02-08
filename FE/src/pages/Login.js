@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useCookies } from "react-cookie";
 import { useNavigate, useLocation } from "react-router-dom";
 import store from "../store";
 import axios from "axios";
@@ -40,7 +39,6 @@ const Login = ()=> {
   //특수 문자 정규표현식
   const regExp = /^[ㄱ-힣a-zA-Z0-9]+$/; 
   //쿠키
-  const [cookies, setCookie] = useCookies()
 
   //중복 확인
   
@@ -51,7 +49,7 @@ const Login = ()=> {
   const [state, setState] = useState({
     birth: props.birth ? props.birth : '',
     email: props.email ? props.email : '',
-    gender: props.gender ? props.gender : '',
+    gender: props.gender,
     image: props.image ? props.image : '',
     interest: props.interest ? props.interest : '',
     kakao_id: props.kakao_id ? props.kakao_id : '',
@@ -82,15 +80,12 @@ const Login = ()=> {
     }
 
   }
-
   //관심사 제거
   const removeInterst = (e) => {
     const newList = interest.filter((element) => element !== e.target.id)
-    setInterest({'interest': newList})
+    setInterest(newList)
     setState({...state, interest: interest.join(',')})
   }
-
-
   //닉네임 입력시 state의 값을 바꿈
   const NicknameInput = (e) => {
     const newNickname = e.target.value
@@ -116,7 +111,6 @@ const Login = ()=> {
       })
     }
   }
-
   //서버와 통신 필요-------------------------------------------수정필요
   const check = ()=> {
 
@@ -142,25 +136,23 @@ const Login = ()=> {
   const submit = () => {
     console.log(state)
     if (overlap) {
-      alert('제출 완료')
-      //redux 연습
-      store.dispatch({type:'submit', state:state });
-      //쿠키저장
-      setCookie('nickname', state.nickname,{path:'/'})
-      setCookie('interest', state.interest,{path:'/'})
-      setCookie('jwt','1q2w3e4r!', {path:'/'})
-      axios.post('http://127.0.0.1:8081/user/account', 
-      {params: {userVo: state}}, 
-      )
+      axios.post('http://127.0.0.1:8081/user/account', state)
+      //axios.post( 'http://i8d207.p.ssafy.io:8081/user/account', state )
       .then((res) => {
         console.log(res)
+        store.dispatch({type:'submit', state:state })
+        alert('제출 완료')
+      })
+      .then(res =>{
+        axios.post(`http://127.0.0.1:8081/user/check`, res.data.userVo)
+        .then((res) => {
+          navi('/map')
+        })
       })
       .catch((err) => {
         console.log(err)
+        navi('/mypage')
       })
-
-
-      navi('/mypage')
     } else {
       alert('중복체크')
     }
@@ -278,7 +270,7 @@ const Login = ()=> {
         <button onClick={plusInteresting}>+</button>
         <div>
           {
-            interest?.map((e)=>{return <button id={e} key={e} onClick={removeInterst}>#{e}</button>})
+            interest?.map((e)=>{return <span id={e} key={e} onClick={removeInterst}>#{e}</span>})
           }
         </div>
       </div>

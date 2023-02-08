@@ -2,21 +2,27 @@ import { createStore } from "redux";
 
 export default createStore(function(state, action) {
     if (state === undefined){
-        return {
-            nickname: '',
-            profile: '',
-            interest: [],
-        }
+        return localStorage.state ?
+            JSON.parse(localStorage.state)
+            :
+            {
+                birth: '',
+                email: '',
+                gender: '',
+                image: '',
+                interest: '',
+                kakao_id: '',
+                name: '',
+                nickname: '',
+                reportcnt: '',
+                uid: 0,
+              }
     }
     if (action.type === 'submit') {
-        const newState = {
-            ...state,
-            nickname: action.state.nickname,
-            profile: action.state.profile,
-            interest: action.state.interest
-        }
+        const newState = action.state
         //local storage에 저장
-        localStorage.setItem('userData', JSON.stringify(newState))
+        console.log(action.state)
+        localStorage.setItem('state', JSON.stringify(newState))
         return newState
     }
     return state;
