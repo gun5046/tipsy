@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.domainrdb.dao.user.UserDao">
+	<select id = "findByKakaoID" resultType="UserVo">
+		<![CDATA[
+			select * from user where kakao_id = #{id}
+		]]>
+	</select>
+	
+	<insert id = "insertUser" parameterType="UserVo">
+		<![CDATA[
+			insert into user(kakao_id,name,nickname,image,birth,gender,interest) values(#{kakao_id}, #{name}, #{nickname}, #{image}, #{birth}, #{gender}, #{interest})
+		]]>
+	</insert>
+	
+	<select id="findUserByUid" resultType="UserVo">
+		<![CDATA[
+			select * from user where uid = #{uid}
+		]]>
+	</select>
+	
+	<select id="findUserCountByNickname" resultType="UserVo">
+		<![CDATA[
+			select * from user where nickname = #{nickname}
+		]]>
+	</select>
+	
+	<update id="updateUserInfo" parameterType="UserVo">
+		<![CDATA[
+			update user set nickname=#{nickname} and name =#{name}
+			 and gender=#{gender} and interest = #{interest} and birth = #{birth} and 
+			 image =#{image} where uid = #{uid}
+		]]>
+	</update>
+</mapper>
+	
