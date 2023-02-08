@@ -142,7 +142,7 @@ class SsafyScene extends Phaser.Scene {
         const tableLayer = map.getObjectLayer('tableObject');
         const tables = this.physics.add.staticGroup();
         tableLayer.objects.forEach((tableObj, i) => {
-            console.log(tableObj.gid)
+            // console.log(tableObj.gid)
             if (tableObj.gid === 5201) {
                 const item = tables.get(tableObj.x + tableObj.width * 0.5, tableObj.y - tableObj.height * 0.5, 'tables2', tableObj.gid - tableTileset2.firstgid)
             } else if (tableObj.gid === 5233) {
@@ -159,10 +159,11 @@ class SsafyScene extends Phaser.Scene {
          const chairs = this.physics.add.staticGroup();
 
          chairLayer.objects.forEach((chairObj, i) => {
-             const item = chairs.get(chairObj.x + chairObj.width * 0.5, chairObj.y - chairObj.height * 0.5, 'chairs', chairObj.gid - chairTileset.firstgid)
+             const item = chairs.get(chairObj.x + chairObj.width * 0.5, chairObj.y - chairObj.height * 0.5, 'chairs', chairObj.gid - chairTileset.firstgid).setDepth(10)
              const id = Number(`${i}`)            
              item.id = id
              item.sit = chairObj.gid- chairTileset.firstgid
+            //  console.log(id, chairObj.gid, chairTileset.firstgid)
             //  console.log(people.includes(id))
             //  if (people.indexOf(id) >= 0){
             //      this.add.image(item.x, item.y, 'profile').setDepth(10);
@@ -268,18 +269,25 @@ class SsafyScene extends Phaser.Scene {
         // 'E' 키 눌렀을 때 앉는 모션 추가
         if (this.keyX.isDown && current_table >= 0) {
             // console.log(prevVelocity)
-            // console.log(this.sit)
             // this.player.anims.play(`${this.characterKey}_sit_left`, true);
             // console.log(this.overlapChair)
 
             // 나중에 의자 모양에 따라 모션이 바뀌는 걸로 조정 !!!!!!!!!!!!!!!!!!!!!!
-            if (sit === 3) {this.player.anims.play(`${this.characterKey}_sit_left`, true)}
-            else if (sit === 1) {this.player.anims.play(`${this.characterKey}_sit_right`, true)}
-            else if (sit === 2) {this.player.anims.play(`${this.characterKey}_sit_up`, true)}
-            else if (sit === 0) {this.player.anims.play(`${this.characterKey}_sit_down`, true)}
-            // 의자에 위치에 맞게 아바타 앉히기
-            this.player.setPosition(chair_x, chair_y - 12)
-            console.log(current_chair, current_table) 
+            switch(sit){
+                case 9: //옆면
+                    this.player.anims.play(`${this.characterKey}_sit_right`, true);
+                    this.player.setPosition(chair_x + 2, chair_y - 13)
+                    break
+                case 11: //뒷모습
+                    this.player.anims.play(`${this.characterKey}_sit_up`, true)
+                    this.player.setPosition(chair_x, chair_y - 4)
+                    this.player.setDepth(5)
+                    break
+                case 6: //앞면
+                    this.player.anims.play(`${this.characterKey}_sit_down`, true)
+                    this.player.setPosition(chair_x, chair_y - 4)
+                    break
+            }
         }
 
     }

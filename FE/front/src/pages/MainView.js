@@ -24,7 +24,7 @@ const GameView = () => {
   // useGame(phaserConfig, phaserEl);
 
   useEffect(() => {
-    console.log('페이져 불러옴');
+    // console.log('페이져 불러옴');
     if (!startGame && phaserEl.current) {
       const newGame = new phaser.Game(phaserConfig)
       // phaserEl레퍼런스에 phaserConfig 로 scene을 생성
