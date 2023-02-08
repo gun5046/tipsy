@@ -10,6 +10,8 @@ const Home = () => {
       <br/> 
       <Link to="/phaser">Phaser</Link>
       <br/> 
+      <Link to="/mainstreet">Mainstreet</Link>
+      <br/> 
       {/* <Link to="/QR">QRcode</Link> */}
       <Modal/>
     </div>
