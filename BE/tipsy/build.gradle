@@ -113,7 +113,7 @@ project(':tipsy-game'){
 project(':tipsy-room'){
 	dependencies{
 		implementation project(':core-web')
-		implementation project(':web-socket')
+		//implementation project(':web-socket')
 		implementation project(':domain-nosql')
 	}
 }
