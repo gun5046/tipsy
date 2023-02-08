@@ -113,7 +113,7 @@ project(':tipsy-game'){
 project(':tipsy-room'){
 	dependencies{
 		implementation project(':core-web')
-		//implementation project(':web-socket')
+		implementation project(':web-socket')
 		implementation project(':domain-nosql')
 	}
 }
@@ -142,5 +142,12 @@ project(':tipsy-chat'){
 		implementation project(':web-socket')
 		implementation project(':domain-nosql')
 		implementation project(':domain-rdb')
+	}
+}
+
+project(':tipsy-openvidu'){
+	dependencies{
+		implementation project(':core-web')
+		implementation 'io.openvidu:openvidu-java-client:2.25.0'
 	}
 }
