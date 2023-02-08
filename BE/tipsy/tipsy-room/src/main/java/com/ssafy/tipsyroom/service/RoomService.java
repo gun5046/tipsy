@@ -14,5 +14,5 @@ public interface RoomService {
 	void banUser(User user);
 	void changeSet(Room room);
 	List<Map<Object, Object>> getTable(int bno);
-	int[][] getBuilding();
+	List<int[]> getBuilding();
 }

@@ -193,10 +193,10 @@ public class RoomRepoImpl implements RoomRepo {
 	}
 
 	@Override
-	public int[][] getBuilding() {
+	public List<int[]> getBuilding() {
 		Hashinit();
 		ZSetinit();
-		int[][] table = new int[6][2];
+		List<int[]> table = new ArrayList<>();
 
 		List<Map<Object, Object>>[] list = new ArrayList[6];
 		for (int i = 0; i < 6; i++) {
@@ -228,10 +228,9 @@ public class RoomRepoImpl implements RoomRepo {
 				}
 				total += cur;
 			}
-
-			table[i - 1][0] = total;
-			table[i - 1][1] = cnt;
-
+			
+			table.add(new int[] {total, cnt});
+			
 			set.clear();
 		}
 		return table;

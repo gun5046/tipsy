@@ -16,7 +16,7 @@ public interface RoomRepo {
 	boolean exitRoom(User user);
 	void banUser(User user);
 	
-	int[][] getBuilding();
+	List<int[]> getBuilding();
 	List<Map<Object, Object>> getTable(int bno);
 	
 	boolean isExists(String key);

@@ -111,7 +111,7 @@ public class RoomServiceImpl implements RoomService {
 	}
 	
 	@Override
-	public int[][] getBuilding() {
+	public List<int[]> getBuilding() {
 		return roomRepo.getBuilding();
 	}
 
