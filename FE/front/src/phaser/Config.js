@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import PlayingScene from "./PlayingScene";
 import MainstreetScene from './MainstreetScene';
+import SsafyScene from './SsafyScene';
 
 // Phaser 환경 설정
 const config = {
@@ -17,7 +18,8 @@ const config = {
       },
     // width: 800,
     // height: 600,
-    scene: [PlayingScene],                      // 사용할 scene들은 해당 배열에 넣어줘야 함
+    // scene: [PlayingScene],                      // 사용할 scene들은 해당 배열에 넣어줘야 함
+    scene: [SsafyScene],                      // 사용할 scene들은 해당 배열에 넣어줘야 함
     // pixelArt: true,                          // 타일 선명하게
     physics:{
         default:"arcade",                       // arcade라는 물리 엔진을 사용
