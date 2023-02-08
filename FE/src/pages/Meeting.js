@@ -1,16 +1,27 @@
 import * as THREE from 'three'
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+import { MeshBasicMaterial } from 'three';
 import {RGBELoader} from 'three/examples/jsm/loaders/RGBELoader'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import Stats from 'three/examples/jsm/libs/stats.module'
-import Profile from '../components/Profile';
+//import Profile from '../components/Profile';
+import { useState } from 'react';
 //import { GUI } from 'dat.gui'
 
 const pointer = new THREE.Vector2()
 const textboxPointer = new THREE.Vector2(0,0)
+const textboxPointer2 = new THREE.Vector2(0,0)
 let INTERSECTED
+let lon = 0, onPointerDownLon = 0,
+  lat = 0, onPointerDownLat = 0,
+  phi = 0, theta = 0;
 
+  
 function Meeting() {
+  const interest = '취향1,취향2,취향3'
+	const arr = interest.split(",")
+  const [props, setProps] = useState({
+    name: ''
+  })
   const scene = new THREE.Scene()
   scene.background = new THREE.Color(0xeeeeee)
 
@@ -24,24 +35,12 @@ function Meeting() {
   renderer.setSize(window.innerWidth, window.innerHeight)
   document.body.appendChild(renderer.domElement)
 
-  const controls = new OrbitControls(camera, renderer.domElement)
-
   const gridHelper = new THREE.GridHelper(20, 20)   //바닥 격자 크기, 갯수
   gridHelper.position.y = 0
   scene.add(gridHelper)
 
-
-  window.addEventListener('resize', onWindowResize, false)
-    function onWindowResize() {
-        camera.aspect = window.innerWidth / window.innerHeight
-        camera.updateProjectionMatrix()
-        renderer.setSize(window.innerWidth, window.innerHeight)
-        render()
-    }
-
-    const webcam = document.createElement('video')
-
-    var constraints = { audio: false, video: { width: 1280, height: 1024} }
+  const webcam = document.createElement('video')
+  var constraints = { audio: false, video: { width: 1280, height: 1024} }
 
 
     navigator.mediaDevices
@@ -121,7 +120,7 @@ function Meeting() {
       uniforms: {
           map: { value: webcamTexture },
           keyColor: { value: [0.0, 1.0, 0.0] },
-          similarity: { value: 0.6 },
+          similarity: { value: 0.0 },
           smoothness: { value: 0.0 },
       },
       vertexShader: vertexShader(),
@@ -135,14 +134,21 @@ function Meeting() {
   cam.scale.y = 3
   cam.position.set(0, 8, -1)
   cam.name= 'CAT'
+  scene.add(cam)
 
   const cam2 = cam.clone()
   cam2.name = 'CAT2'
-  cam2.position.set(5.5, 9, 2)
-  //cam2.rotateY(-0.44)
+  cam2.position.set(7, 8, 2)
+  cam2.rotateY(-1)
+  scene.add(cam2)
 
-  scene.add(cam)
-  //scene.add(cam2)
+  const cam3 = cam.clone()
+  cam3.name = 'CAT3'
+  cam3.position.set(-3, 8, 5)
+  cam3.rotateY(1.3)
+  scene.add(cam3)
+
+
 
   const stats= Stats()
   //document.body.appendChild(stats.dom)
@@ -189,33 +195,22 @@ function Meeting() {
       //texture.dispose();
       }
   )
-
+  document.addEventListener('click', onPointerMove2)
+  document.addEventListener( 'pointermove', onPointerMove );
+  document.addEventListener( 'wheel', onDocumentMouseWheel )
+  window.addEventListener('resize', onWindowResize, false)
+  document.addEventListener( 'pointerdown', onPointerDown )
   /* 배경 skybox */
 	function skybox(place) {
-		const left = textureLoader.load(`../3d/${place}/${place}_left.png`)
-		const front = textureLoader.load(`../3d/${place}/${place}_front.png`)
-		const right = textureLoader.load(`../3d/${place}/${place}_right.png`)
-		const bottom = textureLoader.load(`../3d/${place}/${place}_bottom.png`)
-		const skyMaterialArray = []
-		skyMaterialArray.push(
-		new THREE.MeshStandardMaterial({map: right,}),//오른쪽
-		new THREE.MeshStandardMaterial({map: left,}),//왼쪽
-		new THREE.MeshStandardMaterial({map: left,}),//위
-		new THREE.MeshStandardMaterial({map: bottom,}),//바닥
-		new THREE.MeshStandardMaterial({map: front,}),//뒤
-		new THREE.MeshStandardMaterial({map: front,}),//앞
-		)
-			
-		for (let i = 0 ; i < 6; i++){
-			skyMaterialArray[i].side = THREE.BackSide
-		}
-			
-		const skyGeometry = new THREE.BoxGeometry(240, 240, 240)
-		const sky = new THREE.Mesh(skyGeometry, skyMaterialArray)
+		const skyTexture = textureLoader.load(`3d/D207_1.jpg`)
+		//const skyGeometry = new THREE.SphereGeometry(400, 60, 40)
+    const skyGeometry = new THREE.CylinderGeometry(150, 150, 400, 32, 2, true)
+    skyGeometry.scale(-1,1,1)
+    const skyMaterial = new MeshBasicMaterial({ map: skyTexture })
+		const sky = new THREE.Mesh(skyGeometry, skyMaterial)
 		sky.position.set(0, 0, 0)
 		scene.add(sky)
 	}
-	skybox('bar')
     /* 테이블 */
 	function table(tableFolder){
   	const tableLoader = new GLTFLoader()
@@ -244,8 +239,6 @@ function Meeting() {
   	  scene.add(table)
   	})
 	}
-
-	table('round_wooden_table_01')
     /* 의자 생성  */
 	function chairMake(furniture) {
 
@@ -298,8 +291,6 @@ function Meeting() {
 			//animate2()
     });
 	}
-	chairMake('dining_chair_02')
-
   function sojumaker(){
   	const bottleLoader = new GLTFLoader()
   	bottleLoader.load( '3d/jiro_soju_4k/jiro_bottle.gltf',
@@ -311,7 +302,7 @@ function Meeting() {
               o.material.opacity = 0.28
   	      }
   	    });
-  	  bottle.scale.set(30, 30, 30)
+  	  bottle.scale.set(40, 40, 40)
   	  bottle.position.set(2, 6, 1)
   	  scene.add(bottle)
       bottle.rotation.x = -Math.PI/2
@@ -328,53 +319,76 @@ function Meeting() {
             //o.material.map = diff;
         }
       });
-    label.scale.set(30, 30, 30)
+    label.scale.set(40, 40, 40)
     label.position.set(2, 6, 1)
     scene.add(label)
     label.rotation.x = -Math.PI/2
   })
 	}
-  sojumaker()
-  let raycaster = new THREE.Raycaster()
-  document.addEventListener( 'click', onPointerMove );
-  function onPointerMove( event ) {
-    pointer.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-    pointer.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
-    textboxPointer.x = event.clientX
-    textboxPointer.y = event.clientY
-  }
-
-  function animate() {
-    requestAnimationFrame(animate)
-
-    //if (webcam.readyState === webcam.HAVE_ENOUGH_DATA) {
-    canvasCtx.drawImage(webcam, 0, 0, webcamCanvas.width, webcamCanvas.height)
-    if (webcamTexture) webcamTexture.needsUpdate = true
-    //}
-
-    //controls.update()
-    render()
-
-    stats.update()
-    }
-  
-
-  const foodLoader = new GLTFLoader()
-  foodLoader.load( '3d/pizza/pizza.gltf',
+  function anju(){
+    const foodLoader = new GLTFLoader()
+    foodLoader.load( '3d/pizza/pizza.gltf',
     gltf2 => {
       var pizza = gltf2.scene;
       //bottle.scale.set(30,30,30)
       pizza.position.set(0,6.4,5)
       scene.add(pizza)
-  })
-  foodLoader.load( '3d/pizza/frenchfries.gltf',
-  gltf2 => {
-    var pizza = gltf2.scene;
-    //bottle.scale.set(30,30,30)
-    pizza.position.set(3,6.4,5)
-    scene.add(pizza)
-  })
+    })
+    foodLoader.load( '3d/pizza/frenchfries.gltf',
+    gltf2 => {
+      var pizza = gltf2.scene;
+      //bottle.scale.set(30,30,30)
+      pizza.position.set(3,6.4,5)
+      scene.add(pizza)
+    })
+  }
+  let raycaster = new THREE.Raycaster()
+  function onWindowResize() {
+    camera.aspect = window.innerWidth / window.innerHeight
+    camera.updateProjectionMatrix()
+    renderer.setSize(window.innerWidth, window.innerHeight)
+    render()
+  }
+  function onDocumentMouseWheel( event ) {
 
+    const fov = camera.fov + event.deltaY * 0.05;
+
+    camera.fov = THREE.MathUtils.clamp( fov, 10, 75 );
+
+    camera.updateProjectionMatrix();
+
+  }
+  function onPointerDown( event ) {
+    if ( event.isPrimary === false ) return;
+
+    textboxPointer.x = event.clientX;
+    textboxPointer.y = event.clientY;
+
+    onPointerDownLon = lon;
+    onPointerDownLat = lat;
+    document.removeEventListener('click', onPointerMove2)
+    document.addEventListener( 'pointermove', onPointerMove );
+    document.addEventListener( 'pointerup', onPointerUp );
+  }
+  function onPointerMove( event ) {
+    if ( event.isPrimary === false ) return;
+    lon = ( textboxPointer.x - event.clientX ) * 0.1 + onPointerDownLon;
+    lat = ( event.clientY - textboxPointer.y ) * 0.1 + onPointerDownLat;
+  }
+  function onPointerMove2 ( event ) {
+    pointer.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+    pointer.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+    textboxPointer2.x = event.clientX
+    textboxPointer2.y = event.clientY
+  }
+  function onPointerUp(event) {
+
+    if ( event.isPrimary === false ) return;
+    document.removeEventListener( 'pointermove', onPointerMove );
+    document.removeEventListener( 'pointerup', onPointerUp );
+    document.addEventListener('click', onPointerMove2)
+
+  }
 
 
   const textBox = document.createElement('div')
@@ -391,10 +405,10 @@ function Meeting() {
   textBox.prepend(pTag)
   document.body.prepend(textBox)
   textBox.style.display = 'none'
-  console.log(textBox.style)
   btnTag1.onclick = () => {
-      document.getElementById('profileBox').style.display = 'block'
-    }
+    //console.log(document.getElementById('profileBox'))
+    document.getElementById('profileBox').style.display = 'block'
+  }
 
   function render() {
     raycaster.setFromCamera( pointer, camera );
@@ -404,7 +418,16 @@ function Meeting() {
       	INTERSECTED = intersects[ 0 ].object.name;
         const text = INTERSECTED
 				pTag.innerText = INTERSECTED
-        console.log(text)
+        if (document.getElementById('nickname2') && INTERSECTED !== '')  {
+          document.getElementById('nickname2').innerText = INTERSECTED
+        }
+        if (INTERSECTED !== ''){
+          const temp = props
+          temp.name = INTERSECTED
+          setProps(temp)
+          console.log(props)
+          
+        }
 				if (text) {
 					textBox.style.display = 'none'
 				}
@@ -413,8 +436,8 @@ function Meeting() {
           `
           position: fixed;
           background-color: white;
-          left:${textboxPointer.x}px;
-          top:${textboxPointer.y}px;
+          left:${textboxPointer2.x}px;
+          top:${textboxPointer2.y}px;
           width: 100px
           `
         )
@@ -422,36 +445,51 @@ function Meeting() {
       	  textBox.style.display = 'none'
         }
       }
-    } 
+    }
     renderer.render(scene, camera)
   }
+  function animate() {
+    requestAnimationFrame(animate)
+    //if (webcam.readyState === webcam.HAVE_ENOUGH_DATA) {
+    canvasCtx.drawImage(webcam, 0, 0, webcamCanvas.width, webcamCanvas.height)
+    if (webcamTexture) webcamTexture.needsUpdate = true
+    //}
 
-	window.addEventListener("keydown", e => {
-		if (e.key === 'ArrowLeft' && camera.rotation.y < 1.75){
-			camera.rotation.y += 0.25
-		} else if (e.key === 'ArrowRight' && camera.rotation.y > -1.5){
-			camera.rotation.y -= 0.25
-		}
-    if (camera.rotation.y <= 0.75 && camera.rotation.y >= -0.25) {
-      if (e.key === 'ArrowUp' && camera.rotation.x < 0.25){
-        camera.rotation.x += 0.25
-      } else if (e.key === 'ArrowDown' && camera.rotation.x > -0.75){
-        camera.rotation.x -=0.25
-      }
-    } else {
-      if (camera.rotation.x < 0){
-        camera.rotation.x += 0.25
-      } else if (camera.rotation.x > 0){
-        camera.rotation.x -= 0.25
-      }
-    }
-	})
-
+    lat = Math.max( - 85, Math.min( 85, lat ) );
+    phi = THREE.MathUtils.degToRad( 90 - lat );
+    theta = THREE.MathUtils.degToRad( lon );
+    const x = 500 * Math.sin( phi ) * Math.cos( theta );
+    const y = 500 * Math.cos( phi );
+    const z = 500 * Math.sin( phi ) * Math.sin( theta );
+    camera.lookAt( x, y, z );
+    render()
+    stats.update()
+  }
+  skybox('bar')
+  table('round_wooden_table_01')
+  chairMake('dining_chair_02')
+  sojumaker()
+  anju()
 	animate()
-	
   return (
     <>
-      <Profile/>
+      <div id="profileBox" style={{display: 'none', position: "fixed", backgroundColor:'white' }}>
+			  <button onClick={()=> {
+			  	document.getElementById('profileBox').style.display = 'none'
+			  }}>
+			  	X
+			  </button>
+			  <br/>
+			  <img alt='' src='https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Ft1.daumcdn.net%2Fcfile%2Ftistory%2F2513B53E55DB206927'/> 
+			  <p id='nickname2'></p>
+			  {
+			  	arr.map((element)=>{
+			  		return ( <p key={element}>{element}</p>)
+			  	})
+			  }
+			  <p>활동뱃지</p>
+      </div>
+      {/* <Profile props={props}/> */}
     </>
   )
 }
