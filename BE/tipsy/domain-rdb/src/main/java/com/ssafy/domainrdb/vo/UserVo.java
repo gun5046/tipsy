@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 public class UserVo {
 	private Long uid;
 	private String kakao_id;
-	private String email;
 	private String name;
 	private String nickname;
 	private String image;
