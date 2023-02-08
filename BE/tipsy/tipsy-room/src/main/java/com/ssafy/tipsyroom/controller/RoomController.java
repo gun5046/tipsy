@@ -39,9 +39,9 @@ public class RoomController {
 	public ResponseEntity<?> getBuilding() {
 		
 		try {
-			int[][] BuildingInfo = roomService.getBuilding();
+			List<int[]> BuildingInfo = roomService.getBuilding();
 			logger.info("술집별 정보");
-			return new ResponseEntity<int[][]>(BuildingInfo, HttpStatus.CREATED);
+			return new ResponseEntity<List<int[]>>(BuildingInfo, HttpStatus.CREATED);
 		} catch (Exception e) {
 			return exceptionHandling(e);
 		}
