@@ -1,0 +1,10 @@
+#Mypage img {
+    width: 100px;
+    height: 100px;
+    border-radius: 70%
+}
+
+#Mypage {
+    justify-items: center;
+    color: white;
+}
