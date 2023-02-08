@@ -2,40 +2,11 @@ import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import store from "../store";
 import axios from "axios";
-//import Rating from '@mui/material/Rating';
-//import Box from '@mui/material/Box';
-//import StarIcon from '@mui/icons-material/Star';
+
 
 let overlap = false
-/* 
-const labels = {
-  0.5: '0.5병',
-  1: '1병',
-  1.5: '1.5병',
-  2: '2병',
-  2.5: '2.5병',
-  3: '3병',
-  3.5: '3.5병',
-  4: '4병',
-  4.5: '4.5병',
-  5: '5병',
-};
- */
-
-/* function getLabelText(value) {
-  return `${value} Star${value !== 1 ? 's' : ''}, ${labels[value]}`;
-}
- */
 const Login = ()=> {
   
-/*   
-  const [sojuValue, setSojuValue] = React.useState(0.5);
-  const [sojuHover, setSojuHover] = React.useState(-1);
-  const [beerValue, setBeerValue] = React.useState(0.5);
-  const [beerHover, setBeerHover] = React.useState(-1);
-  const [ricewineValue, setRicewineValue] = React.useState(0.5);
-  const [ricewineHover, setRicewineHover] = React.useState(-1);
- */
   //특수 문자 정규표현식
   const regExp = /^[ㄱ-힣a-zA-Z0-9]+$/; 
   //쿠키
@@ -160,7 +131,7 @@ const Login = ()=> {
 
   return (
     <div className="Login">
-      <h2>WELCOME</h2>
+      <h2>Welcome to Tipsy!</h2>
       <div>
         <img 
           alt =''
@@ -181,86 +152,6 @@ const Login = ()=> {
         />
         <button onClick={check}>중복확인</button>
       </div>
-      {/* <div>
-        <p>주량</p>
-        <span>소주</span>
-        <Box
-          sx={{
-            width: 200,
-            display: 'flex',
-            alignItems: 'center',
-          }}
-        >
-          <Rating
-            name="hover-feedback"
-            value={sojuValue}
-            precision={0.5}
-            getLabelText={getLabelText}
-            onChange={(event, newValue) => {
-              setSojuValue(newValue);
-            }}
-            onChangeActive={(event, newHover) => {
-              setSojuHover(newHover);
-            }}
-            emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
-          />
-          {sojuValue !== null && (
-            <Box sx={{ ml: 2 }}>{labels[sojuHover !== -1 ? sojuHover : sojuValue]}</Box>
-          )}
-        </Box>
-
-        <span>맥주</span>
-        <Box
-          sx={{
-            width: 200,
-            display: 'flex',
-            alignItems: 'center',
-          }}
-        >
-          <Rating
-            name="hover-feedback"
-            value={beerValue}
-            precision={0.5}
-            getLabelText={getLabelText}
-            onChange={(event, newValue) => {
-              setBeerValue(newValue);
-            }}
-            onChangeActive={(event, newHover) => {
-              setBeerHover(newHover);
-            }}
-            emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
-          />
-          {beerValue !== null && (
-            <Box sx={{ ml: 2 }}>{labels[beerHover !== -1 ? beerHover : beerValue]}</Box>
-          )}
-        </Box>
-        <span>막걸리</span>
-        <Box
-          sx={{
-            width: 200,
-            display: 'flex',
-            alignItems: 'center',
-          }}
-        >
-          <Rating
-            name="hover-feedback"
-            value={ricewineValue}
-            precision={0.5}
-            getLabelText={getLabelText}
-            onChange={(event, newValue) => {
-              setRicewineValue(newValue);
-            }}
-            onChangeActive={(event, newHover) => {
-              setRicewineHover(newHover);
-            }}
-            emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
-          />
-          {ricewineValue !== null && (
-            <Box sx={{ ml: 2 }}>{labels[ricewineHover !== -1 ? ricewineHover : ricewineValue]}</Box>
-          )}
-        </Box>
-
-      </div> */}
       <div>
         <span>관심사</span>
         <input 

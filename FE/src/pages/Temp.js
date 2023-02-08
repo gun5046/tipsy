@@ -22,7 +22,8 @@ function Temp(){
       axios.post(`http://127.0.0.1:8081/user/check`, res.data.userVo)
       .then((re) => {
         store.dispatch({type:'submit', state:res.data.userVo })
-        navigate('/map', {state: res.data.userVo})
+        //navigate('/map', {state: res.data.userVo})
+        navigate('/login', {state: res.data.userVo})
       })
     }
     })
