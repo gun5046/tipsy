@@ -9,6 +9,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.ssafy.coreweb.dto.UserDto;
@@ -29,13 +30,12 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain chain)
 			throws IOException, ServletException {
-
+		
 		if (req.getCookies() != null) {
-			System.out.println("token 비교");
 			Cookie cookie[] = req.getCookies();
 
-			String accessToken = "eyJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjEsIm5hbWUiOiLrsJXsooXqsbQiLCJuaWNrbmFtZSI6IuyihSIsImV4cCI6MTY3NTE4NDA1Nn0.xBItunzZvTVHV-vi6dNMEQNta_I__Kp9v5_QmYE8890";
-			String refreshToken = "eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2NzU3ODg1NTZ9.SPeJxv9HjgXGwqD8LukD_IEoS-mQNf98WuxPFxHcFFA";
+			String accessToken = "";
+			String refreshToken = "";
 
 			for (Cookie c : cookie) {
 				if (c.getName().equals("Authorization")) {
@@ -51,7 +51,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 				res.setStatus(403);
 				return;
 			}
-
+			
 			if (!jwtTokenProvider.validateToken(accessToken)) { // access토큰 만료시
 				Long uid = (long) jwtTokenProvider.getUserPk(accessToken);
 
@@ -61,21 +61,24 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
 				// refrestoken 검사
 
-				Optional<Auth> originRefreshToken = authRepository.findById(uid);
-				if (!originRefreshToken.isPresent()) {
-					System.out.println("refreshtToken Not Exist");
-					return;
-				}
-				if (!originRefreshToken.get().getRefreshToken().equals(refreshToken)) {
-					System.out.println("refreshtToken Not Equal");
-					return;
-				}
+//				Optional<Auth> originRefreshToken = authRepository.findById(uid);
+//				if (!originRefreshToken.isPresent()) {
+					System.out.println("refreshToken Not Exist");
+					res.setStatus(403);
+//					return;
+//				}
+//				if (!originRefreshToken.get().getRefreshToken().equals(refreshToken)) {
+					System.out.println("refreshToken Not Equal");
+					res.setStatus(403);
+//					return;
+//				}
 
 				if (!jwtTokenProvider.validateToken(refreshToken)) {
 					System.out.println("refreshToken NotValid");
+					res.setStatus(403);
 					return;
 				}
-				System.out.println(2);
+
 				accessToken = jwtTokenProvider.createAccessToken(new UserDto(uid, name, nickname));
 			}
 
@@ -85,7 +88,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
 			refreshToken = jwtTokenProvider.createRefreshToken();
 			jwtTokenProvider.saveRefreshToken((long) jwtTokenProvider.getUserPk(accessToken), refreshToken);
-			System.out.println(2);
 			Cookie cookie2 = new Cookie("RefreshToken", refreshToken);
 
 			Cookie deleteCookie1 = new Cookie("Authorization", null);
@@ -98,7 +100,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 			cookie2.setHttpOnly(true);
 			res.addCookie(cookie1);
 			res.addCookie(cookie2);
-			System.out.println(1);
+
 			chain.doFilter(req, res);
 			return;
 		} else {

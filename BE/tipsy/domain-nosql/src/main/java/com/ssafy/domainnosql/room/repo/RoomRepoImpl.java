@@ -114,8 +114,8 @@ public class RoomRepoImpl implements RoomRepo {
 		}
 
 		// check banlist
-		if (stringSetOperations.isMember("room:" + roomcode + ":banlist", member.getId())) {
-			logger.info(member.getId() + "님은 강퇴당한 유저입니다.");
+		if (stringSetOperations.isMember("room:" + roomcode + ":banlist", member.getUid())) {
+			logger.info(member.getUid() + "님은 강퇴당한 유저입니다.");
 			return 3;
 		}
 
@@ -130,16 +130,16 @@ public class RoomRepoImpl implements RoomRepo {
 		String formatNow = now.format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
 
 		// 방에 들어와 있는 사람들
-		stringZSetOperations.add("room:" + roomcode + ":member", String.valueOf(member.getId()),
+		stringZSetOperations.add("room:" + roomcode + ":member", String.valueOf(member.getUid()),
 				Double.parseDouble(formatNow));
 
 		// 방에 들어온 사람들
-		stringHashOperations.put("room:" + roomcode + ":member:" + member.getId(), "entertime", formatNow);
-		stringHashOperations.put("room:" + roomcode + ":member:" + member.getId(), "position",
+		stringHashOperations.put("room:" + roomcode + ":member:" + member.getUid(), "entertime", formatNow);
+		stringHashOperations.put("room:" + roomcode + ":member:" + member.getUid(), "position",
 				member.getPosition());
 
 		String formatNow2 = now.format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH시 mm분 ss초"));
-		logger.info(member.getId() + "님이 " + roomcode + "방에 입장하였습니다. (" + formatNow2 + ")");
+		logger.info(member.getUid() + "님이 " + roomcode + "방에 입장하였습니다. (" + formatNow2 + ")");
 
 		return 0;
 	}

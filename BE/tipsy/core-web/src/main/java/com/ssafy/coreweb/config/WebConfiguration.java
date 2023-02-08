@@ -14,14 +14,14 @@ public class WebConfiguration implements WebMvcConfigurer {
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
 //		System.out.println("CORS Setting");
-//		default 설정.
+//		default ����.
 //		Allow all origins.
 //		Allow "simple" methods GET, HEAD and POST.
 //		Allow all headers.
 //		Set max age to 1800 seconds (30 minutes).
 		registry.addMapping("/**")
-		.allowedOrigins("*") // 모든 ip에 응답을 허용
-		.allowedHeaders("*") // 모든 header에 응답을 허용 
+		.allowedOrigins("*") 
+		.allowedHeaders("*")  
 		.allowedOriginPatterns("*")
 			.allowedMethods("*")
 //			.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH", "HEAD")
@@ -29,8 +29,7 @@ public class WebConfiguration implements WebMvcConfigurer {
 		
 	}
 
-//	Swagger UI ����� 404ó��
-//	Swagger2 �ϰ��
+
 	@Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		registry.addResourceHandler("/static/**")
@@ -40,6 +39,8 @@ public class WebConfiguration implements WebMvcConfigurer {
 		.addResourceLocations("classpath:/META-INF/resources/");
 		registry.addResourceHandler("/webjars/**")
         .addResourceLocations("classpath:/META-INF/resources/webjars/");
+		registry.addResourceHandler("/swagger-ui/**")
+        .addResourceLocations("classpath:/META-INF/resources/webjars/swagger-ui/3.52.5/");
     }
 	
 }
