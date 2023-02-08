@@ -35,7 +35,7 @@ public class UserController {
 	private final JwtTokenProvider jwt;
 
 	@GetMapping("/login")
-	@ApiOperation(value = "asd", notes = "asd")
+	@ApiOperation(value = "로그인", notes = "카카오 로그인 후 서버에 정보가 있는지 확인 후 결과 전송")
 	public UserInfoDto loginUser(HttpServletRequest request, HttpServletResponse response,
 			@RequestParam(required = false) String code, @RequestParam(required = false) String state,
 			@RequestParam(required = false) String error, @RequestParam(required = false) String error_description) {
@@ -81,6 +81,7 @@ public class UserController {
 	}
 
 	@GetMapping("/nickname")
+	@ApiOperation(value = "중복 확인", notes = "사용자가 입력한 닉네임이 중복인지 확인")
 	public boolean checkName(@RequestParam String nickname) {
 		int n =userServiceImpl.checkNickname(nickname);
 		if(n==0) {
@@ -91,7 +92,7 @@ public class UserController {
 	}
 	
 	@PostMapping("/check") // Mobile
-	@ApiOperation(value = "sdq!", notes = "sdqdq")
+	@ApiOperation(value = "모바일 앱 로그인", notes = "kako_id, birth, gender, image를 body로 보내면 loginDto를 보내줌")
 	public LoginDto checkUser(HttpServletRequest request, HttpServletResponse response,
 			@RequestBody KakaoAccountDto accountDto) {
 		logger.info("sdqds");
@@ -114,11 +115,13 @@ public class UserController {
 	}
 
 	@GetMapping("/mypage")
+	@ApiOperation(value = "유저 정보 조회", notes = "uid를 보내면 서버에서 사용자 정보를 보내줌")
 	public UserVo getUserInfo(@RequestParam Long uid) {
 		return userServiceImpl.getUserInfo(uid);
 	}
 	
 	@PutMapping("/mypage/modify")
+	@ApiOperation(value = "유저 정보 수정", notes = "사용자 정보를 보내면 DB에 업데이트 한 결과 알려줌")
 	public Boolean updateUserInfo(@RequestBody UserVo userVo) {
 		if(userServiceImpl.updateUserInfo(userVo)==0) return false;
 		else {
