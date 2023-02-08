@@ -29,8 +29,7 @@ public class WebConfiguration implements WebMvcConfigurer {
 		
 	}
 
-//	Swagger UI ����� 404ó��
-//	Swagger2 �ϰ��
+
 	@Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		registry.addResourceHandler("/static/**")

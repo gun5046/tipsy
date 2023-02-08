@@ -91,7 +91,7 @@ public class JwtTokenProvider {
     }
  
     public void saveRefreshToken(Long uid, String refreshToken) {
-    	authRepository.save(new Auth(uid,refreshToken));
+//    	authRepository.save(new Auth(uid,refreshToken));
     }
     public boolean validateToken(String jwtToken) {
         try {

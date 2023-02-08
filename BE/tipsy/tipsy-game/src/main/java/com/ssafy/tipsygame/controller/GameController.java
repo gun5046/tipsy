@@ -30,6 +30,7 @@ public class GameController {
 
 	@GetMapping("/game/room")
 	public String checkGameRoom(@RequestParam Long uid, @RequestParam String rid) {
+		gameServiceImpl.room();
 		return gameServiceImpl.checkGameRoom(uid, rid);
 	}
 

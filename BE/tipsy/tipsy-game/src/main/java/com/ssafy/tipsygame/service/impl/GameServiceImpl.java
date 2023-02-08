@@ -1,27 +1,25 @@
 package com.ssafy.tipsygame.service.impl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
 
 import javax.annotation.PostConstruct;
 
 import org.springframework.stereotype.Service;
 
 import com.ssafy.domainnosql.entity.Member;
-import com.ssafy.domainnosql.repo.RoomRepository;
+import com.ssafy.domainnosql.game.repo.RoomRepository;
 import com.ssafy.tipsygame.constant.Constant;
 import com.ssafy.tipsygame.dto.CommonGameDto;
 import com.ssafy.tipsygame.dto.GameCommDto;
 import com.ssafy.tipsygame.dto.GameDto;
 import com.ssafy.tipsygame.dto.GameUserDto;
 import com.ssafy.tipsygame.dto.LiarResponseDto;
-import com.ssafy.tipsygame.dto.LiarResultDto;
 import com.ssafy.tipsygame.dto.RouletteResponseDto;
 import com.ssafy.tipsygame.service.GameService;
 
@@ -50,8 +48,15 @@ public class GameServiceImpl implements GameService{
 		commonData = new HashMap<String, List<CommonGameDto>>();
 		constant = new Constant();
 	}
+	public void room() {
+		Member member = Member.builder().code("asd").uid(2).password("asd").build();
+		roomRepository.save(member);
+	}
 	public String checkGameRoom(Long uid, String rid) {
-		List<Member> memberList = roomRepository.findAllById(rid);
+		List<String> longs = Arrays.asList(rid);
+		
+		List<Member> memberList = (List<Member>) roomRepository.findAllById(longs);
+		System.out.println("list " + memberList);
 		if(memberList.isEmpty()) {
 			return "WrongRoomId";
 		}
