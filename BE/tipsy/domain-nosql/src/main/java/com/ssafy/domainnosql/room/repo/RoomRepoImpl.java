@@ -17,8 +17,9 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Component;
 
-import com.ssafy.domainnosql.vo.MemberVo;
-import com.ssafy.domainnosql.vo.RoomVo;
+import com.ssafy.domainnosql.entity.Member;
+import com.ssafy.domainnosql.entity.Room;
+import com.ssafy.domainnosql.entity.User;
 
 import lombok.RequiredArgsConstructor;
 
@@ -34,70 +35,72 @@ public class RoomRepoImpl implements RoomRepo {
 	HashOperations<String, Object, Object> stringHashOperations;
 	SetOperations<String, String> stringSetOperations;
 	ZSetOperations<String, String> stringZSetOperations;
-	
+
 	private void Hashinit() {
 		stringHashOperations = stringRedisTemplate.opsForHash();
 	}
+
 	private void Setinit() {
 		stringSetOperations = stringRedisTemplate.opsForSet();
 	}
+
 	private void ZSetinit() {
 		stringZSetOperations = stringRedisTemplate.opsForZSet();
 	}
-	
+
 	@Override
-	public void createRoom(RoomVo roomvo) {
+	public void createRoom(Room room) {
 		Hashinit();
 		Setinit();
-		stringHashOperations.put("room:" + roomvo.getCode(), "title", roomvo.getTitle());
-		stringHashOperations.put("room:" + roomvo.getCode(), "max", String.valueOf(roomvo.getMax()));
-		if (roomvo.getPassword() != null)
-			stringHashOperations.put("room:" + roomvo.getCode(), "password", roomvo.getPassword());
-		stringHashOperations.put("room:" + roomvo.getCode(), "entrance", (roomvo.getEntrance() > 0 ? "on" : "off"));
-		stringHashOperations.put("room:" + roomvo.getCode(), "silence", (roomvo.getSilence() > 0 ? "on" : "off"));
+		stringHashOperations.put("room:" + room.getCode(), "title", room.getTitle());
+		stringHashOperations.put("room:" + room.getCode(), "max", String.valueOf(room.getMax()));
+		if (room.getPassword() != null)
+			stringHashOperations.put("room:" + room.getCode(), "password", room.getPassword());
+		stringHashOperations.put("room:" + room.getCode(), "entrance", (room.getEntrance() > 0 ? "on" : "off"));
+		stringHashOperations.put("room:" + room.getCode(), "silence", (room.getSilence() > 0 ? "on" : "off"));
 		LocalDateTime now = LocalDateTime.now();
 		String formatNow = now.format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
-		stringHashOperations.put("room:" + roomvo.getCode(), "time", formatNow);
+		stringHashOperations.put("room:" + room.getCode(), "time", formatNow);
 
-		List<String> tags = roomvo.getHashtag();
+		List<String> tags = room.getHashtag();
 		for (String tag : tags) {
-			stringSetOperations.add("room:" + roomvo.getCode() + ":hashtag", tag);
+			stringSetOperations.add("room:" + room.getCode() + ":hashtag", tag);
 		}
 	}
 
 	@Override
-	public void changeSet(RoomVo roomvo) {
+	public void changeSet(Room room) {
 		Hashinit();
 		Setinit();
-		stringHashOperations.put("room:" + roomvo.getCode(), "title", roomvo.getTitle());
-		stringHashOperations.put("room:" + roomvo.getCode(), "max", String.valueOf(roomvo.getMax()));
-		System.out.println("password = " + roomvo.getPassword());
-		if (roomvo.getPassword() != null)
-			stringHashOperations.put("room:" + roomvo.getCode(), "password", roomvo.getPassword());
+		stringHashOperations.put("room:" + room.getCode(), "title", room.getTitle());
+		stringHashOperations.put("room:" + room.getCode(), "max", String.valueOf(room.getMax()));
+		System.out.println("password = " + room.getPassword());
+		if (room.getPassword() != null)
+			stringHashOperations.put("room:" + room.getCode(), "password", room.getPassword());
 		else {
 			// private to public
-			if (stringHashOperations.get("room:" + roomvo.getCode(), "password") != null) {
-				stringHashOperations.delete("room:" + roomvo.getCode(), "password");
+			if (stringHashOperations.get("room:" + room.getCode(), "password") != null) {
+				stringHashOperations.delete("room:" + room.getCode(), "password");
 			}
 		}
-		stringHashOperations.put("room:" + roomvo.getCode(), "entrance", (roomvo.getEntrance() > 0 ? "on" : "off"));
-		stringHashOperations.put("room:" + roomvo.getCode(), "silence", (roomvo.getSilence() > 0 ? "on" : "off"));
+		stringHashOperations.put("room:" + room.getCode(), "entrance", (room.getEntrance() > 0 ? "on" : "off"));
+		stringHashOperations.put("room:" + room.getCode(), "silence", (room.getSilence() > 0 ? "on" : "off"));
 
 		// init Hashtag
-		stringRedisTemplate.delete("room:" + roomvo.getCode() + ":hashtag");
+		stringRedisTemplate.delete("room:" + room.getCode() + ":hashtag");
 
 		// save Hashtag
-		for (String tag : roomvo.getHashtag()) {
-			stringSetOperations.add("room:" + roomvo.getCode() + ":hashtag", tag);
+		for (String tag : room.getHashtag()) {
+			stringSetOperations.add("room:" + room.getCode() + ":hashtag", tag);
 		}
 	}
 
 	@Override
-	public int enterRoom(MemberVo membervo) {
+	public int enterRoom(Member member) {
 		Hashinit();
 		Setinit();
 		ZSetinit();
-		String roomcode = membervo.getCode();
+		String roomcode = member.getCode();
 		// no exist room
 		if (!isExists("room:" + roomcode)) {
 			logger.info(roomcode + "방은 존재하지 않는 방입니다.");
@@ -105,14 +108,14 @@ public class RoomRepoImpl implements RoomRepo {
 		}
 
 		// check password
-		if (!chkPassword(roomcode, membervo.getPassword())) {
+		if (!chkPassword(roomcode, member.getPassword())) {
 			logger.info("비밀번호가 다릅니다.");
 			return 2;
 		}
 
 		// check banlist
-		if (stringSetOperations.isMember("room:" + roomcode + ":banlist", membervo.getId())) {
-			logger.info(membervo.getId() + "님은 강퇴당한 유저입니다.");
+		if (stringSetOperations.isMember("room:" + roomcode + ":banlist", member.getId())) {
+			logger.info(member.getId() + "님은 강퇴당한 유저입니다.");
 			return 3;
 		}
 
@@ -127,20 +130,20 @@ public class RoomRepoImpl implements RoomRepo {
 		String formatNow = now.format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
 
 		// 방에 들어와 있는 사람들
-		stringZSetOperations.add("room:" + roomcode + ":member", String.valueOf(membervo.getId()),
+		stringZSetOperations.add("room:" + roomcode + ":member", String.valueOf(member.getId()),
 				Double.parseDouble(formatNow));
 
 		// 방에 들어온 사람들
-		stringHashOperations.put("room:" + roomcode + ":member:" + membervo.getId(), "entertime", formatNow);
-		stringHashOperations.put("room:" + roomcode + ":member:" + membervo.getId(), "position",
-				membervo.getPosition());
+		stringHashOperations.put("room:" + roomcode + ":member:" + member.getId(), "entertime", formatNow);
+		stringHashOperations.put("room:" + roomcode + ":member:" + member.getId(), "position",
+				member.getPosition());
 
 		String formatNow2 = now.format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH시 mm분 ss초"));
-		logger.info(membervo.getId() + "님이 " + roomcode + "방에 입장하였습니다. (" + formatNow2 + ")");
+		logger.info(member.getId() + "님이 " + roomcode + "방에 입장하였습니다. (" + formatNow2 + ")");
 
 		return 0;
 	}
-	
+
 	private boolean chkPassword(String roomcode, String password) {
 		Hashinit();
 		Object pwd = stringHashOperations.get("room:" + roomcode, "password");
@@ -153,34 +156,39 @@ public class RoomRepoImpl implements RoomRepo {
 	}
 
 	@Override
-	public boolean exitRoom(String roomcode, String uid) {
+	public boolean exitRoom(User user) {
 		Hashinit();
 		ZSetinit();
 		LocalDateTime now = LocalDateTime.now();
 		String formatNow = now.format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
-
+		
+		String roomcode = user.getCode();
+		String uid = String.valueOf(user.getId());
+		
 		// 생성
 		// 방에 들어왔었던 사람들
 		stringHashOperations.put("room:" + roomcode + ":member:" + uid, "exittime", formatNow);
 
 		// 현재 방에 있는 사람들
 		stringZSetOperations.remove("room:" + roomcode + ":member", uid);
-		
+
 		// 방에 아무도 없으면 방 삭제
-		Long cur = stringZSetOperations.zCard("room:"+roomcode+":member");
-		if(cur == 0) {
+		Long cur = stringZSetOperations.zCard("room:" + roomcode + ":member");
+		if (cur == 0) {
 			stringRedisTemplate.delete("room:" + roomcode);
 			stringRedisTemplate.delete("room:" + roomcode + ":banlist");
 			stringRedisTemplate.delete("room:" + roomcode + ":hashtag");
 			return true;
 		}
-		
+
 		return false;
 	}
 
 	@Override
-	public void banUser(String roomcode, String uid) {
+	public void banUser(User user) {
 		Setinit();
+		String roomcode = user.getCode();
+		String uid = String.valueOf(user.getId());
 		stringSetOperations.add("room:" + roomcode + ":banlist", uid);
 	}
 
@@ -189,41 +197,41 @@ public class RoomRepoImpl implements RoomRepo {
 		Hashinit();
 		ZSetinit();
 		int[][] table = new int[6][2];
-		
+
 		List<Map<Object, Object>>[] list = new ArrayList[6];
 		for (int i = 0; i < 6; i++) {
 			list[i] = new ArrayList();
 		}
-		
+
 		for (int i = 1; i <= 6; i++) {
 			Set<String> set = stringRedisTemplate.keys("room:?????" + i + "??");
-			
+
 			logger.info(i + "번 건물에서 생성되어 있는 방 : " + set);
-			
+
 			int total = 0; // 해방 건물에 들어가 있는 사람 수
-			int cnt = 0;   // 해당 건물에서 들어갈 수 없는 방(만석 테이블)
-			
+			int cnt = 0; // 해당 건물에서 들어갈 수 없는 방(만석 테이블)
+
 			// Iterator 사용
 			Iterator iter = set.iterator();
-			while(iter.hasNext()) {
+			while (iter.hasNext()) {
 				String str = (String) iter.next();
-				
+
 				Map<Object, Object> map = stringHashOperations.entries(str);
 				map.put("code", str.substring(5));
 				list[i].add(map);
-				
+
 				long max = Long.parseLong(String.valueOf(stringHashOperations.get(str, "max")));
 				long cur = stringZSetOperations.zCard(str + ":member");
-				if(max == cur) {
+				if (max == cur) {
 					logger.info(str + "방은 만석 테이블입니다.");
 					cnt++;
 				}
 				total += cur;
 			}
-			
-			table[i-1][0] = total;
-			table[i-1][1] = cnt;
-			
+
+			table[i - 1][0] = total;
+			table[i - 1][1] = cnt;
+
 			set.clear();
 		}
 		return table;
@@ -233,34 +241,35 @@ public class RoomRepoImpl implements RoomRepo {
 	public List<Map<Object, Object>> getTable(int bno) {
 		Hashinit();
 		ZSetinit();
+		Setinit();
 		Set<String> set = stringRedisTemplate.keys("room:?????" + bno + "??");
 		List<Map<Object, Object>> list = new ArrayList<>();
-		
+
 		Iterator iter = set.iterator();
-		
+
 		logger.info(bno + "번 건물에 있는 테이블 정보들");
-		
-		while(iter.hasNext()) {
+
+		while (iter.hasNext()) {
 			String str = (String) iter.next();
-			
+
 			Map<Object, Object> map = stringHashOperations.entries(str);
-			
+
 			// save max from object to int
 			Object max = stringHashOperations.get(str, "max");
 			map.remove("max");
 			map.put("max", Integer.parseInt(String.valueOf(max)));
-			
+
 			map.put("code", str.substring(5));
-			map.put("current", stringZSetOperations.zCard(str + ":member"));
+			map.put("current", stringZSetOperations.zCard(str + ":member"));	
 			map.put("hashtag", stringSetOperations.members("room:" + map.get("code") + ":hashtag"));
-			
+
 			logger.info(String.valueOf(map));
-			
+
 			list.add(map);
 		}
 		return list;
 	}
-
+	
 	@Override
 	public boolean isExists(String key) {
 		return stringRedisTemplate.hasKey(key);

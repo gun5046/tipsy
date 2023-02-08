@@ -3,17 +3,18 @@ package com.ssafy.domainnosql.room.repo;
 import java.util.List;
 import java.util.Map;
 
-import com.ssafy.domainnosql.vo.MemberVo;
-import com.ssafy.domainnosql.vo.RoomVo;
+import com.ssafy.domainnosql.entity.Member;
+import com.ssafy.domainnosql.entity.Room;
+import com.ssafy.domainnosql.entity.User;
 
 public interface RoomRepo {
-	void createRoom(RoomVo roomvo);
-	void changeSet(RoomVo roomvo);
+	void createRoom(Room room);
+	void changeSet(Room room);
 
-	int enterRoom(MemberVo membervo);
+	int enterRoom(Member member);
 	
-	boolean exitRoom(String roomcode, String uid);
-	void banUser(String roomcode, String uid);
+	boolean exitRoom(User user);
+	void banUser(User user);
 	
 	int[][] getBuilding();
 	List<Map<Object, Object>> getTable(int bno);

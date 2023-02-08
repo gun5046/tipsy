@@ -14,8 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ssafy.domainnosql.vo.MemberVo;
-import com.ssafy.domainnosql.vo.RoomVo;
+import com.ssafy.domainnosql.entity.Member;
+import com.ssafy.domainnosql.entity.Room;
+import com.ssafy.domainnosql.entity.User;
 import com.ssafy.tipsyroom.service.RoomService;
 
 import io.swagger.annotations.Api;
@@ -61,9 +62,10 @@ public class RoomController {
 	//create room
 	@PostMapping()
 	@ApiOperation(value = "code[테이블정보], title[방제목], max[최대인원], (password[비밀번호]), antrance[입장효과], silence[침묵효과]", notes = "방 생성한다.")
-	public ResponseEntity<?> createRoom(@RequestBody RoomVo roomDto) {
+	public ResponseEntity<?> createRoom(@RequestBody Room room) {
 		try {
-			String roomcode = roomService.createRoom(roomDto);
+			System.out.println(room);
+			String roomcode = roomService.createRoom(room);
 			logger.info(roomcode + "방 생성 완료");
 			return new ResponseEntity<String>(roomcode, HttpStatus.CREATED);
 
@@ -75,9 +77,9 @@ public class RoomController {
 	// change room setting
 	@PostMapping("/setting")
 	@ApiOperation(value = "code[테이블정보], title[방제목], max[최대인원], (password[비밀번호]), antrance[입장효과], silence[침묵효과]", notes = "방 설정을 변경한다.")
-	public ResponseEntity<?> changeRoomSet(@RequestBody RoomVo roomvo) {
+	public ResponseEntity<?> changeRoomSet(@RequestBody Room room) {
 		try {
-			roomService.changeSet(roomvo);
+			roomService.changeSet(room);
 			return new ResponseEntity<String>("changed", HttpStatus.CREATED);
 		} catch (Exception e) {
 			return exceptionHandling(e);
@@ -87,11 +89,11 @@ public class RoomController {
 	//enter room
 	@PostMapping("/entry")
 	@ApiOperation(value = "code[방코드], id[사용자id], (password[비밀번호]), position[의자위치]", notes = "미팅룸 입장")
-	public ResponseEntity<?> enterRoom(@RequestBody MemberVo membervo) {
+	public ResponseEntity<?> enterRoom(@RequestBody Member member) {
 		try {
 
 			String status = "failed";
-			int result = roomService.enterRoom(membervo);
+			int result = roomService.enterRoom(member);
 			if (result == 0) {
 				status = "success";
 			} else if (result == 1) {
@@ -113,12 +115,10 @@ public class RoomController {
 	// exit room
 	@PostMapping("/exit")
 	@ApiOperation(value = "code[방코드], id[사용자id]", notes = "미팅룸 나간다.")
-	public ResponseEntity<?> exitRoom(@RequestBody Map<String, Object> param) {
+	public ResponseEntity<?> exitRoom(@RequestBody User user) {
 		try {
-			String roomcode = String.valueOf(param.get("code"));
-			String uid = String.valueOf(param.get("id"));
-			roomService.exitRoom(roomcode, uid);
-			logger.info(uid + "님이 " + roomcode + "방을 나갔습니다.");
+			roomService.exitRoom(user);
+			logger.info(String.valueOf(user.getId()) + "님이 " + user.getCode() + "방을 나갔습니다.");
 			return new ResponseEntity<String>("success", HttpStatus.CREATED);
 		} catch (Exception e) {
 			return exceptionHandling(e);
@@ -128,18 +128,16 @@ public class RoomController {
 	// ban user
 	@PostMapping("/ban")
 	@ApiOperation(value = "code[방코드], id[강퇴할 사용자 id]", notes = "강퇴하기")
-	public ResponseEntity<?> banUser(@RequestBody Map<String, Object> param) {
+	public ResponseEntity<?> banUser(@RequestBody User user) {
 		try {
-			String roomcode = String.valueOf(param.get("code"));
-			String uid = String.valueOf(param.get("id"));
-			roomService.banUser(roomcode, uid);
-			logger.info(uid + "님이 " + roomcode + "방에서 강퇴되었습니다.");
+			roomService.banUser(user);
+			logger.info(String.valueOf(user.getId()) + "님이 " + user.getCode() + "방에서 강퇴되었습니다.");
 			return new ResponseEntity<String>("success", HttpStatus.CREATED);
 		} catch (Exception e) {
 			return exceptionHandling(e);
 		}
 	}
-
+	
 	private ResponseEntity<String> exceptionHandling(Exception e) {
 		e.printStackTrace();
 		return new ResponseEntity<String>("Sorry: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);

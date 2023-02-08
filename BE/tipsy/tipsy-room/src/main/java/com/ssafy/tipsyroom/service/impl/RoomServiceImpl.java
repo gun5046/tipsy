@@ -9,9 +9,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ssafy.domainnosql.entity.Member;
+import com.ssafy.domainnosql.entity.Room;
+import com.ssafy.domainnosql.entity.User;
 import com.ssafy.domainnosql.room.repo.RoomRepo;
-import com.ssafy.domainnosql.vo.MemberVo;
-import com.ssafy.domainnosql.vo.RoomVo;
 import com.ssafy.tipsyroom.service.RoomService;
 
 import lombok.RequiredArgsConstructor;
@@ -26,53 +27,53 @@ public class RoomServiceImpl implements RoomService {
 	private RoomRepo roomRepo;
 
 	@Override
-	public String createRoom(RoomVo roomvo) {
+	public String createRoom(Room room) {
 
-		System.out.println("테이블 위치 : " + roomvo.getCode());
+		System.out.println("테이블 위치 : " + room.getCode());
 		
 		// 현재 room DB에 없는 랜덤 코드가 나올 때까지
 		String roomcode = "";
 		while(true) {
-			roomcode = getRandomCode() + roomvo.getCode();
+			roomcode = getRandomCode() + room.getCode();
 			if(!roomRepo.isExists("room:"+roomcode)) {
 				break;
 			}
 		}
 		System.out.println("roomcode = " + roomcode);
-		roomvo.setCode(roomcode);
+		room.setCode(roomcode);
 		
 		// 생성
-		roomRepo.createRoom(roomvo);
+		roomRepo.createRoom(room);
 		
 		
-		logger.info(roomvo.getCode() + "방이 생성되었습니다.");
-		logger.info("  Title : " + roomvo.getTitle());
-		logger.info("  최대 인원 : " + roomvo.getMax());
-		if(roomvo.getPassword() != null) {
-			logger.info("  공개범위 : 비공개(" + roomvo.getPassword() + ")");
+		logger.info(room.getCode() + "방이 생성되었습니다.");
+		logger.info("  Title : " + room.getTitle());
+		logger.info("  최대 인원 : " + room.getMax());
+		if(room.getPassword() != null) {
+			logger.info("  공개범위 : 비공개(" + room.getPassword() + ")");
 		} else {
 			logger.info("  공개범위 : 공개방");
 		}
-		logger.info("  입장 시 효과 : " + (roomvo.getEntrance()>0?"on":"off"));
-		logger.info("  침묵 시 효과 : " + (roomvo.getSilence()>0?"on":"off"));
-		logger.info("  방 생성 시간 : " + String.format("yyyy년 MM월 dd일 HH시 mm분 ss초", roomvo.getTime()));
+		logger.info("  입장 시 효과 : " + (room.getEntrance()>0?"on":"off"));
+		logger.info("  침묵 시 효과 : " + (room.getSilence()>0?"on":"off"));
+		logger.info("  방 생성 시간 : " + String.format("yyyy년 MM월 dd일 HH시 mm분 ss초", room.getTime()));
 		String tags = "";
-		for (String tag : roomvo.getHashtag()) {
+		for (String tag : room.getHashtag()) {
 			tags += " #" + tag;
 		}
 		logger.info("  해시태그 :" + tags);
 		
-		return roomvo.getCode();
+		return room.getCode();
 	}
 	
 	@Override
-	public void changeSet(RoomVo roomvo) {
-		roomRepo.changeSet(roomvo);	
+	public void changeSet(Room room) {
+		roomRepo.changeSet(room);	
 	}
 	
 	@Override
-	public int enterRoom(MemberVo membervo) {
-		return roomRepo.enterRoom(membervo);
+	public int enterRoom(Member member) {
+		return roomRepo.enterRoom(member);
 	}
 	
 	
@@ -92,17 +93,16 @@ public class RoomServiceImpl implements RoomService {
 
 
 	@Override
-	public void exitRoom(String roomcode, String uid) {
-
-		if(roomRepo.exitRoom(roomcode, uid)) {
-			logger.info("남아있는 사람이 없어 " + roomcode + "방을 삭제하였습니다.");
+	public void exitRoom(User user) {
+		if(roomRepo.exitRoom(user)) {
+			logger.info("남아있는 사람이 없어 " + user.getCode() + "방을 삭제하였습니다.");
 		}
 	}
 
 	@Override
-	public void banUser(String roomcode, String uid) {
-		roomRepo.banUser(roomcode, uid);
-		roomRepo.exitRoom(roomcode, uid);
+	public void banUser(User user) {
+		roomRepo.banUser(user);
+		roomRepo.exitRoom(user);
 	}
 	
 	@Override
@@ -114,5 +114,5 @@ public class RoomServiceImpl implements RoomService {
 	public int[][] getBuilding() {
 		return roomRepo.getBuilding();
 	}
-	
+
 }

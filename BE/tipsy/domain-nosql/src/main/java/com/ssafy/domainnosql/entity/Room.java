@@ -1,17 +1,11 @@
-package com.ssafy.domainnosql.vo;
+package com.ssafy.domainnosql.entity;
 
 import java.util.List;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class RoomVo {
+public class Room {
 	private String code;
 	private String title;
 	private String password;
