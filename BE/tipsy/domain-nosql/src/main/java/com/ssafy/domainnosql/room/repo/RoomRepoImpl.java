@@ -260,6 +260,18 @@ public class RoomRepoImpl implements RoomRepo {
 
 			map.put("code", str.substring(5));
 			map.put("current", stringZSetOperations.zCard(str + ":member"));	
+			
+			List<String[]> memberinfo = new ArrayList<>();
+			Set<String> members = stringZSetOperations.range(str + ":member", 0, -1);
+			Iterator it = members.iterator();
+			while(it.hasNext()) {
+				String member = (String) it.next();
+				String position = String.valueOf(stringHashOperations.get(str + ":member:" + member, "position"));
+				
+				memberinfo.add(new String[] {member, position});
+			}
+			map.put("member", memberinfo);
+			
 			map.put("hashtag", stringSetOperations.members("room:" + map.get("code") + ":hashtag"));
 
 			logger.info(String.valueOf(map));

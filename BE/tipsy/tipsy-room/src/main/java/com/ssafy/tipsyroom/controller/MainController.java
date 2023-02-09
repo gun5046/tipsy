@@ -17,7 +17,8 @@ import lombok.RequiredArgsConstructor;
 @RestController()
 @RequestMapping("/main")
 @RequiredArgsConstructor
-@ComponentScan(basePackages = {"com.ssafy.domainnosql.dao.room"})
+@ComponentScan(basePackages = {"com.ssafy.domainnosql.rooom.repo"})
+//@ComponentScan(basePackages = {"com.ssafy.domainnosql.dao.room"})
 public class MainController {
 private final Logger logger = LoggerFactory.getLogger(MainController.class);
 	
