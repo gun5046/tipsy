@@ -10,7 +10,7 @@ import com.ssafy.domainnosql.entity.User;
 public interface RoomService {
 	String createRoom(Room room);
 	int enterRoom(Member member);
-	void exitRoom(User user);
+	String exitRoom(User user);
 	void banUser(User user);
 	void changeSet(Room room);
 	List<Map<Object, Object>> getTable(int bno);

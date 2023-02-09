@@ -98,10 +98,8 @@ public class RoomServiceImpl implements RoomService {
 
 
 	@Override
-	public void exitRoom(User user) {
-		if(roomRepo.exitRoom(user)) {
-			logger.info("남아있는 사람이 없어 " + user.getCode() + "방을 삭제하였습니다.");
-		}
+	public String exitRoom(User user) {
+		return roomRepo.exitRoom(user);
 	}
 
 	@Override

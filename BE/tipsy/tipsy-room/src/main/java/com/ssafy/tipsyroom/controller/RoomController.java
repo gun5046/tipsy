@@ -117,9 +117,15 @@ public class RoomController {
 	@ApiOperation(value = "code[방코드], id[사용자id]", notes = "미팅룸 나간다.")
 	public ResponseEntity<?> exitRoom(@RequestBody User user) {
 		try {
-			roomService.exitRoom(user);
-			logger.info(String.valueOf(user.getId()) + "님이 " + user.getCode() + "방을 나갔습니다.");
-			return new ResponseEntity<String>("success", HttpStatus.CREATED);
+			String result = roomService.exitRoom(user);
+			if(result.equals("delete")) {
+				logger.info("남아있는 사람이 없어 " + user.getCode() + "방을 삭제하였습니다.");
+			} else if(result.equals("exit")) {
+				logger.info(String.valueOf(user.getId()) + "님이 " + user.getCode() + "방을 나갔습니다.");
+			} else {
+				logger.info("호스트가 " + result + "님으로 변경되었습니다.");
+			}
+			return new ResponseEntity<String>(result, HttpStatus.CREATED);
 		} catch (Exception e) {
 			return exceptionHandling(e);
 		}

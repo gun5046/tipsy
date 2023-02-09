@@ -13,12 +13,13 @@ public interface RoomRepo {
 
 	int enterRoom(Member member);
 	
-	boolean exitRoom(User user);
+	String exitRoom(User user);
 	void banUser(User user);
 	
 	List<int[]> getBuilding();
 	List<Map<Object, Object>> getTable(int bno);
 	
-	boolean isExists(String key);
+	void changeHost(User user);
 	
+	boolean isExists(String key);
 }

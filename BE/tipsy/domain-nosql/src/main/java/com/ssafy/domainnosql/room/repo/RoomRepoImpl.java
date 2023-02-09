@@ -1,8 +1,11 @@
 package com.ssafy.domainnosql.room.repo;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -155,8 +158,13 @@ public class RoomRepoImpl implements RoomRepo {
 		return true;
 	}
 
+	private Date getDate(String Date) throws ParseException {
+		Date date = new SimpleDateFormat("yyyyMMDDHHmmss").parse(Date);
+		return date;
+	}
+	
 	@Override
-	public boolean exitRoom(User user) {
+	public String exitRoom(User user) {
 		Hashinit();
 		ZSetinit();
 		LocalDateTime now = LocalDateTime.now();
@@ -164,13 +172,43 @@ public class RoomRepoImpl implements RoomRepo {
 		
 		String roomcode = user.getCode();
 		String uid = String.valueOf(user.getId());
+		String minMember = uid;
+
+		// 현재 방에 있는 사람들
+		stringZSetOperations.remove("room:" + roomcode + ":member", uid);
+		
+		// 호스트가 나간다면 호스트 변경
+		if(stringHashOperations.get("room:" + roomcode, "host").equals(uid)) {
+			System.out.println("host가 나간대요");
+			// 이 방에 남아있는 사람들
+			Set<String> members = stringZSetOperations.range("room:" + roomcode + ":member", 0, -1);
+			
+			// 가장 먼저 들어왔었던 사람을 호스트로 지정
+			try {
+				Date minDate =  java.sql.Timestamp.valueOf(now);
+				for (String member : members) {
+					Date entertime = getDate(String.valueOf(stringHashOperations.get("room:" + roomcode + ":member:" + member, "entertime")));
+					
+					int result = minDate.compareTo(entertime);
+					
+					if(result >= 0) {
+						minDate = entertime;
+						minMember = member;
+					}
+				}
+				System.out.println(minMember);
+				changeHost(new User(roomcode, Long.parseLong(minMember)));
+				
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+			
+		}
 		
 		// 생성
 		// 방에 들어왔었던 사람들
 		stringHashOperations.put("room:" + roomcode + ":member:" + uid, "exittime", formatNow);
 
-		// 현재 방에 있는 사람들
-		stringZSetOperations.remove("room:" + roomcode + ":member", uid);
 
 		// 방에 아무도 없으면 방 삭제
 		Long cur = stringZSetOperations.zCard("room:" + roomcode + ":member");
@@ -178,11 +216,25 @@ public class RoomRepoImpl implements RoomRepo {
 			stringRedisTemplate.delete("room:" + roomcode);
 			stringRedisTemplate.delete("room:" + roomcode + ":banlist");
 			stringRedisTemplate.delete("room:" + roomcode + ":hashtag");
-			return true;
+			return "delete";
 		}
-
-		return false;
+		
+		if(minMember.equals(uid)) {
+			return "exit";
+		}
+		
+		return minMember;
 	}
+	
+	@Override
+	public void changeHost(User user) {
+		Hashinit();
+		String roomcode = user.getCode();
+		String uid = String.valueOf(user.getId());
+		
+		stringHashOperations.put("room:" + roomcode, "host", uid);
+	}
+
 
 	@Override
 	public void banUser(User user) {

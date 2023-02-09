@@ -119,6 +119,11 @@ room:[방코드]:member:[유저아이디]
 
 :paperclip: exitRoom()
 
+| status | response |
+| --- | --- |
+| 그냥 나가기 | exit |
+| 사람이 아무도 없으면 방 삭제 | delete |
+| 호스트가 나가면 호스트 변경 | [호스트가 된 아이디]] |
 
 :outbox_tray: body
 
