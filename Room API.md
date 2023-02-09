@@ -234,26 +234,125 @@ room:[방코드]:banlist
 [
   {
     "title": "string",
-    "max": 4,
     "entrance": "off",
     "silence": "off",
-    "time": "20230202124920",
-    "code": "XRKeW201",
+    "time": "20230202124958",
+    "max": 4,
+    "code": "BoMFe402",
     "current": 2,
+    "member": [
+      {
+        "uid": 3,
+        "image": "C:UsersmulticampusDesktop프로필.jpg",
+        "gender": "3",
+        "interest": "3",
+        "reportcnt": "0",
+        "name": "김싸피",
+        "nickname": "ssafy3",
+        "birth": "3",
+        "position": "12",
+        "kakao_id": null,
+        "email": "ssafy3@ssafy.com"
+      },
+      {
+        "uid": 6,
+        "image": "C:UsersmulticampusDesktop프로필.jpg",
+        "gender": "3",
+        "interest": "3",
+        "reportcnt": "0",
+        "name": "김싸피",
+        "nickname": "ssafy6",
+        "birth": "3",
+        "position": "42",
+        "kakao_id": null,
+        "email": "ssafy6@ssafy.com"
+      }
+    ],
     "hashtag": [
-      "string"
+      "string",
+      "\"왜안돼\""
     ]
   },
   {
     "title": "string",
-    "max": 4,
     "entrance": "off",
     "silence": "off",
-    "time": "20230202124928",
-    "code": "B6m79202",
+    "time": "20230202124945",
+    "max": 4,
+    "code": "jPhGx401",
     "current": 0,
+    "member": [
+      {
+        "uid": 3,
+        "image": "C:UsersmulticampusDesktop프로필.jpg",
+        "gender": "3",
+        "interest": "3",
+        "reportcnt": "0",
+        "name": "김싸피",
+        "nickname": "ssafy3",
+        "birth": "3",
+        "position": "12",
+        "kakao_id": null,
+        "email": "ssafy3@ssafy.com"
+      },
+      {
+        "uid": 6,
+        "image": "C:UsersmulticampusDesktop프로필.jpg",
+        "gender": "3",
+        "interest": "3",
+        "reportcnt": "0",
+        "name": "김싸피",
+        "nickname": "ssafy6",
+        "birth": "3",
+        "position": "42",
+        "kakao_id": null,
+        "email": "ssafy6@ssafy.com"
+      }
+    ],
     "hashtag": [
-      "string"
+      "string",
+      "test"
+    ]
+  },
+  {
+    "title": "string",
+    "entrance": "off",
+    "silence": "off",
+    "time": "20230202125008",
+    "max": 4,
+    "code": "HuPsZ403",
+    "current": 0,
+    "member": [
+      {
+        "uid": 3,
+        "image": "C:UsersmulticampusDesktop프로필.jpg",
+        "gender": "3",
+        "interest": "3",
+        "reportcnt": "0",
+        "name": "김싸피",
+        "nickname": "ssafy3",
+        "birth": "3",
+        "position": "12",
+        "kakao_id": null,
+        "email": "ssafy3@ssafy.com"
+      },
+      {
+        "uid": 6,
+        "image": "C:UsersmulticampusDesktop프로필.jpg",
+        "gender": "3",
+        "interest": "3",
+        "reportcnt": "0",
+        "name": "김싸피",
+        "nickname": "ssafy6",
+        "birth": "3",
+        "position": "42",
+        "kakao_id": null,
+        "email": "ssafy6@ssafy.com"
+      }
+    ],
+    "hashtag": [
+      "string",
+      "test"
     ]
   }
 ]
