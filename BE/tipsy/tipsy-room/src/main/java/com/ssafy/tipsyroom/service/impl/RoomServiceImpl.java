@@ -77,6 +77,12 @@ public class RoomServiceImpl implements RoomService {
 	}
 	
 	@Override
+	public void changeHost(User user) {
+		roomRepo.changeHost(user);
+		logger.info(user.getCode() + "방의 호스트가 " + String.valueOf(user.getId()) + "님으로 변경되었습니다.");
+	}
+	
+	@Override
 	public int enterRoom(Member member) {
 		return roomRepo.enterRoom(member);
 	}

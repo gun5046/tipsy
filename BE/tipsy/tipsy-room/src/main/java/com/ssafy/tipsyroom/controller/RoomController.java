@@ -86,6 +86,18 @@ public class RoomController {
 		}
 	}
 
+	// change room host
+	@PostMapping("/host")
+	@ApiOperation(value = "code[테이블정보], id[호스트할 아이디]", notes = "방장을 변경한다.")
+	public ResponseEntity<?> changeRoomHost(@RequestBody User user) {
+		try {
+			roomService.changeHost(user);
+			return new ResponseEntity<String>("host changed", HttpStatus.CREATED);
+		} catch (Exception e) {
+			return exceptionHandling(e);
+		}
+	}
+	
 	//enter room
 	@PostMapping("/entry")
 	@ApiOperation(value = "code[방코드], id[사용자id], (password[비밀번호]), position[의자위치]", notes = "미팅룸 입장")

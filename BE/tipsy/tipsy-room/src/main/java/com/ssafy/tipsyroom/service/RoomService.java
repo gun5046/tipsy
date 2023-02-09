@@ -13,6 +13,7 @@ public interface RoomService {
 	String exitRoom(User user);
 	void banUser(User user);
 	void changeSet(Room room);
+	void changeHost(User user);
 	List<Map<Object, Object>> getTable(int bno);
 	List<int[]> getBuilding();
 }
