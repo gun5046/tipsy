@@ -62,6 +62,7 @@ public class GameController {
 			String result = gameServiceImpl.voteLiar(rid, nickname);
 			if (result != null) {
 				simpMessagingTemplate.convertAndSend("/sub/play/liar-game/" + rid, result);
+				simpMessagingTemplate.convertAndSend("/topic/play/liar-game/" + rid, result);
 			}
 		}
 	}
@@ -81,7 +82,9 @@ public class GameController {
 				simpMessagingTemplate.convertAndSend("/sub/play/croco-game/" + rid,
 						new CrocoDto("Turn", next, crocoDto.getIdx()));
 			}else {
-				simpMessagingTemplate.convertAndSend("/sub/play/croco-game/"+rid,new CrocoDto("Result", crocoDto.getNickname(),0));
+				CrocoDto data = new CrocoDto("Result", crocoDto.getNickname(),0);
+				simpMessagingTemplate.convertAndSend("/sub/play/croco-game/"+rid, data);
+				simpMessagingTemplate.convertAndSend("/topic/play/croco-game/"+rid, data);
 			}
 		}
 	}
@@ -92,6 +95,7 @@ public class GameController {
 		if(gameServiceImpl.countUser(rid)) {
 			List<CommonGameDto> list = gameServiceImpl.sortRecord(rid);
 			simpMessagingTemplate.convertAndSend("/sub/play/drink-game/"+rid, list);
+			simpMessagingTemplate.convertAndSend("/topic/play/drink-game/"+rid, list);
 		}
 	}
 
@@ -101,6 +105,7 @@ public class GameController {
 		if(gameServiceImpl.countUser(rid)) {
 			List<CommonGameDto> list = gameServiceImpl.sortRecord(rid);
 			simpMessagingTemplate.convertAndSend("/sub/play/drag-game/"+rid, list);
+			simpMessagingTemplate.convertAndSend("/topic/play/drag-game/"+rid, list);
 		}
 	}
 
@@ -113,7 +118,7 @@ public class GameController {
 			}
 		} else {
 			if(gameServiceImpl.countUser(rid)) {
-				//type == nickname send response to frontend
+				simpMessagingTemplate.convertAndSend("/topic/play/roulette-game/" + rid, type);
 			}
 		}
 	}
@@ -124,6 +129,7 @@ public class GameController {
 		if(gameServiceImpl.countUser(rid)) {
 			List<CommonGameDto> list = gameServiceImpl.sortRecord(rid);
 			simpMessagingTemplate.convertAndSend("/sub/play/ordering-game/"+rid, list);
+			simpMessagingTemplate.convertAndSend("/topic/play/ordering-game/"+rid, list);
 		}
 	}
 }
