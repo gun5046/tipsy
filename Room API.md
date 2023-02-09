@@ -226,7 +226,7 @@ room:[방코드]:banlist
 
 :paperclip: getTable()
 
-현재 들어가 있는 사람 수도 같이 제공(current)
+현재 들어가 있는 사람 수와 정보도 같이 제공(current)
 
 :inbox_tray: Response body
 
@@ -243,7 +243,7 @@ room:[방코드]:banlist
     "member": [
       {
         "uid": 3,
-        "image": "C:UsersmulticampusDesktop프로필.jpg",
+        "image": "C:Users\\multicampus\\Desktop\\프로필.jpg",
         "gender": "3",
         "interest": "3",
         "reportcnt": "0",
@@ -251,12 +251,11 @@ room:[방코드]:banlist
         "nickname": "ssafy3",
         "birth": "3",
         "position": "12",
-        "kakao_id": null,
-        "email": "ssafy3@ssafy.com"
+        "kakao_id": "ssafy3@ssafy.com"
       },
       {
         "uid": 6,
-        "image": "C:UsersmulticampusDesktop프로필.jpg",
+        "image": "C:\\Users\\multicampus\\Desktop\\프로필.jpg",
         "gender": "3",
         "interest": "3",
         "reportcnt": "0",
@@ -264,8 +263,7 @@ room:[방코드]:banlist
         "nickname": "ssafy6",
         "birth": "3",
         "position": "42",
-        "kakao_id": null,
-        "email": "ssafy6@ssafy.com"
+        "kakao_id": "ssafy6@ssafy.com"
       }
     ],
     "hashtag": [
@@ -281,34 +279,7 @@ room:[방코드]:banlist
     "max": 4,
     "code": "jPhGx401",
     "current": 0,
-    "member": [
-      {
-        "uid": 3,
-        "image": "C:UsersmulticampusDesktop프로필.jpg",
-        "gender": "3",
-        "interest": "3",
-        "reportcnt": "0",
-        "name": "김싸피",
-        "nickname": "ssafy3",
-        "birth": "3",
-        "position": "12",
-        "kakao_id": null,
-        "email": "ssafy3@ssafy.com"
-      },
-      {
-        "uid": 6,
-        "image": "C:UsersmulticampusDesktop프로필.jpg",
-        "gender": "3",
-        "interest": "3",
-        "reportcnt": "0",
-        "name": "김싸피",
-        "nickname": "ssafy6",
-        "birth": "3",
-        "position": "42",
-        "kakao_id": null,
-        "email": "ssafy6@ssafy.com"
-      }
-    ],
+    "member": [],
     "hashtag": [
       "string",
       "test"
@@ -322,34 +293,7 @@ room:[방코드]:banlist
     "max": 4,
     "code": "HuPsZ403",
     "current": 0,
-    "member": [
-      {
-        "uid": 3,
-        "image": "C:UsersmulticampusDesktop프로필.jpg",
-        "gender": "3",
-        "interest": "3",
-        "reportcnt": "0",
-        "name": "김싸피",
-        "nickname": "ssafy3",
-        "birth": "3",
-        "position": "12",
-        "kakao_id": null,
-        "email": "ssafy3@ssafy.com"
-      },
-      {
-        "uid": 6,
-        "image": "C:UsersmulticampusDesktop프로필.jpg",
-        "gender": "3",
-        "interest": "3",
-        "reportcnt": "0",
-        "name": "김싸피",
-        "nickname": "ssafy6",
-        "birth": "3",
-        "position": "42",
-        "kakao_id": null,
-        "email": "ssafy6@ssafy.com"
-      }
-    ],
+    "member": [],
     "hashtag": [
       "string",
       "test"

@@ -120,12 +120,13 @@ public class RoomServiceImpl implements RoomService {
 			if(map.get("member") != null) {
 				List<String[]> list = (List<String[]>) map.get("member");			
 				
+				if(list.isEmpty()) continue;
+				
 				for (String[] arr : list) {
 					Map<Object, Object> member = new HashMap();
-					String position = arr[1];
-					System.out.println(arr[0] + " " + arr[1]);
+					logger.info(arr[0] + "님이 앉은 자리는 " + arr[1] + "번입니다.");
 					uservo = userDao.findUserByUid(Long.parseLong(arr[0]));
-					System.out.println(uservo);
+					
 					member.put("uid", uservo.getUid());
 					member.put("kakao_id", uservo.getKakao_id());
 					member.put("name", uservo.getName());
@@ -135,12 +136,12 @@ public class RoomServiceImpl implements RoomService {
 					member.put("gender", uservo.getGender());
 					member.put("interest", uservo.getInterest());
 					member.put("reportcnt", uservo.getReportcnt());
-					member.put("position", position);
-					
+					member.put("position", arr[1]);
+							
 					memberlist.add(member);
 				}
+				map.put("member", memberlist);
 			}		
-			map.put("member", memberlist);
 		}
 		return info;
 	}
