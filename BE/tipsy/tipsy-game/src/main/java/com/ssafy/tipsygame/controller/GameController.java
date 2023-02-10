@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.tipsygame.dto.CommonGameDto;
 import com.ssafy.tipsygame.dto.CrocoDto;
+import com.ssafy.tipsygame.dto.ForceExitDto;
 import com.ssafy.tipsygame.dto.GameCommDto;
 import com.ssafy.tipsygame.dto.GameUserDto;
 import com.ssafy.tipsygame.dto.LiarRequestDto;
@@ -131,6 +132,35 @@ public class GameController {
 			List<CommonGameDto> list = gameServiceImpl.sortRecord(rid);
 			simpMessagingTemplate.convertAndSend("/sub/play/ordering-game/"+rid, list);
 			simpMessagingTemplate.convertAndSend("/topic/play/ordering-game/"+rid, list);
+		}
+	}
+	
+	@MessageMapping("/game/force-exit/{rid}")
+	public void ForceExit(@DestinationVariable String rid, ForceExitDto dto) {
+		List<GameUserDto> data = gameServiceImpl.communicateInGameRoom(rid, new GameCommDto("Exit", dto.getGameUserDto()));
+		if(data != null) {
+			gameServiceImpl.onGameStart(rid);
+			simpMessagingTemplate.convertAndSend("/sub/room/" + rid, data);
+			switch(dto.getGid()) {
+			case -1:
+				simpMessagingTemplate.convertAndSend("/sub/select/" + rid, "ForceExit," + dto.getGameUserDto().getNickname());
+			case 1:
+				simpMessagingTemplate.convertAndSend("/sub/play/liar-game/" + rid, "ForceExit," + dto.getGameUserDto().getNickname());
+			case 2:
+				gameServiceImpl.forceExit(rid);
+				simpMessagingTemplate.convertAndSend("/sub/play/croco-game/" + rid, "ForceExit," + dto.getGameUserDto().getNickname());
+			case 3:
+				gameServiceImpl.forceExit(rid);
+				simpMessagingTemplate.convertAndSend("/sub/play/drink-game/" + rid, "ForceExit," + dto.getGameUserDto().getNickname());
+			case 4:
+				gameServiceImpl.forceExit(rid);
+				simpMessagingTemplate.convertAndSend("/sub/play/drag-game/" + rid, "ForceExit," + dto.getGameUserDto().getNickname());
+			case 5:
+				simpMessagingTemplate.convertAndSend("/sub/play/roulette-game/" + rid, "ForceExit," + dto.getGameUserDto().getNickname());
+			case 6:
+				gameServiceImpl.forceExit(rid);
+				simpMessagingTemplate.convertAndSend("/sub/play/ordering-game/" + rid, "ForceExit," + dto.getGameUserDto().getNickname());
+			}
 		}
 	}
 }

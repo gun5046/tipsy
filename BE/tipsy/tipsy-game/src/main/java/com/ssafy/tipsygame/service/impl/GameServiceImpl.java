@@ -314,4 +314,9 @@ public class GameServiceImpl implements GameService{
 		}
 		setHost(rid, list.get(idx).getNickname());
 	}
+	
+	public void forceExit(String rid) {
+		count.remove(rid);
+		commonData.remove(rid);
+	}
 }
