@@ -7,9 +7,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,7 +39,6 @@ public class RoomController {
 	@GetMapping()
 	@ApiOperation(value = "술집별 정보를 제공(현재 인원, 만석 테이블)", notes = "거리 페이지에서 술집별로 현재 들어간 인원, 합석하지 못하는 테이블을 제공한다.")
 	public ResponseEntity<?> getBuilding() {
-		
 		try {
 			List<int[]> BuildingInfo = roomService.getBuilding();
 			logger.info("술집별 정보");
@@ -75,7 +76,7 @@ public class RoomController {
 	}
 
 	// change room setting
-	@PostMapping("/setting")
+	@PutMapping("/setting")
 	@ApiOperation(value = "code[테이블정보], title[방제목], max[최대인원], (password[비밀번호]), antrance[입장효과], silence[침묵효과]", notes = "방 설정을 변경한다.")
 	public ResponseEntity<?> changeRoomSet(@RequestBody Room room) {
 		try {
@@ -87,7 +88,7 @@ public class RoomController {
 	}
 
 	// change room host
-	@PostMapping("/host")
+	@PutMapping("/host")
 	@ApiOperation(value = "code[테이블정보], id[호스트할 아이디]", notes = "방장을 변경한다.")
 	public ResponseEntity<?> changeRoomHost(@RequestBody User user) {
 		try {
@@ -125,7 +126,7 @@ public class RoomController {
 	}
 
 	// exit room
-	@PostMapping("/exit")
+	@DeleteMapping("/exit")
 	@ApiOperation(value = "code[방코드], id[사용자id]", notes = "미팅룸 나간다.")
 	public ResponseEntity<?> exitRoom(@RequestBody User user) {
 		try {
