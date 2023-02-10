@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -126,7 +125,7 @@ public class RoomController {
 	}
 
 	// exit room
-	@DeleteMapping("/exit")
+	@PostMapping("/exit")
 	@ApiOperation(value = "code[방코드], id[사용자id]", notes = "미팅룸 나간다.")
 	public ResponseEntity<?> exitRoom(@RequestBody User user) {
 		try {
