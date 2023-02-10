@@ -113,6 +113,30 @@ room:[방코드]:member:[유저아이디]
 }
 ```
 
+status : changed
+
+
+
+---
+
+### :loudspeaker: [POST] /room/host
+
+:paperclip: changeHost()
+
+
+:outbox_tray: body - User
+
+```json
+{
+  "code": "string",
+  "id": 0
+}
+```
+
+status : host changed
+
+
+
 ---
 
 ### :loudspeaker: [POST] /room/exit
