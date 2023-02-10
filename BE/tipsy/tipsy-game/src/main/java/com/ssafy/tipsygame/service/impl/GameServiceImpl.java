@@ -214,11 +214,14 @@ public class GameServiceImpl implements GameService{
 			if(v1 > v2) {
 				if(liar.equals(u1)) {
 					result = "Lose";//liar lose
+					setHost(rid, liar);
 				} else {
 					result = "Win";//liar win
+					pickRandom(rid, liar);
 				}
 			} else {
 				result = "Win";
+				pickRandom(rid, liar);
 			}
 			
 			return result + "," + liarNickname.get(rid);
@@ -276,12 +279,14 @@ public class GameServiceImpl implements GameService{
 		List <CommonGameDto> list = commonData.get(rid);
 		commonData.remove(rid);
 		Collections.sort(list,Collections.reverseOrder());
+		setHost(rid, list.get(list.size()-1).getNickname());
 		return list;
 	}
 	
 	public RouletteResponseDto getRouletteResponseDto(String rid) {
 		List<GameUserDto> list = roomList.get(rid).getGameUserList();
 		int index = (int)(Math.random() * list.size()) + 1;
+		setHost(rid, list.get(index-1).getNickname());
 		return new RouletteResponseDto(index, list);
 	}
 	
@@ -289,5 +294,24 @@ public class GameServiceImpl implements GameService{
 		roomList.get(rid).getGameUserList().forEach((e) -> {
 			e.setReady(false);
 		});
+	}
+	
+	public void setHost(String rid, String nickname) {
+		roomList.get(rid).getGameUserList().forEach((e) -> {
+			if(e.getNickname().equals(nickname)) {
+				e.setHost(true);
+			} else {
+				e.setHost(false);
+			}
+		});
+	}
+	
+	public void pickRandom(String rid, String liar) {
+		List<GameUserDto> list = roomList.get(rid).getGameUserList();
+		int idx = (int)(Math.random() * list.size());
+		while(list.get(idx).getNickname().equals(liar)) {
+			idx = (int)(Math.random() * list.size());
+		}
+		setHost(rid, list.get(idx).getNickname());
 	}
 }

@@ -83,6 +83,7 @@ public class GameController {
 						new CrocoDto("Turn", next, crocoDto.getIdx()));
 			}else {
 				CrocoDto data = new CrocoDto("Result", crocoDto.getNickname(),0);
+				gameServiceImpl.setHost(rid, crocoDto.getNickname());
 				simpMessagingTemplate.convertAndSend("/sub/play/croco-game/"+rid, data);
 				simpMessagingTemplate.convertAndSend("/topic/play/croco-game/"+rid, data);
 			}
