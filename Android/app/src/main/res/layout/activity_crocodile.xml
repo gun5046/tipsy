@@ -221,6 +221,18 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <TextView
+        android:id="@+id/turn_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="nickname님의 차례입니다."
+        android:textColor="@color/icon"
+        android:textSize="28sp"
+        app:layout_constraintBottom_toTopOf="@+id/aligator"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageView
         android:id="@+id/aligator_game_over"
         android:layout_width="350dp"
@@ -230,8 +242,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/aligator_origin"
-        tools:visibility="visible" />
+        app:srcCompat="@drawable/aligator_origin" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/black_screen"
@@ -242,21 +253,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="gone">
+        app:layout_constraintTop_toTopOf="parent">
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <TextView
-        android:id="@+id/turn_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="nickname님의 차례입니다."
-        android:textSize="28sp"
-        app:layout_constraintBottom_toTopOf="@+id/aligator"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/crocodile_title"
