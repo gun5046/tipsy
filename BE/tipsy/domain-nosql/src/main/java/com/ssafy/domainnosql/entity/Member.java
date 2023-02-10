@@ -18,7 +18,7 @@ public class Member {
 	@Id
 	private String code;
 	private String password;
-	private long uid;
+	private Long uid;
 	private String position;
 
 }

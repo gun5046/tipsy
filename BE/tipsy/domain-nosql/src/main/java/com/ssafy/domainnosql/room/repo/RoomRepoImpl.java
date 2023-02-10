@@ -117,7 +117,7 @@ public class RoomRepoImpl implements RoomRepo {
 		}
 
 		// check banlist
-		if (stringSetOperations.isMember("room:" + roomcode + ":banlist", member.getUid())) {
+		if (stringSetOperations.isMember("room:" + roomcode + ":banlist", String.valueOf(member.getUid()))) {
 			logger.info(member.getUid() + "님은 강퇴당한 유저입니다.");
 			return 3;
 		}
@@ -136,6 +136,13 @@ public class RoomRepoImpl implements RoomRepo {
 		stringZSetOperations.add("room:" + roomcode + ":member", String.valueOf(member.getUid()),
 				Double.parseDouble(formatNow));
 
+		// 방에 아무도 없으면 호스트 지정
+		System.out.println(stringZSetOperations.zCard("room:" + roomcode + ":member"));
+		if (stringZSetOperations.zCard("room:" + roomcode + ":member") == 1) {
+			System.out.println("host지정");
+			stringHashOperations.put("room:" + roomcode, "host", String.valueOf(member.getUid()));
+		}
+		
 		// 방에 들어온 사람들
 		stringHashOperations.put("room:" + roomcode + ":member:" + member.getUid(), "entertime", formatNow);
 		stringHashOperations.put("room:" + roomcode + ":member:" + member.getUid(), "position",
