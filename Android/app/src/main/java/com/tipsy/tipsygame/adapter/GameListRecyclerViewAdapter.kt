@@ -21,13 +21,6 @@ class GameListRecyclerViewAdapter(var host: Boolean, var activity: Activity?):
         "10초 내에 가운데 원을 양쪽 끝까지 누가 더 많이 옮겼는지 대결하는 게임",
         "간단한 룰렛으로 방에 있는 사람 중 한 명 뽑기",
         "15초 내에 1부터 15까지의 숫자를 얼마나 빠르게 누르는지 대결하는 게임")
-    val activityList = listOf(
-        LiarGameActivity::class.java,
-        CrocodileActivity::class.java,
-        DrinkActivity::class.java,
-        DragActivity::class.java,
-        RouletteActivity::class.java,
-        OrderingActivity::class.java)
 
     private lateinit var binding : GameListCardBinding
 

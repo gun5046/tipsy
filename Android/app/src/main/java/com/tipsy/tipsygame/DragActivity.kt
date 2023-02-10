@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.SeekBar
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import com.tipsy.tipsygame.adapter.showGameResultDialog
 import com.tipsy.tipsygame.adapter.showGameResultRecyclerViewDialog
 import com.tipsy.tipsygame.databinding.ActivityDragBinding
 import com.tipsy.tipsygame.dto.GameResult
@@ -35,12 +36,21 @@ class DragActivity : AppCompatActivity() {
         countId = GlobalApplication.sp.load(this, R.raw.count, 0)
         hitId = GlobalApplication.sp.load(this, R.raw.hit, 0)
         GlobalApplication.stompClient?.topic("/sub/play/drag-game/${GlobalApplication.roomNumber}")?.subscribe {
-            val result = jacksonObjectMapper().readValue<List<GameResult>>(it.payload)
-            wait?.cancel()
-            runOnUiThread {
-                binding.dragTimerBackground.visibility = View.GONE
-                binding.waiting.visibility = View.GONE
-                showGameResultRecyclerViewDialog(this, result, false)
+            val temp = it.payload.split(',')
+            if(temp[0].equals("ForceExit")) {
+                GlobalApplication.sp.stop(countId)
+                timer.cancel()
+                runOnUiThread {
+                    showGameResultDialog(this, "${temp[1]}님이 나갔습니다.")
+                }
+            } else {
+                val result = jacksonObjectMapper().readValue<List<GameResult>>(it.payload)
+                wait?.cancel()
+                runOnUiThread {
+                    binding.dragTimerBackground.visibility = View.GONE
+                    binding.waiting.visibility = View.GONE
+                    showGameResultRecyclerViewDialog(this, result, false)
+                }
             }
         }
         binding.seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {

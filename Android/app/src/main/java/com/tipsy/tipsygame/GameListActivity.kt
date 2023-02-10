@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.tipsy.tipsygame.adapter.GameListRecyclerViewAdapter
+import com.tipsy.tipsygame.adapter.showGameResultDialog
 import com.tipsy.tipsygame.databinding.ActivityGameListBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -29,12 +30,21 @@ class GameListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityGameListBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        GlobalApplication.gid = -1
         host = intent.getBooleanExtra("host", false)
         GlobalApplication.stompClient?.topic("/sub/select/${GlobalApplication.roomNumber}")?.subscribe {
-            val idx = it.payload.toInt() - 1
-            val intent = Intent(this, activityList[idx])
-            startActivity(intent)
-            finish()
+            val temp = it.payload.split(',')
+            if(temp[0].equals("ForceExit")){
+                runOnUiThread {
+                    showGameResultDialog(this, "${temp[1]}님이 나갔습니다.")
+                }
+            } else {
+                GlobalApplication.gid = it.payload.toInt()
+                val idx = it.payload.toInt() - 1
+                val intent = Intent(this, activityList[idx])
+                startActivity(intent)
+                finish()
+            }
         }
         if(host){
             binding.gameListWaitText.visibility = View.GONE

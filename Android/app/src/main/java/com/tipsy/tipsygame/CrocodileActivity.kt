@@ -41,47 +41,54 @@ class CrocodileActivity : AppCompatActivity() {
             .build()
         val id = sp.load(this, R.raw.crocodile_sound, 0)
         GlobalApplication.stompClient?.topic("/sub/play/croco-game/${GlobalApplication.roomNumber}")?.subscribe {
-            val response = jacksonObjectMapper().readValue<CrocoDto>(it.payload)
-            clickable = response.nickname.equals(GlobalApplication.user.nickname)
-            runOnUiThread {
-                binding.turnText.text = "${response.nickname}님의 차례입니다."
-            }
-            if(response.type.equals("Turn")){
-                flagList[response.idx] = true
+            val temp = it.payload.split(',')
+            if(temp[0].equals("ForceExit")) {
                 runOnUiThread {
-                    ObjectAnimator.ofFloat(toothList[response.idx], "scaleY", 1f, 0.4f).apply {
-                        duration = 500
-                        start()
-                    }
-                    ObjectAnimator.ofFloat(toothList[response.idx], "translationY", 0f, 11f).apply {
-                        duration = 500
-                        start()
-                    }
+                    showGameResultDialog(this, "${temp[1]}님이 나갔습니다.")
                 }
-            } else if(response.type.equals("Result")){
-                sp.play(id, 1f, 1f, 0, 0, 1f)
+            } else {
+                val response = jacksonObjectMapper().readValue<CrocoDto>(it.payload)
+                clickable = response.nickname.equals(GlobalApplication.user.nickname)
                 runOnUiThread {
-                    binding.aligatorGameOver.visibility = View.VISIBLE
-                    ObjectAnimator.ofFloat(binding.aligatorGameOver, "scaleX", 1f, 10f).apply {
-                        duration = 500
-                        start()
-                    }
-                    ObjectAnimator.ofFloat(binding.aligatorGameOver, "scaleY", 1f, 10f).apply {
-                        duration = 500
-                        start()
-                    }
-                    CoroutineScope(Dispatchers.IO).launch {
-                        delay(250)
-                        runOnUiThread {
-                            binding.blackScreen.visibility = View.VISIBLE
-                            ObjectAnimator.ofFloat(binding.blackScreen, "alpha", 0f, 1f).apply {
-                                duration = 500
-                                start()
-                            }
+                    binding.turnText.text = "${response.nickname}님의 차례입니다."
+                }
+                if(response.type.equals("Turn")){
+                    flagList[response.idx] = true
+                    runOnUiThread {
+                        ObjectAnimator.ofFloat(toothList[response.idx], "scaleY", 1f, 0.4f).apply {
+                            duration = 500
+                            start()
                         }
-                        delay(500)
-                        runOnUiThread {
-                            showGameResultDialog(this@CrocodileActivity, "${response.nickname}님이 걸렸습니다")
+                        ObjectAnimator.ofFloat(toothList[response.idx], "translationY", 0f, 11f).apply {
+                            duration = 500
+                            start()
+                        }
+                    }
+                } else if(response.type.equals("Result")){
+                    sp.play(id, 1f, 1f, 0, 0, 1f)
+                    runOnUiThread {
+                        binding.aligatorGameOver.visibility = View.VISIBLE
+                        ObjectAnimator.ofFloat(binding.aligatorGameOver, "scaleX", 1f, 10f).apply {
+                            duration = 500
+                            start()
+                        }
+                        ObjectAnimator.ofFloat(binding.aligatorGameOver, "scaleY", 1f, 10f).apply {
+                            duration = 500
+                            start()
+                        }
+                        CoroutineScope(Dispatchers.IO).launch {
+                            delay(250)
+                            runOnUiThread {
+                                binding.blackScreen.visibility = View.VISIBLE
+                                ObjectAnimator.ofFloat(binding.blackScreen, "alpha", 0f, 1f).apply {
+                                    duration = 500
+                                    start()
+                                }
+                            }
+                            delay(500)
+                            runOnUiThread {
+                                showGameResultDialog(this@CrocodileActivity, "${response.nickname}님이 걸렸습니다")
+                            }
                         }
                     }
                 }

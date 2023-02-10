@@ -34,7 +34,11 @@ class LiarGameActivity : AppCompatActivity() {
         setContentView(binding.root)
         GlobalApplication.stompClient?.topic("/sub/play/liar-game/${GlobalApplication.roomNumber}")?.subscribe{
             val temp = it.payload.split(',')
-            if(temp[0].equals("Win")){
+            if(temp[0].equals("ForceExit")) {
+                runOnUiThread {
+                    showGameResultDialog(this, "${temp[1]}님이 나갔습니다.")
+                }
+            } else if(temp[0].equals("Win")){
                 //라이어 승리
                 runOnUiThread {
                     showGameResultDialog(this, "라이어 승리\n라이어는 ${temp[1]}님입니다.")
