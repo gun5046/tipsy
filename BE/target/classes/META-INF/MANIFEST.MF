@@ -1,0 +1,23 @@
+Manifest-Version: 1.0
+Build-Jdk-Spec: 11
+Specification-Title: Kurento Java Tutorial - Group Call
+Specification-Version: 6.18
+Specification-Vendor: Kurento
+Implementation-Title: Kurento Java Tutorial - Group Call
+Implementation-Version: 6.18.0
+Implementation-Vendor: Kurento
+Build-Timestamp: 
+Created-By: Maven Integration for Eclipse
+Implementation-URL: https://www.kurento.org/kurento-tutorial/kurento-gro
+ up-call/
+Java-Vendor: Oracle Corporation
+Java-Version: 11.0.16
+Os-Arch: amd64
+Os-Name: Windows 11
+Os-Version: 10.0
+Scm-Connection: scm:git:https://github.com/Kurento/kurento-tutorial-java
+ .git/kurento-group-call
+Scm-Revision: 
+Scm-Url: https://github.com/Kurento/kurento-tutorial-java/kurento-group-
+ call
+
