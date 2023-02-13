@@ -9,9 +9,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class FriendRequeustVo {
+public class FriendRequestVo {
 	private Long rid;
 	private Long from;
 	private Long to;
 	private String time;
+	
 }
