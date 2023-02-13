@@ -136,6 +136,11 @@ public class GameServiceImpl implements GameService{
 	public Boolean countUser(String rid) {
 		if(!count.containsKey(rid)) {
 			count.put(rid, 1);
+			int size = roomList.get(rid).getGameUserList().size();
+			if(count.get(rid)==size) {
+				count.remove(rid);
+				return true;
+			}
 		} else {
 			int size = roomList.get(rid).getGameUserList().size();
 			count.replace(rid, count.get(rid)+1);
