@@ -24,7 +24,6 @@ public class FriendsServiceImpl implements FriendsService{
 	}
 
 	@Override
-	@Transactional
 	public int insertFriend(Long user1, Long user2) {
 		friendsDao.deleteFriendsRequest(user1, user2);
 		
@@ -32,13 +31,11 @@ public class FriendsServiceImpl implements FriendsService{
 	}
 
 	@Override
-	@Transactional
 	public int requestFriend(Long user1, Long user2) {
 		return friendsDao.insertFriendRequest(FriendRequestVo.builder().from(user1).to(user2).time(String.valueOf(LocalDateTime.now())).build());
 	}
 
 	@Override
-	@Transactional
 	public int deleteFriend(Long user1, Long user2) {
 		return friendsDao.deleteFriend(user1, user2);
 	}

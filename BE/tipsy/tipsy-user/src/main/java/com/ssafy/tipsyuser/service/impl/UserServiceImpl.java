@@ -150,7 +150,6 @@ public class UserServiceImpl implements UserService{
 	
 	
 	@Override
-	@Transactional
 	public int registUser(UserVo userVo) {
 		return userDao.insertUser(userVo);
 	}
@@ -166,13 +165,11 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	@Transactional
 	public int updateUserInfo(UserVo userVo) {
 		return userDao.updateUserInfo(userVo);
 	}
 
 	@Override
-	@Transactional
 	public int deleteUser(Long uid) {
 		return userDao.deleteUser(uid);
 	}
