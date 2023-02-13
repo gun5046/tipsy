@@ -14,16 +14,18 @@ class ForceExitService : Service() {
     }
 
     override fun onTaskRemoved(rootIntent: Intent?) {
-        val data = JSONObject()
-        data.put("type", "ForceExit")
-        val userJson = JSONObject()
-        userJson.put("img", GlobalApplication.user.img)
-        userJson.put("nickname", GlobalApplication.user.nickname)
-        userJson.put("host", false)
-        userJson.put("ready", false)
-        data.put("gameUserDto", userJson)
-        data.put("gid", GlobalApplication.gid)
-        GlobalApplication.stompClient!!.send("/game/force-exit/${GlobalApplication.roomNumber}", data.toString())?.subscribe()
+        if(GlobalApplication.stompClient?.isConnected == true){
+            val data = JSONObject()
+            data.put("type", "ForceExit")
+            val userJson = JSONObject()
+            userJson.put("img", GlobalApplication.user.img)
+            userJson.put("nickname", GlobalApplication.user.nickname)
+            userJson.put("host", false)
+            userJson.put("ready", false)
+            data.put("gameUserDto", userJson)
+            data.put("gid", GlobalApplication.gid)
+            GlobalApplication.stompClient!!.send("/game/force-exit/${GlobalApplication.roomNumber}", data.toString())?.subscribe()
+        }
         Log.d("ForceExit", "onTaskRemoved: ${GlobalApplication.stompClient?.isConnected}")
         super.onTaskRemoved(rootIntent)
     }

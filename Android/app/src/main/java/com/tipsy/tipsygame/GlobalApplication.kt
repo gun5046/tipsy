@@ -20,7 +20,7 @@ class GlobalApplication: Application() {
         lateinit var retrofit: Retrofit
         lateinit var gRetrofit: Retrofit
         var stompClient: StompClient? = null
-        var user = User("", "test2")
+        var user = User("", "test")
         var roomNumber = ""
         var uid = 0L
         var gid = 0
@@ -35,7 +35,7 @@ class GlobalApplication: Application() {
         .build()
 
         fun connectStomp(){
-            val url = "ws://10.0.2.2:8082/ws/chat/websocket"
+            val url = "ws://i8d207.p.ssafy.io:8082/ws/chat/websocket"
             if(stompClient == null){
                 Log.d(TAG, "connectStomp: ")
                 stompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, url)
