@@ -1,0 +1,435 @@
+{
+  "accessors": [
+    {
+      "bufferView": 2,
+      "componentType": 5126,
+      "count": 65534,
+      "max": [
+        17.76333236694336,
+        17.654726028442383,
+        6.509044170379639
+      ],
+      "min": [
+        -17.447391510009766,
+        -17.654726028442383,
+        -1.5618414878845215
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 786408,
+      "componentType": 5126,
+      "count": 65534,
+      "max": [
+        0.9999909400939941,
+        0.9999788999557495,
+        0.9999929070472717
+      ],
+      "min": [
+        -0.9999468326568604,
+        -0.9999333024024963,
+        -0.9943812489509583
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "componentType": 5126,
+      "count": 65534,
+      "max": [
+        0.9984755516052246,
+        0.9995115995407104
+      ],
+      "min": [
+        0.0,
+        0.0
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 0,
+      "componentType": 5125,
+      "count": 66576,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 1572816,
+      "componentType": 5126,
+      "count": 40068,
+      "max": [
+        1.5978751182556152,
+        17.651891708374023,
+        4.305063247680664
+      ],
+      "min": [
+        -17.447391510009766,
+        -17.556493759155273,
+        -1.5618414878845215
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 2053632,
+      "componentType": 5126,
+      "count": 40068,
+      "max": [
+        0.9973682761192322,
+        0.9999102354049683,
+        0.9999961256980896
+      ],
+      "min": [
+        -0.9994797110557556,
+        -0.99981689453125,
+        -0.9959730505943298
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 524272,
+      "componentType": 5126,
+      "count": 40068,
+      "max": [
+        0.9984972476959229,
+        0.9951170682907104
+      ],
+      "min": [
+        0.00048828125,
+        0.001473505632020533
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 266304,
+      "componentType": 5125,
+      "count": 40068,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 2534448,
+      "componentType": 5126,
+      "count": 14399,
+      "max": [
+        17.76333236694336,
+        17.654726028442383,
+        0.2801460027694702
+      ],
+      "min": [
+        -17.447391510009766,
+        -17.654726028442383,
+        -2.9901986122131348
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 2707236,
+      "componentType": 5126,
+      "count": 14399,
+      "max": [
+        0.9461806416511536,
+        0.9473557472229004,
+        1.0
+      ],
+      "min": [
+        -0.9488453269004822,
+        -0.9532528519630432,
+        -0.992277979850769
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 844816,
+      "componentType": 5126,
+      "count": 14399,
+      "max": [
+        0.5331724286079407,
+        0.993916392326355
+      ],
+      "min": [
+        0.48532265424728394,
+        0.9503988027572632
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 426576,
+      "componentType": 5125,
+      "count": 21246,
+      "type": "SCALAR"
+    }
+  ],
+  "asset": {
+    "extras": {
+      "author": "Shahriar Shahrabi (https://sketchfab.com/shahriyarshahrabi)",
+      "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+      "source": "https://sketchfab.com/3d-models/florence-steak-fiorentina-bistecca-969285ae788c41cd914387cecf088708",
+      "title": "Florence Steak - Fiorentina bistecca"
+    },
+    "generator": "Sketchfab-12.68.0",
+    "version": "2.0"
+  },
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 511560,
+      "name": "floatBufferViews",
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteLength": 960008,
+      "byteOffset": 511560,
+      "byteStride": 8,
+      "name": "floatBufferViews",
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 2880024,
+      "byteOffset": 1471568,
+      "byteStride": 12,
+      "name": "floatBufferViews",
+      "target": 34962
+    }
+  ],
+  "buffers": [
+    {
+      "byteLength": 4351592,
+      "uri": "scene.bin"
+    }
+  ],
+  "extensionsUsed": [
+    "KHR_materials_unlit"
+  ],
+  "images": [
+    {
+      "uri": "textures/FlorenceSteak_Model_3_u1_v1_baseColor.jpeg"
+    }
+  ],
+  "materials": [
+    {
+      "extensions": {
+        "KHR_materials_unlit": {}
+      },
+      "name": "FlorenceSteak_Model_3_u1_v1",
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 0
+        },
+        "metallicFactor": 0.0
+      }
+    },
+    {
+      "doubleSided": true,
+      "extensions": {
+        "KHR_materials_unlit": {}
+      },
+      "name": "Plate",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.4178270105141843,
+          0.43378246201231235,
+          0.3742196243808654,
+          1.0
+        ],
+        "metallicFactor": 0.0
+      }
+    }
+  ],
+  "meshes": [
+    {
+      "name": "FlorenceSteak_Model_3_FlorenceSteak_Model_3_u1_v1_0",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 1,
+            "POSITION": 0,
+            "TEXCOORD_0": 2
+          },
+          "indices": 3,
+          "material": 0,
+          "mode": 4
+        }
+      ]
+    },
+    {
+      "name": "FlorenceSteak_Model_3_FlorenceSteak_Model_3_u1_v1_0",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 5,
+            "POSITION": 4,
+            "TEXCOORD_0": 6
+          },
+          "indices": 7,
+          "material": 0,
+          "mode": 4
+        }
+      ]
+    },
+    {
+      "name": "FlorenceSteak_Model_3.001_Plate_0",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 9,
+            "POSITION": 8,
+            "TEXCOORD_0": 10
+          },
+          "indices": 11,
+          "material": 1,
+          "mode": 4
+        }
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "children": [
+        1
+      ],
+      "matrix": [
+        0.01201562024652958,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.6680036505698677e-18,
+        -0.01201562024652958,
+        0.0,
+        0.0,
+        0.01201562024652958,
+        2.6680036505698677e-18,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "name": "Sketchfab_model"
+    },
+    {
+      "children": [
+        2
+      ],
+      "matrix": [
+        0.009999999776482582,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.009999999776482582,
+        0.0,
+        0.0,
+        -0.009999999776482582,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "name": "FlorenceSteak.fbx"
+    },
+    {
+      "children": [
+        3,
+        6
+      ],
+      "name": "RootNode"
+    },
+    {
+      "children": [
+        4,
+        5
+      ],
+      "matrix": [
+        100.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        -1.629206793918314e-05,
+        -99.99999999999868,
+        0.0,
+        0.0,
+        99.99999999999868,
+        -1.629206793918314e-05,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "name": "FlorenceSteak_Model_3"
+    },
+    {
+      "mesh": 0,
+      "name": "FlorenceSteak_Model_3_FlorenceSteak_Model_3_u1_v1_0"
+    },
+    {
+      "mesh": 1,
+      "name": "FlorenceSteak_Model_3_FlorenceSteak_Model_3_u1_v1_0"
+    },
+    {
+      "children": [
+        7
+      ],
+      "matrix": [
+        100.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        -1.629206793918314e-05,
+        -99.99999999999868,
+        0.0,
+        0.0,
+        99.99999999999868,
+        -1.629206793918314e-05,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "name": "FlorenceSteak_Model_3.001"
+    },
+    {
+      "mesh": 2,
+      "name": "FlorenceSteak_Model_3.001_Plate_0"
+    }
+  ],
+  "samplers": [
+    {
+      "magFilter": 9729,
+      "minFilter": 9987,
+      "wrapS": 10497,
+      "wrapT": 10497
+    }
+  ],
+  "scene": 0,
+  "scenes": [
+    {
+      "name": "Sketchfab_Scene",
+      "nodes": [
+        0
+      ]
+    }
+  ],
+  "textures": [
+    {
+      "sampler": 0,
+      "source": 0
+    }
+  ]
+}
