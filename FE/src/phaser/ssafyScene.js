@@ -29,6 +29,7 @@ import room4 from '../assets/roomInfo/room4.png';
 import { getScene } from '../redux/gameSlice';
 import { getChair } from '../redux/gameSlice';
 import { getTable } from '../redux/gameSlice';
+import { infoActions } from '../redux/infoSlice';
 import { store } from '../redux/store';
 
 
@@ -103,6 +104,12 @@ class ssafyScene extends Phaser.Scene {
         // 타일맵 Json 불러오기
         this.load.tilemapTiledJSON('map', ssafy_map)
         // this.load.tilemapTiledJSON('map', map2)
+
+
+        this.table1_axios = store.getState().info.tableInfo1
+        console.log('table1_axios111111')
+        console.log(this.table1_axios)
+
     }
     
     // 생성하기
@@ -360,6 +367,8 @@ class ssafyScene extends Phaser.Scene {
 
             store.dispatch(getChair(current_chair));
             store.dispatch(getTable(current_table));
+            //// 사람없는 곳에 앉으면 리덕스에 true /// 여기에 하면될것 같습니당 윤경쓰~~
+            store.dispatch(infoActions.isCreateRoom(true));
 
         }
 

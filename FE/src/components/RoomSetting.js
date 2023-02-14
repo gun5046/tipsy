@@ -14,7 +14,41 @@ const RoomSetting = () => {
   const maxPeopleRef = useRef(null)
   const [title, setTitle] = useState("");
   const [maxPeople, setmaxPeople] = useState("");
+  const [room, setRoom] = useState({
+    code: '',
+    title: '',
+    max: '',
+    password: '',
+    antrance: '',
+    silence: '',
+    hashtag: []
+  });
 
+
+   // 앉으면 방만들기
+   const createRoom = () => {
+    console.log(room);
+    axios
+      .post(url, { 
+        code: room.code,
+        title: room.code,
+        max: room.max,
+        password: room.password,
+        antrance: room.antrance,
+        silence: room.silence,
+        hashtag: [room.hashtag]
+      })
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((e) => {
+        console.log(e);
+        // 403 에러가 발생한 경우
+        if (e.response && e.response.status === 403) {
+          console.log("로그인으로 이동");
+        }
+      });
+  };
 
   return (
     <StyledBox>

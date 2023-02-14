@@ -38,7 +38,7 @@ const StreetView = () => {
   //// axios
   const url = "http://i8d207.p.ssafy.io:8083";
 
-
+  //// 스트릿 건물 정보 가져오기
   const getBuilding = () => {
     axios
       .get(`${url}/room`)
@@ -54,13 +54,38 @@ const StreetView = () => {
         // 403 에러가 발생한 경우
         if (e.response && e.response.status === 403) {
           console.log("로그인으로 이동");
-          
+          navigate('/')
         }
       });
   };
 
+  //// 테이블 정보 가져오기 (1번 구미) - 미리가져옴
+  const getTable1 = function () {
+    axios
+      .get(`${url}/room/1`)
+      .then((res) => {
+        console.log("1번 건물 테이블 정보");
+        console.log(res.data);
+        dispatch(infoActions.getTable1(res.data))
+      })
+      .catch((e) => {
+        console.log(e);
+        // 403 에러가 발생한 경우
+        if (e.response && e.response.status === 403) {
+          console.log("로그인으로 이동");
+          navigate('/')
+        }
+      });
+  };
+
+  // const test1 = useSelector((state) => state.info.tableInfo1)
+  // console.log('test1')
+  // console.log(test1)
+  
+
   useEffect(() => {
     getBuilding()
+    getTable1()
   }, [])
 
 
