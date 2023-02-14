@@ -34,6 +34,7 @@ class GameRoomActivity : AppCompatActivity() {
         setContentView(binding.root)
         Log.d(TAG, "onCreate: $roomNumber")
         GlobalApplication.connectStomp()
+        GlobalApplication.gid = 0
         subscribeStomp()
         sendMessage("Enter")
         binding.gameStartBtn.setOnClickListener {
@@ -85,6 +86,7 @@ class GameRoomActivity : AppCompatActivity() {
     override fun onRestart() {
         super.onRestart()
         GlobalApplication.reconnectStomp()
+        GlobalApplication.gid = 0
         ready = false
         subscribeStomp()
         sendMessage("Ready")

@@ -50,6 +50,7 @@ fun showGameResultRecyclerViewDialog(activity: Activity, resultList: List<GameRe
     val builder = AlertDialog.Builder(activity, R.style.Theme_dialog)
     val binding = GameResultListDialogBinding.inflate(LayoutInflater.from(activity))
     builder.setView(binding.root)
+    binding.recyclerView.suppressLayout(true)
     binding.recyclerView.adapter = GameResultRecyclerViewAdapter(resultList, time)
     binding.recyclerView.layoutManager = LinearLayoutManager(activity)
     val dialog = builder.show()

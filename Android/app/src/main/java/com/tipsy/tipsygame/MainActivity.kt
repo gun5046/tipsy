@@ -71,7 +71,7 @@ class MainActivity : AppCompatActivity() {
             } else {
                 GlobalApplication.roomNumber = binding.roomNumberText.text.toString()
                 checkRoom(GlobalApplication.roomNumber)
-//                binding.roomNumberText.text.clear()
+                binding.roomNumberText.text.clear()
 //                val intent = Intent(this@MainActivity, GameRoomActivity::class.java)
 //                startActivity(intent)
             }
