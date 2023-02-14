@@ -16,6 +16,9 @@ import bar from '../assets/street/bar.png';
 import hotel from '../assets/street/hotel.png'; 
 import house from '../assets/street/house.png'; 
 import pub from '../assets/street/pub.png'; 
+import playstore from '../assets/street/playstore.png'; 
+import exit from '../assets/street/exit.png'; 
+
 
 //animation
 import jsonash from '../assets/character/ash.json'
@@ -25,19 +28,83 @@ import imagelucy from '../assets/character/lucy.png'
 
 import mainstreet from '../assets/street/map.json';
 
-import room1 from '../assets/roomInfo/room1.png';
-import room2 from '../assets/roomInfo/room2.png';
-import room3 from '../assets/roomInfo/room3.png';
-import room4 from '../assets/roomInfo/room4.png';
+// import popup from '../assets/street/popup.png'
+import popup_s from '../assets/street/popup_s.png'
+import popup_m from '../assets/street/popup_m.png'
 
 
-import { getScene } from '../redux/gameSlice';
+import { getScene, getStreetPosition } from '../redux/gameSlice';
 import { store } from '../redux/store';
 import axios from 'axios';
 
+let infoList = [
+    {
+        title: 'Exit',
+        detail: `로그아웃을 원하시면 선택해주세요.\n선택 시 즉시 로그아웃됩니다.`,
+        padding: 75, 
+        url: '',
+        shop: false
+    },
+    {
+        title: 'App Store',
+        detail: `TIPSY GAME 앱을 다운받아\n친구들과 미팅에서 게임을 즐겨보세요`,
+        padding: 85,
+        url: '',
+        shop: false
+    },    {
+        title: 'Home',
+        detail: `Home에 입장시 MyPage에서\n프로필 조회와 수정이 가능합니다`,
+        padding: 72,
+        url: 'mypage',
+        shop: false
+    },    {
+        title: 'TIPSY Bar',
+        detail: `Jazzbar TIPSY에서\n재즈와 함께 낭만적인 분위기를 느껴보세요\n\n입장 인원 : 16 / 40 \n잔여테이블 : 17 / 20`,
+        padding: 95,
+        url: 'bar',
+        shop: true
+    },    {
+        title: 'PUB TIPSY',
+        detail: `신나는 음악과 함게\nPub TIPSY에서 맥주 한잔 어때신가요?\n\n입장 인원 : 16 / 40 \n잔여테이블 : 17 / 20`,
+        padding: 90,
+        url: 'pub',
+        shop: true
+    },    {
+        title: 'SSAFY 부울경캠퍼스',
+        detail: `여기는 SSAFY 부울경캠퍼스가 위치한\n삼성전기 부산사업장입니다.\n이곳에서 SSAFY 친구들과 회식 어떠신가요?\n\n입장 인원 : 16 / 40 \n잔여테이블 : 17 / 20`,
+        padding: 96,
+        url: 'ssafy',
+        shop: true
+    },    {
+        title: 'SSAFY 대전캠퍼스',
+        detail: `여기는 대전캠퍼스가 위치한\n삼성화재 유성연수원 교육동입니다.\n이곳에서 SSAFY 친구들과 회식 어떠신가요?\n\n입장 인원 : 16 / 40 \n잔여테이블 : 17 / 20`,
+        padding: 98,
+        url: 'ssafy',
+        shop: true
+    },    {
+        title: 'SSAFY 광주캠퍼스',
+        detail: `여기는 SSAFY 광주캠퍼스가 있는\n삼성전자 광주 사업장입니다.\n이곳에서 SSAFY 친구들과 회식 어떠신가요?\n\n입장 인원 : 16 / 40 \n잔여테이블 : 17 / 20`,
+        padding: 96,
+        url: 'ssafy',
+        shop: true
+    },    {
+        title: 'SSAFY 구미캠퍼스',
+        detail: `여기는 구미 인동에 위치한\n삼성전자 제2사업장 구미캠퍼스입니다.\n이곳에서 SSAFY 친구들과 회식 어떠신가요?\n\n입장 인원 : 16 / 40 \n잔여테이블 : 17 / 20`,
+        padding: 98,
+        url: 'ssafy',
+        shop: true
+    },    {
+        title: 'SSAFY 서울캠퍼스',
+        detail: `여기는 역삼 캠퍼스에 위치한 멀티스퀘어입니다.\n이곳에서 SSAFY 친구들과 회식 어떠신가요?\n\n입장 인원 : 16 / 40 \n잔여테이블 : 17 / 20`,
+        padding: 96,
+        url: 'ssafy',
+        shop: true
+    }
+]
 
-let current_building = -1;
-let buildingInfo = ['mypage', 'bar', 'pub', 'BU', 'daejeon', 'GJ', 'seoul', 'ssafy', 'hotel']
+
+// let current_building = -1;
+// let buildingInfo = ['mypage', 'bar', 'pub', 'BU', 'daejeon', 'GJ', 'seoul', 'ssafy', 'hotel']
 
 
 class streetScene extends Phaser.Scene {
@@ -67,8 +134,12 @@ class streetScene extends Phaser.Scene {
         this.load.image('hotel', hotel);
         this.load.image('house', house);
         this.load.image('pub', pub);
+        this.load.image('playstore', playstore);
+        this.load.image('exit', exit);
         
-        this.load.image('room1', room1);
+        this.load.image('popup_m', popup_m);
+        this.load.image('popup_s', popup_s);
+
         
         // this.load.image('tilestore', stores);
         // this.load.spritesheet('stores', stores, {
@@ -108,13 +179,16 @@ class streetScene extends Phaser.Scene {
         const hotel = map.addTilesetImage("hotel", 'hotel');
         const house = map.addTilesetImage("house", 'house');
         const pub = map.addTilesetImage("pub", 'pub');
+        const playstore = map.addTilesetImage("playstore", 'playstore');
+        const exit = map.addTilesetImage("exit", 'exit');
+
         
         
         // 레이어 생성
         // 2배 확대 : setScale(2) -> setZoom 으로 대체
         const layer1 = map.createLayer('backgroundLayer', background, 0, 0)
         const layer2 = map.createLayer('floorLayer', [floor, floor_shadow], 0, 0)
-        const layer3 = map.createLayer('storeLayer', [BU, daejeon, GJ, gumi, seoul, bar, hotel, house, pub], 0, 0)
+        const layer3 = map.createLayer('storeLayer', [BU, daejeon, GJ, gumi, seoul, bar, hotel, house, pub, playstore, exit], 0, 0)
         
 
         //// 플레이어
@@ -123,18 +197,55 @@ class streetScene extends Phaser.Scene {
         this.characterKey = 'lucy'
         this.imageName = 'Lucy'
 
+        const buildingLayer = map.getObjectLayer('storeObject');
 
         // 캐릭터 & 시작 위치 설정
-        this.player = this.physics.add.sprite(100, 415, this.characterKey).setScale(0.7).setDepth(32)
+        this.player = this.physics.add.sprite(buildingLayer.objects[2].x - 50, 577, this.characterKey).setScale(0.7).setDepth(32)
 
         //storeObject 레이어 생성
-        const buildingLayer = map.getObjectLayer('storeObject');
         buildingLayer.objects.forEach((buildingObj, i) => {
-            buildingObj.id = buildingInfo[i]
-            buildingObj.image = this.add.image(buildingObj.x + buildingObj.width / 2 + 10, buildingObj.y + buildingObj.height / 2 - 20, 'room1')
-            buildingObj.image.visible = false
+            var info = infoList[i]
+            // dispatch로 이동할 url입력
+            buildingObj.id = info.url
+
+            // 정보 창 배경
+            if(info.shop){
+                var box = this.add.sprite(buildingObj.x + buildingObj.width / 2, buildingObj.y - 40 - 25, 'popup_m')
+                const title_style = { font: "15px Arial", fill: '#ffffff'};
+                if(info.title.length > 9){
+                    var padding = 5.7
+                } else { var padding = 4.5}
+                var title = this.add.text(buildingObj.x + buildingObj.width / 2 - info.title.length * padding, buildingObj.y - 176 / 2 + 20 - 35,  info.title, title_style);
+                // title.visible = false
+
+                // 정보 창 상세내용
+                const detail_style = { font: "10px Arial", fill: '#ffffff',  align: "center"};
+                var detail = this.add.text(buildingObj.x + buildingObj.width / 2 - info.padding, buildingObj.y - 176 / 2 + 40 - 35,  info.detail, detail_style);  
+            }else{
+                var box = this.add.sprite(buildingObj.x + buildingObj.width / 2, buildingObj.y - 40, 'popup_s')
+                const title_style = { font: "15px Arial", fill: '#ffffff'};
+                if(info.title.length > 9){
+                    var padding = 5.7
+                } else { var padding = 4.5}
+                var title = this.add.text(buildingObj.x + buildingObj.width / 2 - info.title.length * padding, buildingObj.y - 176 / 2 + 20 ,  info.title, title_style);
+                // title.visible = false
+
+                // 정보 창 상세내용
+                const detail_style = { font: "10px Arial", fill: '#ffffff',  align: "center"};
+                var detail = this.add.text(buildingObj.x + buildingObj.width / 2 - info.padding, buildingObj.y - 176 / 2 + 40,  info.detail, detail_style);
+                }
+            box.alpha = 0.7
+
+            buildingObj.info = {
+                box: box,
+                title: title,
+                detail: detail,
+                // table: table
+            }
+
         })
 
+        // street의 빌딩들의 정보를 객체로 저장
         this.buildings = buildingLayer.objects
         
         //// 플레이어에 충돌 적용
@@ -167,15 +278,30 @@ class streetScene extends Phaser.Scene {
 
         // 맵이동
         this.buildings.forEach((building) => {
+            // 건물 앞에 서있을 때 인식하기
              if (this.player.body.x > building.x && this.player.body.x < building.x + building.width ) {
-                building.image.visible = true;
+                building.info.title.visible = true;
+                building.info.detail.visible = true;
+                building.info.box.visible = true;
+                // if(building.info.table){
+                //     building.info.table.visible = true;
+                // }
+                
+                // spaceBar입력시 건물 입장
                 if(Phaser.Input.Keyboard.JustDown(this.spaceBar)){
                     store.dispatch(getScene(building.id))
+                    store.dispatch(getStreetPosition(this.player.body.x))
                     console.log(building.id);
                 }
             }
             else{
-                building.image.visible = false;
+                building.info.title.visible = false;
+                building.info.detail.visible = false;
+                building.info.box.visible = false;
+                // if(building.info.table){
+                //     building.info.table.visible = false;
+                // }
+
             }
 
         })

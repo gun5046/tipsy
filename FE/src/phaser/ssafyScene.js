@@ -20,6 +20,7 @@ import imagelucy from '../assets/character/lucy.png'
 
 import ssafy_map from '../assets/ssafyMap/ssafy_map.json';
 
+import bu from '../assets/photo/김부경.png';
 import room1 from '../assets/roomInfo/room1.png';
 import room2 from '../assets/roomInfo/room2.png';
 import room3 from '../assets/roomInfo/room3.png';
@@ -69,7 +70,7 @@ class ssafyScene extends Phaser.Scene {
         this.load.image('room2', room2);
         this.load.image('room3', room3);
         this.load.image('room4', room4);
-
+        this.load.image('bu', bu)
 
         // tableObject의 책상 이미지 불러오기
         this.load.image('tilesTable1', ssafy_table1);
@@ -163,7 +164,25 @@ class ssafyScene extends Phaser.Scene {
         // 캐릭터 & 시작 위치 설정
         this.player = this.physics.add.sprite(45, 690, this.characterKey).setDepth(32)
         
-        
+                // 프로필 사진
+        // const profile = this.add.image(0, 0, 'bu').setDepth(100)
+        const profile = this.add.sprite(100, 200, 'bu')
+        profile.setDisplaySize(50, 50)
+        const shape = this.add.graphics().setPosition(100, 200).fillCircle(0, 0, 20)
+        profile.setMask(shape.createGeometryMask())
+
+        // this.image = new Phaser.GameObjects.Image(scene, 0, 0, image,   frame);
+        // this.radius = Math.min(this.image.width, this.image.height) / 2
+        // this.circle = this.scene.
+
+        //위치 지정
+        // let container = this.add.container(100, 200).setInteractive({hitArea: new Phaser.Geom.Circle(0, 0, 0), hitAreaCallback: Phaser.Geom.Circle.Contains});
+        // let biggerImage = this.add.image(10, 10, 'bu').setDisplaySize(50, 50); // 보이는 사이즈 조정, 이미지 넣기
+        // container.add(biggerImage).setDepth(10);
+        // this.physics.add.collider(this.player, container);
+        // let cir = this.add.circle(600, 400, 40, biggerImage).setDepth(100);
+
+
         //// tableObject 레이어 생성
         const tableLayer = map.getObjectLayer('tableObject');
         const tables = this.physics.add.staticGroup();
