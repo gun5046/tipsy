@@ -83,7 +83,7 @@ class streetScene extends Phaser.Scene {
         
         console.log('building_axios22222222222')
         console.log(this.building_axios)
-        console.log(this.building_axios[0][0])
+        // console.log(this.building_axios[0][0])
 
         
         }
