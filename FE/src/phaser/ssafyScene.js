@@ -21,10 +21,11 @@ import imagelucy from '../assets/character/lucy.png'
 import ssafy_map from '../assets/ssafyMap/ssafy_map.json';
 
 import bu from '../assets/photo/김부경.png';
-import room1 from '../assets/roomInfo/room1.png';
-import room2 from '../assets/roomInfo/room2.png';
-import room3 from '../assets/roomInfo/room3.png';
-import room4 from '../assets/roomInfo/room4.png';
+import popup from '../assets/street/popup.png'
+// import room1 from '../assets/roomInfo/room1.png';
+// import room2 from '../assets/roomInfo/room2.png';
+// import room3 from '../assets/roomInfo/room3.png';
+// import room4 from '../assets/roomInfo/room4.png';
 
 import { getScene } from '../redux/gameSlice';
 import { getChair } from '../redux/gameSlice';
@@ -39,7 +40,7 @@ let current_table = -1
 let chair_x = -1
 let chair_y = -1
 let table_array = [];
-let roomInfo = ['room1', 'room2', 'room3', 'room4'];
+// let roomInfo = ['room1', 'room2', 'room3', 'room4'];
 
 let roomTF = new Array(12);
 
@@ -68,10 +69,11 @@ class ssafyScene extends Phaser.Scene {
         this.load.image('tileslogo2', ssafy_logo2);
         this.load.image('tilesname', ssafy_name);
 
-        this.load.image('room1', room1);
-        this.load.image('room2', room2);
-        this.load.image('room3', room3);
-        this.load.image('room4', room4);
+        // this.load.image('room1', room1);
+        // this.load.image('room2', room2);
+        // this.load.image('room3', room3);
+        // this.load.image('room4', room4);
+        this.load.image('popup', popup)
         this.load.image('bu', bu)
 
         // tableObject의 책상 이미지 불러오기
@@ -241,9 +243,10 @@ class ssafyScene extends Phaser.Scene {
             // console.log(roomTF[i])
                 if(roomTF[i]){
                     let data = {};
-                    data.image = this.add.image(infoObj.x + infoObj.width / 2 + 10, infoObj.y + infoObj.height / 2 - 20, roomInfo[Math.floor(Math.random() * roomInfo.length)])
-                    data.image.setDepth(40)
-                    data.image.visible = false
+                    data.popup = this.add.image(infoObj.x + infoObj.width / 2 + 10, infoObj.y + infoObj.height / 2 - 20, 'popup')
+                    data.popup.setDepth(40)
+                    data.popup.alpha = 0.7
+                    data.popup.visible = false
                     table_array.push(data)
                 } 
                 else{
@@ -322,7 +325,7 @@ class ssafyScene extends Phaser.Scene {
             this.player.anims.play(`${this.characterKey}_run_left`, true);
             if (current_table >= 0){
                 if (roomTF[current_table]){
-                    table_array[current_table].image.visible = false
+                    table_array[current_table].popup.visible = false
                 }
                 current_table = -1
             }
@@ -332,7 +335,7 @@ class ssafyScene extends Phaser.Scene {
             this.player.anims.play(`${this.characterKey}_run_right`, true);
             if (current_table >= 0){
                 if (roomTF[current_table]){
-                    table_array[current_table].image.visible = false
+                    table_array[current_table].popup.visible = false
                 }
                 current_table = -1
             }
@@ -342,7 +345,7 @@ class ssafyScene extends Phaser.Scene {
             this.player.anims.play(`${this.characterKey}_run_up`, true);
             if (current_table >= 0){
                 if (roomTF[current_table]){
-                    table_array[current_table].image.visible = false
+                    table_array[current_table].popup.visible = false
                 }
                 current_table = -1
             }
@@ -352,7 +355,7 @@ class ssafyScene extends Phaser.Scene {
             this.player.anims.play(`${this.characterKey}_run_down`, true);
             if (current_table >= 0){
                 if (roomTF[current_table]){
-                    table_array[current_table].image.visible = false
+                    table_array[current_table].popup.visible = false
                 }
                 current_table = -1
             }
@@ -418,7 +421,7 @@ class ssafyScene extends Phaser.Scene {
             // console.log(roomTF[current_table])
 
             if (roomTF[current_table]){
-                table_array[current_table].image.visible = true
+                table_array[current_table].popup.visible = true
             }
             // console.log(parseInt(current_chair / 4), current_chair % 4)
         }
