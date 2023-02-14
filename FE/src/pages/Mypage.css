@@ -5,6 +5,55 @@
 }
 
 #Mypage {
+    margin: auto;
     justify-items: center;
+    background-color: black;
+    width: 50%;
+    height: 400px;
+}
+#Mypage span {
+    margin: 5px;
+    background-color:transparent;
     color: white;
+}
+
+#Mypage #h1 {
+    font-size: 30px;
+    color: white;
+    font-weight: 500;
+}
+#Mypage #nickname {
+    color: #A03BC4;
+    font-size: 30px;
+}
+#Mypage button {
+    margin: 5px;
+    border-width: 0px;
+    background-color: #a03bc4;
+    border-radius: 5px;
+    color: white;
+}
+#Mypage input {
+    color: white;
+    outline: none;
+    border:none;
+    border-bottom: solid;
+    border-color: #a03bc4;
+    border-width: 1px;
+    text-align: center;
+    width: 80%;
+    
+}
+#Mypage .interest{
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 5px;
+    border-color: #a03bc4;
+    background-color: transparent;
+    margin: 5px;
+}
+
+#Mypage #starting{
+    position: fixed;
+    font-size: 13px;
 }

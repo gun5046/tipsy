@@ -97,12 +97,20 @@ const Login = ()=> {
       return
     }
 
-    overlap = true
-    if(overlap) {
-      alert('사용 가능한 닉네임입니다.')
-    } else {
-      alert('중복된 닉네임 입니다')
-    }
+    axios.get( 'http://i8d207.p.ssafy.io:8081/user/nickname',  {
+      params: {
+        nickname: state.nickname
+      }
+    })
+    .then((res) => {
+      overlap = res.data
+      console.log(overlap)
+      if(overlap) {
+        alert('사용 가능한 닉네임입니다.')
+      } else {
+        alert('중복된 닉네임 입니다')
+      }
+    })
   }
   const navi = useNavigate()
   //제출 
@@ -164,7 +172,7 @@ const Login = ()=> {
         <button onClick={plusInteresting}>+</button>
         <div>
           {
-            interest?.map((e)=>{return <span id={e} key={e} onClick={removeInterst}>#{e}</span>})
+            interest?.map((e)=>{return <span id={e} key={e} onClick={removeInterst}>#{e} x</span>})
           }
         </div>
       </div>

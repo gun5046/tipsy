@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-const initialState = {
+const initialState = localStorage.state ?
+  JSON.parse(localStorage.state):{
   birth: '',
   email: '',
   gender: '',
@@ -18,14 +19,12 @@ export const authSlice = createSlice({
   initialState,
   reducers: {
     authSubmit(state, action) {
-      if (state === undefined){
-        localStorage.state ?
-          JSON.parse(localStorage.state): initialState
-      }
+
         state = action.payload;
         //local storage에 저장
         console.log(state)
         localStorage.setItem('state', JSON.stringify(state))
+      
     }
   },
 })

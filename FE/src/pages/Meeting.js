@@ -243,7 +243,7 @@ function Meeting(id) {
   document.addEventListener( 'pointerdown', onPointerDown )
   /* 배경 skybox */
 	function skybox(place) {
-		const skyTexture = new THREE.TextureLoader().load(`/3d/D207_1.jpg`)
+		const skyTexture = new THREE.TextureLoader().load(`/room208.jpg`)
 		//const skyGeometry = new THREE.SphereGeometry(400, 60, 40)
     const skyGeometry = new THREE.CylinderGeometry(150, 150, 400, 32, 2, true)
     skyGeometry.scale(-1,1,1)
@@ -423,7 +423,7 @@ function Meeting(id) {
     gltf2 => {
       var desk = gltf2.scene;
       desk.scale.set(10,10,10)
-      desk.position.set(3,6,5)
+      desk.position.set(2,6,8)
       desk.rotateX(-Math.PI/2)
       
       scene.add(desk)
@@ -626,7 +626,7 @@ function Meeting(id) {
   connect(11)
   skybox("bar")
   //table('round_wooden_table_01')
-  chairMake("dining_chair_02")
+  //chairMake("dining_chair_02")
   sojumaker(2, 6, 2)
   sojumaker(3, 6, 2)
   sojumaker(-5, 6, 2)
@@ -637,7 +637,6 @@ function Meeting(id) {
   //// QRgame Url
   const params = useParams()
   console.log(params.id)
-
   return (
     <>
       <div id="profileBox">
@@ -662,11 +661,9 @@ function Meeting(id) {
 			  		return ( <button key={element} variant="outlined" color="secondary"># {element}</button>)
 			  	})
 			  }
-
         <QrModal paramsNum={params.id}/>
       </div>
       {/* <Profile props={props}/> */}
-
     </>
   )
 }
