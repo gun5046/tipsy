@@ -51,6 +51,7 @@ const RoomSetting = () => {
   const currentScene = useSelector((state) => state.game.scene)
   const currentChair = useSelector((state) => state.game.chair)
   const currentTable = useSelector((state) => state.game.table)
+  const currentUid = useSelector((state) => state.auth.uid)
   const url = 'http://i8d207.p.ssafy.io:8083/room'
 
  
@@ -120,7 +121,7 @@ const RoomSetting = () => {
       axios
         .post(`${url}/entry`, { 
           code: RoomNum,
-          id: 11,
+          id: currentUid,
           password: roomState.password,
           position: currentChair,
          })
@@ -179,10 +180,10 @@ const RoomSetting = () => {
       return;
     }
 
-    if (roomState.password.length < 4) {
-      passwordInput.current.focus();
-      return;
-    }
+    // if (roomState.password.length < 4) {
+    //   passwordInput.current.focus();
+    //   return;
+    // }
 
     // console.log(roomState);
      // 앉으면 방만들기
