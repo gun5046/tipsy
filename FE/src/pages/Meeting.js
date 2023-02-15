@@ -28,7 +28,7 @@ let lon = 0,
 let ws = new WebSocket('ws://'+'i8d207.p.ssafy.io:8443'+'/groupcall');
 let participants = {};
 // let name = localStorage.getItem("state");
-let name = "zxc";
+let name = "bosung";
 
  //let room = match.params.id
 let room = 100
@@ -433,19 +433,19 @@ function Meeting({match}) {
   cam.position.set(sit[0][0]-sit[mySit][0], sit[0][1]-sit[mySit][1], sit[0][2]-sit[mySit][2])
   cam.lookAt(camera.position)
   cam.name = '00'
-  scene.add(cam)
+  //scene.add(cam)
    //threejs 공간에 띄움
    const cam2 = cam.clone()
    cam2.name = '44'
    cam2.position.set(sit[4][0] -sit[mySit][0], sit[4][1]-sit[mySit][1], sit[4][2]-sit[mySit][2])
    cam2.lookAt(camera.position)
-   scene.add(cam2)
+   //scene.add(cam2)
 
    const cam5 = cam.clone()
    cam5.name = '55'
    cam5.position.set(sit[5][0] -sit[mySit][0], sit[5][1] -sit[mySit][1], sit[5][2] -sit[mySit][2])
    cam5.lookAt(camera.position)
-   scene.add(cam5)
+   //scene.add(cam5)
 
    const cam3 = cam.clone()
    cam3.name = '22'
@@ -457,13 +457,13 @@ function Meeting({match}) {
    cam4.name = '11'
    cam4.position.set(sit[1][0] -sit[mySit][0], sit[1][1] -sit[mySit][1], sit[1][2] -sit[mySit][2])
    cam4.lookAt(camera.position)
-   scene.add(cam4)
+   //scene.add(cam4)
 
    const cam6 = cam.clone()
    cam6.name = '33'
    cam6.position.set(sit[3][0] -sit[mySit][0], sit[3][1] -sit[mySit][1], sit[3][2] -sit[mySit][2])
    cam6.lookAt(camera.position)
-   scene.add(cam6)
+   //scene.add(cam6)
 	// 광원
   const basicLight = new THREE.HemisphereLight(0xffffff, 0x000000, 2)
   scene.add(basicLight) // 몰라도됨
