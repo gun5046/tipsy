@@ -131,6 +131,10 @@ const SsafyView = () => {
     <div>
       <GameViewContainer>
         {isOpen && <RoomSetting/>}
+        {/* <img 
+          src="http://k.kakaocdn.net/dn/c0405I/btrUKnHeIku/kvehoKnkkYs9H8pLUD0wY1/img_640x640.jpg"
+          id='frame'
+        /> */}
       </GameViewContainer>
       <div ref={phaserEl} className="game-container"></div>
     </div>
