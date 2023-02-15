@@ -445,14 +445,25 @@ class ssafyScene extends Phaser.Scene {
 
             store.dispatch(getChair(current_chair + 1));
             store.dispatch(getTable(current_table + 1));
-            //// 사람없는 곳에 앉으면 리덕스에 true /// 여기에 하면될것 같습니당 윤경쓰~~
+            //// 사람없는 곳에 앉으면 리덕스에 true
+            // 0 사람없음
             if(roomTF[current_table] == 0){
                 store.dispatch(infoActions.isCreateRoom(true));
-            }
-            else{
-                store.dispatch(infoActions.isCreateRoom(false));
-            }
 
+            }
+            // 1 공개
+            else if (roomTF[current_table] == 1) {
+                store.dispatch(infoActions.isCreateRoom(false));
+                store.dispatch(infoActions.isPublic(true));
+                store.dispatch(getRoomNum(this.table1_axios.code));
+            } 
+            // 2 비공개
+            else {
+                store.dispatch(infoActions.isCreateRoom(false));
+                store.dispatch(infoActions.isPublic(false));
+                store.dispatch(getPassword(this.table1_axios.password));
+                store.dispatch(getRoomNum(this.table1_axios.code));              
+            }
         }
 
     }

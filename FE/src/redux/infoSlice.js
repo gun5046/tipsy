@@ -4,7 +4,9 @@ const initialState = {
     buildingInfo: [],
     tableInfo1: [],
     createRoom: false,
-    roomNumber: ''
+    publicRoom: true,
+    roomNumber: '',
+    roomPassword: '',
 }
 // reducers만드는 것을 도와줌
 export const infoSlice = createSlice({
@@ -22,6 +24,12 @@ export const infoSlice = createSlice({
     },
     getRoomNum: (state, action) => {
       state.roomNumber = action.payload;
+    },
+    getPassword: (state, action) => {
+      state.roomPassword = action.payload;
+    },
+    isPublic: (state, action) => {
+      state.publicRoom = action.payload;
     },
   }
 })

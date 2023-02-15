@@ -34,20 +34,23 @@ const SsafyView = () => {
   const changeScene = useSelector((state) => state.game.scene)
   const currentChair = useSelector((state) => state.game.chair)
   const currentTable = useSelector((state) => state.game.table)
-  const isOpen = useSelector((state) => state.info.createRoom)
-  // const [isOpen, setIsOpen] = useState(false)
-  console.log(isOpen)
+  const currentRoom = useSelector((state) => state.info.roomNumber)
+  const currentPassword = useSelector((state) => state.info.roomPassword)
+  const currentUid = useSelector((state) => state.auth.uid)
+  const isCreate = useSelector((state) => state.info.createRoom)
+  // const [isCreate, setIsCreate] = useState(false)
+  console.log(isCreate)
   // const [RoomNum, setRoomNum] = useState()
   
 
   // 건물번호 1,2,3
-  const url = 'http://i8d207.p.ssafy.io:8083'
+  const url = 'http://i8d207.p.ssafy.io:8083/room'
 
 
   //// 테이블 정보 가져오기 (1번 구미) - 미리가져옴
   const getTable1 = function () {
     axios
-      .get(`${url}/room/1`)
+      .get(`${url}/1`)
       .then((res) => {
         console.log("1번 건물 테이블 정보");
         console.log(res.data);
@@ -63,6 +66,35 @@ const SsafyView = () => {
       });
   };
 
+  // code[방코드], id[사용자id], (password[비밀번호]), position[의자위치]
+  const enterRoom = () => {
+    console.log("방 입장 실행");
+    axios
+      .post(`${url}/entry`, { 
+        code: currentRoom,
+        id: currentUid,
+        password: currentPassword,
+        position: currentChair,
+       })
+      .then((res) => {
+        console.log('입장성공');
+        console.log(res.data);
+        if (res.data == "success" && currentRoom) {
+          console.log(currentRoom);
+          navigate(`/meeting/${currentRoom}`)
+        } 
+      })
+      .catch((e) => {
+        console.log(e);
+        // 403 에러가 발생한 경우
+        if (e.response && e.response.status === 403) {
+          console.log("로그인으로 이동");
+          navigate('/')
+        }
+      });
+      
+  };
+
 
   // 엑시오스 실행
   useEffect(() => {
@@ -76,21 +108,14 @@ const SsafyView = () => {
       navigate('/mainstreet')
     }
   }, [changeScene])
+
+  
   
   //////////////////////////////////////
   // 방이있고 의자랑 테이블이 넘어오면 미팅 페이지 이동 (103 : 1번건물에 3번 방)
   useEffect(() => {
-    if (currentTable !== -1){
-      if (String(currentTable).length === 1) {
-        // navigate(`/meeting/10${currentTable}`)
-      
-      } else {
-        // navigate(`/meeting/1${currentTable}`)
-
-      }
-      // console.log(currentChair, currentTable)
-      // console.log(isOpen)
-      // console.log(RoomNum)
+    if (currentTable !== -1 && !currentPassword){
+      enterRoom()
     }
   }, [currentChair, currentTable])
   
@@ -113,7 +138,7 @@ const SsafyView = () => {
   return (
     <div>
       <GameViewContainer>
-        {isOpen && <RoomSetting/>}
+        {isCreate && <RoomSetting/>}
         {/* <RoomSetting/> */}
       </GameViewContainer>
       <div ref={phaserEl} className="game-container"></div>

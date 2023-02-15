@@ -123,10 +123,10 @@ const StreetView = () => {
   return (
     <div>
       <GameViewContainer>
-        <div className='text1'>ssss</div>
+        {/* <div className='text1'>ssss</div>
         <div>ssss</div>
         <div>ssss</div>
-        <div>ssss</div>
+        <div>ssss</div> */}
       </GameViewContainer>
       <div ref={phaserEl} className="game-container"></div>
 
