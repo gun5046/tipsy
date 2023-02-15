@@ -124,13 +124,21 @@ public class RoomServiceImpl implements RoomService {
 			if(map.get("member") != null) {
 				List<String[]> list = (List<String[]>) map.get("member");			
 				
-				if(list.isEmpty()) continue;
+				if(list.isEmpty()) {
+					logger.info("list empty");
+					continue;
+				}else {
+					logger.info(list.get(0)[0]);
+				}
 				
 				for (String[] arr : list) {
+					if(arr[0] == null || arr[0].equals(null) || arr[0].equals("null")) {
+						continue;
+					}
 					Map<Object, Object> member = new HashMap();
 					logger.info(arr[0] + "님이 앉은 자리는 " + arr[1] + "번입니다.");
 					uservo = userDao.findUserByUid(Long.parseLong(arr[0]));
-					
+
 					member.put("uid", uservo.getUid());
 					member.put("kakao_id", uservo.getKakao_id());
 					member.put("name", uservo.getName());
@@ -141,15 +149,15 @@ public class RoomServiceImpl implements RoomService {
 					member.put("interest", uservo.getInterest());
 					member.put("reportcnt", uservo.getReportcnt());
 					member.put("position", arr[1]);
-							
+
 					memberlist.add(member);
 				}
 				map.put("member", memberlist);
 			}		
 		}
 		return info;
-	}
-	
+	}	
+
 	@Override
 	public List<int[]> getBuilding() {
 		return roomRepo.getBuilding();

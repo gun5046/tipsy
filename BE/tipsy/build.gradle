@@ -116,6 +116,7 @@ project(':tipsy-room'){
 		implementation project(':domain-rdb')
 		implementation project(':web-socket')
 		implementation project(':domain-nosql')
+	
 	}
 }
 

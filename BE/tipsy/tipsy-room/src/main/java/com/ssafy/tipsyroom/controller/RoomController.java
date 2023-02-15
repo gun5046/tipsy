@@ -7,6 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,8 +36,8 @@ public class RoomController {
 	private final Logger logger = LoggerFactory.getLogger(RoomController.class);
 
 	private final RoomService roomService;
-
-	@GetMapping()
+//	private final SimpMessagingTemplate simpMessagingTemplate;
+	@GetMapping("/building")
 	@ApiOperation(value = "술집별 정보를 제공(현재 인원, 만석 테이블)", notes = "거리 페이지에서 술집별로 현재 들어간 인원, 합석하지 못하는 테이블을 제공한다.")
 	public ResponseEntity<?> getBuilding() {
 		try {
@@ -74,6 +76,13 @@ public class RoomController {
 		}
 	}
 
+//	@MessageMapping("/info")
+//	public void getTotalRoomInfo(int bno) {
+//		List<Map<Object, Object>> TableInfo = roomService.getTable(bno);
+//		simpMessagingTemplate.convertAndSend("/map/"+bno,TableInfo);
+//	}
+	
+	
 	// change room setting
 	@PutMapping("/setting")
 	@ApiOperation(value = "code[테이블정보], title[방제목], max[최대인원], (password[비밀번호]), antrance[입장효과], silence[침묵효과]", notes = "방 설정을 변경한다.")
@@ -108,6 +117,7 @@ public class RoomController {
 			int result = roomService.enterRoom(member);
 			if (result == 0) {
 				status = "success";
+//				simpMessagingTemplate.convertAndSend("/room/info",bno);
 			} else if (result == 1) {
 				status = "does not exist room";
 			} else if (result == 2) {
@@ -117,6 +127,8 @@ public class RoomController {
 			} else {
 				status = "overcapacity";
 			}
+			
+			
 			return new ResponseEntity<String>(status, HttpStatus.CREATED);
 
 		} catch (Exception e) {
