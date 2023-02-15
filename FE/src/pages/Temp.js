@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-
+import { authSubmit } from "../redux/authSlice";
 
 const searchParams = new URLSearchParams(window.location.search);
 let code;
