@@ -34,8 +34,9 @@ import popup_m from '../assets/street/popup_m.png'
 
 
 import { getScene, getStreetPosition } from '../redux/gameSlice';
+import { infoActions } from '../redux/infoSlice';
 import { store } from '../redux/store';
-import axios from 'axios';
+
 
 let infoList = [
     {

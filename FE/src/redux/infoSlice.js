@@ -2,6 +2,9 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
     buildingInfo: [],
+    tableInfo1: [],
+    createRoom: false,
+    roomNumber: ''
 }
 // reducers만드는 것을 도와줌
 export const infoSlice = createSlice({
@@ -10,6 +13,15 @@ export const infoSlice = createSlice({
   reducers: {
     getBuilding: (state, action) => {
       state.buildingInfo = action.payload;
+    },
+    getTable1: (state, action) => {
+      state.tableInfo1 = action.payload;
+    },
+    isCreateRoom: (state, action) => {
+      state.createRoom = !state.createRoom
+    },
+    getRoomNum: (state, action) => {
+      state.roomNumber = action.payload;
     },
   }
 })

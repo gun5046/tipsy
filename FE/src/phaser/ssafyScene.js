@@ -21,14 +21,16 @@ import imagelucy from '../assets/character/lucy.png'
 import ssafy_map from '../assets/ssafyMap/ssafy_map.json';
 
 import bu from '../assets/photo/김부경.png';
-import room1 from '../assets/roomInfo/room1.png';
-import room2 from '../assets/roomInfo/room2.png';
-import room3 from '../assets/roomInfo/room3.png';
-import room4 from '../assets/roomInfo/room4.png';
+import popup from '../assets/street/popup.png'
+// import room1 from '../assets/roomInfo/room1.png';
+// import room2 from '../assets/roomInfo/room2.png';
+// import room3 from '../assets/roomInfo/room3.png';
+// import room4 from '../assets/roomInfo/room4.png';
 
 import { getScene } from '../redux/gameSlice';
 import { getChair } from '../redux/gameSlice';
 import { getTable } from '../redux/gameSlice';
+import { infoActions } from '../redux/infoSlice';
 import { store } from '../redux/store';
 
 
@@ -37,9 +39,11 @@ let current_chair = -1
 let current_table = -1
 let chair_x = -1
 let chair_y = -1
-let table_array = [];
-let roomInfo = ['room1', 'room2', 'room3', 'room4'];
+let table_array = new Array(12);
 
+// let roomInfo = ['room1', 'room2', 'room3', 'room4'];
+
+let roomTF = new Array(12);
 
 // console.log(store.dispatch(getScene("zzz")))
 
@@ -66,10 +70,7 @@ class ssafyScene extends Phaser.Scene {
         this.load.image('tileslogo2', ssafy_logo2);
         this.load.image('tilesname', ssafy_name);
 
-        this.load.image('room1', room1);
-        this.load.image('room2', room2);
-        this.load.image('room3', room3);
-        this.load.image('room4', room4);
+        this.load.image('popup', popup)
         this.load.image('bu', bu)
 
         // tableObject의 책상 이미지 불러오기
@@ -103,6 +104,46 @@ class ssafyScene extends Phaser.Scene {
         // 타일맵 Json 불러오기
         this.load.tilemapTiledJSON('map', ssafy_map)
         // this.load.tilemapTiledJSON('map', map2)
+
+        // redux 실패
+        // console.log('table1_axios111111')
+        // this.table1_axios = store.getState().info.tableInfo1
+        // console.log(this.table1_axios)
+
+        this.table1_axios = [
+            {"title":"101호","password":"1111","entrance":"off","silence":"off","time":"20230210155347","host":"6","max":4,
+            "code":"uawm5101","current":1,
+            "member":[
+                {"uid":6,"image":"http://k.kakaocdn.net/dn/c0405I/btrUKnHeIku/kvehoKnkkYs9H8pLUD0wY1/img_640x640.jpg",
+                "gender":"male","interest":"개껌","reportcnt":"0","name":"",
+                "nickname":"변윤경","birth":"","position":"1","kakao_id":"2638215374"},
+
+                {"uid":5,"image":"http://k.kakaocdn.net/dn/Qs7jd/btrMxCykHAJ/AyV40fXVb5uJegzLKRMzAk/img_640x640.jpg",
+                "gender":"male","interest":"","reportcnt":"0","name":"",
+                "nickname":"김부경","birth":"","position":"2","kakao_id":"2542925662"}],
+
+                "hashtag":["101호","테스트"]},
+            {"title":"102호","entrance":"off","silence":"off","time":"20230210155418","host":"5","max":4,"code":"8vvak102","current":1,
+            "member":[
+                {"uid":6,"image":"http://k.kakaocdn.net/dn/c0405I/btrUKnHeIku/kvehoKnkkYs9H8pLUD0wY1/img_640x640.jpg",
+                "gender":"male","interest":"개껌","reportcnt":"0","name":"",
+                "nickname":"변윤경","birth":"","position":"3","kakao_id":"2638215374"},
+
+                {"uid":5,"image":"http://k.kakaocdn.net/dn/Qs7jd/btrMxCykHAJ/AyV40fXVb5uJegzLKRMzAk/img_640x640.jpg",
+                "gender":"male","interest":"","reportcnt":"0","name":"",
+                "nickname":"김부경","birth":"","position":"4","kakao_id":"2542925662"}],
+                
+                "hashtag":["102호","테스트"]}]
+        this.table1_axios.forEach(obj => {
+            const room_num = Number(obj.code.substring(6, 8)) - 1
+            if (obj.password){
+                roomTF[room_num] = 2
+            }
+            else{
+                roomTF[room_num] = 1
+            }
+        })
+        // console.log(roomTF)
     }
     
     // 생성하기
@@ -163,25 +204,6 @@ class ssafyScene extends Phaser.Scene {
         
         // 캐릭터 & 시작 위치 설정
         this.player = this.physics.add.sprite(45, 690, this.characterKey).setDepth(32)
-        
-                // 프로필 사진
-        // const profile = this.add.image(0, 0, 'bu').setDepth(100)
-        const profile = this.add.sprite(100, 200, 'bu')
-        profile.setDisplaySize(50, 50)
-        const shape = this.add.graphics().setPosition(100, 200).fillCircle(0, 0, 20)
-        profile.setMask(shape.createGeometryMask())
-
-        // this.image = new Phaser.GameObjects.Image(scene, 0, 0, image,   frame);
-        // this.radius = Math.min(this.image.width, this.image.height) / 2
-        // this.circle = this.scene.
-
-        //위치 지정
-        // let container = this.add.container(100, 200).setInteractive({hitArea: new Phaser.Geom.Circle(0, 0, 0), hitAreaCallback: Phaser.Geom.Circle.Contains});
-        // let biggerImage = this.add.image(10, 10, 'bu').setDisplaySize(50, 50); // 보이는 사이즈 조정, 이미지 넣기
-        // container.add(biggerImage).setDepth(10);
-        // this.physics.add.collider(this.player, container);
-        // let cir = this.add.circle(600, 400, 40, biggerImage).setDepth(100);
-
 
         //// tableObject 레이어 생성
         const tableLayer = map.getObjectLayer('tableObject');
@@ -215,16 +237,55 @@ class ssafyScene extends Phaser.Scene {
                 this.physics.add.overlap(this.player, item, ()=>this.seat(item), null, this)
             };
          })
- 
+
           //// infoObject 레이어 생성
           const infoLayer = map.getObjectLayer('infoObject');
-          infoLayer.objects.forEach((infoObj, i) => {              
+          infoLayer.objects.forEach((infoObj, i) => {
+            if(roomTF[i]){
                 let data = {};
-                data.image = this.add.image(infoObj.x + infoObj.width / 2 + 10, infoObj.y + infoObj.height / 2 - 20, roomInfo[Math.floor(Math.random() * roomInfo.length)])
-                data.image.setDepth(40)
-                data.image.visible = false
-                table_array.push(data)
+                data.popup = this.add.image(infoObj.x + infoObj.width / 2 + 10, infoObj.y + infoObj.height / 2 - 20, 'popup')
+                data.popup.setDepth(40)
+                data.popup.alpha = 0.7
+                data.popup.visible = false
+
+                const title_style = { font: "15px Arial", fill: '#ffffff'};
+                data.title = this.add.text(infoObj.x + infoObj.width / 2 + 10, infoObj.y + infoObj.height / 2 - 20, this.table1_axios[i].title, title_style);
+                data.title.setDepth(45)
+
+                const detail_style = { font: "10px Arial", fill: '#ffffff',  align: "center"};
+                data.title = this.add.text(infoObj.x + infoObj.width / 2 + 10, infoObj.y + infoObj.height / 2, this.table1_axios[i].time, detail_style);
+                data.title.setDepth(45)
+
+                table_array[i] = data
+            } 
           })
+        
+        // 프로필 사진 시행착오
+        // this.image = new Phaser.GameObjects.Image(scene, 0, 0, image,   frame);
+        // this.radius = Math.min(this.image.width, this.image.height) / 2
+        // this.circle = this.scene.
+        //위치 지정
+        // let container = this.add.container(100, 200).setInteractive({hitArea: new Phaser.Geom.Circle(0, 0, 0), hitAreaCallback: Phaser.Geom.Circle.Contains});
+        // let biggerImage = this.add.image(10, 10, 'bu').setDisplaySize(50, 50); // 보이는 사이즈 조정, 이미지 넣기
+        // container.add(biggerImage).setDepth(10);
+        // this.physics.add.collider(this.player, container);
+        // let cir = this.add.circle(600, 400, 40, biggerImage).setDepth(100);
+
+        // profile 출력
+        roomTF.forEach((is_room, i) => {
+            if (is_room > 0){
+                this.table1_axios[i].member.forEach( obj => {
+                    const chair_num = i * 6 + Number(obj.position) - 1
+                    const chairObj = chairLayer.objects[chair_num]
+                    const profile = this.add.sprite(chairObj.x + chairObj.width * 0.5, chairObj.y - chairObj.height * 0.5, 'bu')
+                    console.log(obj.image)
+                    profile.setDisplaySize(50, 50)
+                    const shape = this.add.graphics().setPosition(chairObj.x + chairObj.width * 0.5, chairObj.y - chairObj.height * 0.5).fillCircle(0, 0, 20)
+                    profile.setMask(shape.createGeometryMask())
+                    profile.setDepth(50)
+                })
+            }
+        })
 
 
         // 타일에 충돌 적용
@@ -295,7 +356,9 @@ class ssafyScene extends Phaser.Scene {
             // 애니메이션
             this.player.anims.play(`${this.characterKey}_run_left`, true);
             if (current_table >= 0){
-                table_array[current_table].image.visible = false
+                if (roomTF[current_table]){
+                    table_array[current_table].popup.visible = false
+                }
                 current_table = -1
             }
 
@@ -303,7 +366,9 @@ class ssafyScene extends Phaser.Scene {
             this.player.setVelocityX(speed);
             this.player.anims.play(`${this.characterKey}_run_right`, true);
             if (current_table >= 0){
-                table_array[current_table].image.visible = false
+                if (roomTF[current_table]){
+                    table_array[current_table].popup.visible = false
+                }
                 current_table = -1
             }
 
@@ -311,7 +376,9 @@ class ssafyScene extends Phaser.Scene {
             this.player.setVelocityY(-speed);
             this.player.anims.play(`${this.characterKey}_run_up`, true);
             if (current_table >= 0){
-                table_array[current_table].image.visible = false
+                if (roomTF[current_table]){
+                    table_array[current_table].popup.visible = false
+                }
                 current_table = -1
             }
 
@@ -319,7 +386,9 @@ class ssafyScene extends Phaser.Scene {
             this.player.setVelocityY(speed);
             this.player.anims.play(`${this.characterKey}_run_down`, true);
             if (current_table >= 0){
-                table_array[current_table].image.visible = false
+                if (roomTF[current_table]){
+                    table_array[current_table].popup.visible = false
+                }
                 current_table = -1
             }
 
@@ -358,8 +427,15 @@ class ssafyScene extends Phaser.Scene {
                     break
             }
 
-            store.dispatch(getChair(current_chair));
-            store.dispatch(getTable(current_table));
+            store.dispatch(getChair(current_chair + 1));
+            store.dispatch(getTable(current_table + 1));
+            //// 사람없는 곳에 앉으면 리덕스에 true /// 여기에 하면될것 같습니당 윤경쓰~~
+            if(roomTF[current_table] == 0){
+                store.dispatch(infoActions.isCreateRoom(true));
+            }
+            else{
+                store.dispatch(infoActions.isCreateRoom(false));
+            }
 
         }
 
@@ -369,6 +445,7 @@ class ssafyScene extends Phaser.Scene {
 
     // 현재 접근한 의자
     seat(item){
+        // console.log(current_table)
         if(current_table === -1){
             current_chair = item.id % 6
             current_table = parseInt(item.id / 6)
@@ -376,7 +453,15 @@ class ssafyScene extends Phaser.Scene {
             sit = item.sit
             chair_x = item.x
             chair_y = item.y
-            table_array[current_table].image.visible = true
+            // console.log(roomTF[current_table])
+            // console.log(current_chair)
+            // console.log(current_chair + 1, current_table + 1)
+
+
+            if (roomTF[current_table]){
+                // console.log(table_array[current_table])
+                table_array[current_table].popup.visible = true
+            }
             // console.log(parseInt(current_chair / 4), current_chair % 4)
         }
         // // 한자리에 계속 머무를 때

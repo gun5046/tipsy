@@ -7,7 +7,8 @@ const QRcode = (props) => {
         <div>
             <QRCodeSVG
                 // value={"http://localhost:8080/"}
-                value ={`http://i8d207.p.ssafy.io/meeting/${props.paramsNum}`}
+                // value ={`http://i8d207.p.ssafy.io/meeting/${props.paramsNum}`}
+                value ={`${props.paramsNum}`}
                 size={200}
                 bgColor={"#ffffff"}
                 fgColor={"#000000"}
