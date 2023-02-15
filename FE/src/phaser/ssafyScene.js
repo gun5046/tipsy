@@ -109,11 +109,12 @@ class ssafyScene extends Phaser.Scene {
         // this.load.tilemapTiledJSON('map', map2)
 
         // redux 실패
-        // console.log('table1_axios111111')
+        console.log('table1_axios111111')
         // console.log(this.table1_axios[0])
-        // this.table1_axios = store.getState().info.tableInfo1
+        this.table1_axios = store.getState().info.tableInfo1
+        console.log(this.table1_axios)
 
-        this.table1_axios = [{"title":"101호","password":"1111","entrance":"off","silence":"off","time":"20230210155347","host":"6","max":4,"code":"uawm5101","current":1,"member":[{"uid":6,"image":"http://k.kakaocdn.net/dn/c0405I/btrUKnHeIku/kvehoKnkkYs9H8pLUD0wY1/img_640x640.jpg","gender":"male","interest":"개껌","reportcnt":"0","name":"","nickname":"강가을","birth":"","position":"1","kakao_id":"2638215374"},{"uid":5,"image":"http://k.kakaocdn.net/dn/Qs7jd/btrMxCykHAJ/AyV40fXVb5uJegzLKRMzAk/img_640x640.jpg","gender":"male","interest":"","reportcnt":"0","name":"","nickname":"sdqdq","birth":"","position":"1","kakao_id":"2542925662"}],"hashtag":["101호","테스트"]},{"title":"102호","entrance":"off","silence":"off","time":"20230210155418","host":"5","max":4,"code":"8vvak102","current":1,"member":[{"uid":6,"image":"http://k.kakaocdn.net/dn/c0405I/btrUKnHeIku/kvehoKnkkYs9H8pLUD0wY1/img_640x640.jpg","gender":"male","interest":"개껌","reportcnt":"0","name":"","nickname":"강가을","birth":"","position":"1","kakao_id":"2638215374"},{"uid":5,"image":"http://k.kakaocdn.net/dn/Qs7jd/btrMxCykHAJ/AyV40fXVb5uJegzLKRMzAk/img_640x640.jpg","gender":"male","interest":"","reportcnt":"0","name":"","nickname":"sdqdq","birth":"","position":"1","kakao_id":"2542925662"}],"hashtag":["102호","테스트"]}]
+        // this.table1_axios = [{"title":"101호","password":"1111","entrance":"off","silence":"off","time":"20230210155347","host":"6","max":4,"code":"uawm5101","current":1,"member":[{"uid":6,"image":"http://k.kakaocdn.net/dn/c0405I/btrUKnHeIku/kvehoKnkkYs9H8pLUD0wY1/img_640x640.jpg","gender":"male","interest":"개껌","reportcnt":"0","name":"","nickname":"강가을","birth":"","position":"1","kakao_id":"2638215374"},{"uid":5,"image":"http://k.kakaocdn.net/dn/Qs7jd/btrMxCykHAJ/AyV40fXVb5uJegzLKRMzAk/img_640x640.jpg","gender":"male","interest":"","reportcnt":"0","name":"","nickname":"sdqdq","birth":"","position":"1","kakao_id":"2542925662"}],"hashtag":["101호","테스트"]},{"title":"102호","entrance":"off","silence":"off","time":"20230210155418","host":"5","max":4,"code":"8vvak102","current":1,"member":[{"uid":6,"image":"http://k.kakaocdn.net/dn/c0405I/btrUKnHeIku/kvehoKnkkYs9H8pLUD0wY1/img_640x640.jpg","gender":"male","interest":"개껌","reportcnt":"0","name":"","nickname":"강가을","birth":"","position":"1","kakao_id":"2638215374"},{"uid":5,"image":"http://k.kakaocdn.net/dn/Qs7jd/btrMxCykHAJ/AyV40fXVb5uJegzLKRMzAk/img_640x640.jpg","gender":"male","interest":"","reportcnt":"0","name":"","nickname":"sdqdq","birth":"","position":"1","kakao_id":"2542925662"}],"hashtag":["102호","테스트"]}]
         this.table1_axios.forEach(obj => {
             const room_num = Number(obj.code.substring(6, 8)) - 1
             if (obj.password){
@@ -419,6 +420,7 @@ class ssafyScene extends Phaser.Scene {
             chair_x = item.x
             chair_y = item.y
             // console.log(roomTF[current_table])
+            console.log(current_chair)
 
             if (roomTF[current_table]){
                 table_array[current_table].popup.visible = true
