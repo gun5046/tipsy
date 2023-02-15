@@ -3,7 +3,8 @@ import { createSlice } from '@reduxjs/toolkit'
 const initialState = {
     buildingInfo: [],
     tableInfo1: [],
-    openRoom: false
+    createRoom: false,
+    roomNumber: ''
 }
 // reducers만드는 것을 도와줌
 export const infoSlice = createSlice({
@@ -17,8 +18,11 @@ export const infoSlice = createSlice({
       state.tableInfo1 = action.payload;
     },
     isCreateRoom: (state, action) => {
-      state.openRoom != state.openRoom
-    }
+      state.createRoom = !state.createRoom
+    },
+    getRoomNum: (state, action) => {
+      state.roomNumber = action.payload;
+    },
   }
 })
 

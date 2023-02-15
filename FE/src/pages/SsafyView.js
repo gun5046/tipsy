@@ -5,6 +5,7 @@ import ssafyConfig from '../phaser/ssafyConfig';
 import axios from "axios";
 import styled from "styled-components"
 import RoomSetting from '../components/RoomSetting';
+// import Setting from '../components/Setting';
 
 // 리덕스
 import { useSelector } from 'react-redux'
@@ -15,9 +16,13 @@ import { infoActions } from '../redux/infoSlice';
 const GameViewContainer = styled.section`
   z-index: 1000;
   position: absolute;
-  height: 50vh;
-
-`;
+  width: 50vh;
+  top: 10vh;
+  left: 80vh;
+  // padding: 20px;
+  
+  `;
+  // background: white;
 
 
 // 게임 화면 뷰 영역 컴포넌트
@@ -29,9 +34,9 @@ const SsafyView = () => {
   const changeScene = useSelector((state) => state.game.scene)
   const currentChair = useSelector((state) => state.game.chair)
   const currentTable = useSelector((state) => state.game.table)
-  // const isOpen= useSelector((state) => state.info.createRoom)
-  const isOpen = false
-  
+  const isOpen = useSelector((state) => state.info.createRoom)
+  // const [isOpen, setIsOpen] = useState(false)
+  console.log(isOpen)
   // const [RoomNum, setRoomNum] = useState()
   
 
@@ -58,30 +63,6 @@ const SsafyView = () => {
       });
   };
 
-  // 방생성
-  const createRoom = () => {
-    console.log(room);
-    axios
-      .post(url, { 
-        code: room.code,
-        title: room.code,
-        max: room.max,
-        password: room.password,
-        antrance: room.antrance,
-        silence: room.silence,
-        hashtag: [room.hashtag]
-      })
-      .then((data) => {
-        console.log(data);
-      })
-      .catch((e) => {
-        console.log(e);
-        // 403 에러가 발생한 경우
-        if (e.response && e.response.status === 403) {
-          console.log("로그인으로 이동");
-        }
-      });
-  };
 
   // 엑시오스 실행
   useEffect(() => {
@@ -95,18 +76,20 @@ const SsafyView = () => {
       navigate('/mainstreet')
     }
   }, [changeScene])
-
-  // 미팅 페이지 이동 (103 : 1번건물에 3번 방)
+  
+  //////////////////////////////////////
+  // 방이있고 의자랑 테이블이 넘어오면 미팅 페이지 이동 (103 : 1번건물에 3번 방)
   useEffect(() => {
     if (currentTable !== -1){
       if (String(currentTable).length === 1) {
-        navigate(`/meeting/10${currentTable}`)
+        // navigate(`/meeting/10${currentTable}`)
       
       } else {
-        navigate(`/meeting/1${currentTable}`)
+        // navigate(`/meeting/1${currentTable}`)
+
       }
-        
-      console.log(currentChair, currentTable)
+      // console.log(currentChair, currentTable)
+      // console.log(isOpen)
       // console.log(RoomNum)
     }
   }, [currentChair, currentTable])
@@ -131,10 +114,7 @@ const SsafyView = () => {
     <div>
       <GameViewContainer>
         {isOpen && <RoomSetting/>}
-        {/* <img 
-          src="http://k.kakaocdn.net/dn/c0405I/btrUKnHeIku/kvehoKnkkYs9H8pLUD0wY1/img_640x640.jpg"
-          id='frame'
-        /> */}
+        {/* <RoomSetting/> */}
       </GameViewContainer>
       <div ref={phaserEl} className="game-container"></div>
     </div>
