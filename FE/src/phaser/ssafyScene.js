@@ -22,10 +22,6 @@ import ssafy_map from '../assets/ssafyMap/ssafy_map.json';
 
 import bu from '../assets/photo/김부경.png';
 import popup from '../assets/street/popup.png'
-// import room1 from '../assets/roomInfo/room1.png';
-// import room2 from '../assets/roomInfo/room2.png';
-// import room3 from '../assets/roomInfo/room3.png';
-// import room4 from '../assets/roomInfo/room4.png';
 
 import { getScene } from '../redux/gameSlice';
 import { getChair } from '../redux/gameSlice';
@@ -44,8 +40,6 @@ let table_array = new Array(12);
 // let roomInfo = ['room1', 'room2', 'room3', 'room4'];
 
 let roomTF = new Array(12);
-
-// console.log(store.dispatch(getScene("zzz")))
 
 class ssafyScene extends Phaser.Scene {
     constructor () {
@@ -111,7 +105,7 @@ class ssafyScene extends Phaser.Scene {
         // console.log(this.table1_axios)
 
         this.table1_axios = [
-            {"title":"101호","password":"1111","entrance":"off","silence":"off","time":"20230210155347","host":"6","max":4,
+            {"title":"101호101호","password":"1111","entrance":"off","silence":"off","time":"20230210155347","host":"6","max":4,
             "code":"uawm5101","current":1,
             "member":[
                 {"uid":6,"image":"http://k.kakaocdn.net/dn/c0405I/btrUKnHeIku/kvehoKnkkYs9H8pLUD0wY1/img_640x640.jpg",
@@ -133,7 +127,9 @@ class ssafyScene extends Phaser.Scene {
                 "gender":"male","interest":"","reportcnt":"0","name":"",
                 "nickname":"김부경","birth":"","position":"4","kakao_id":"2542925662"}],
                 
-                "hashtag":["102호","테스트"]}]
+                "hashtag":["102호","테스트", "102호","테스트", "102호","테스트", "102호","테스트"]}]
+
+        //비공개 방 : 2, 공개방 : 1
         this.table1_axios.forEach(obj => {
             const room_num = Number(obj.code.substring(6, 8)) - 1
             if (obj.password){
@@ -243,18 +239,38 @@ class ssafyScene extends Phaser.Scene {
           infoLayer.objects.forEach((infoObj, i) => {
             if(roomTF[i]){
                 let data = {};
-                data.popup = this.add.image(infoObj.x + infoObj.width / 2 + 10, infoObj.y + infoObj.height / 2 - 20, 'popup')
+                data.popup = this.add.image(infoObj.x + infoObj.width / 2 + 20, infoObj.y + infoObj.height / 2, 'popup')
+                data.popup.setDisplaySize(200, 100)
                 data.popup.setDepth(40)
                 data.popup.alpha = 0.7
                 data.popup.visible = false
 
-                const title_style = { font: "15px Arial", fill: '#ffffff'};
-                data.title = this.add.text(infoObj.x + infoObj.width / 2 + 10, infoObj.y + infoObj.height / 2 - 20, this.table1_axios[i].title, title_style);
+                const title_style = { font: "18px Arial", fill: '#ffffff'};
+                data.title = this.add.text(infoObj.x + infoObj.width / 2 - this.table1_axios[i].title.length * 2, infoObj.y + infoObj.height / 2 - 20, this.table1_axios[i].title, title_style);
                 data.title.setDepth(45)
 
                 const detail_style = { font: "10px Arial", fill: '#ffffff',  align: "center"};
-                data.title = this.add.text(infoObj.x + infoObj.width / 2 + 10, infoObj.y + infoObj.height / 2, this.table1_axios[i].time, detail_style);
-                data.title.setDepth(45)
+                let tf = ''
+                if(roomTF[i] == 2){
+                    tf = '비공개방'
+                    // const public = '비공개방'
+                }else{
+                    tf = '공개방'
+                    // const public = '공개방'
+                }
+                const current = '현재 인원 : '+ this.table1_axios[i].current.toString()+' / 6'
+                let hashtag = ''
+                this.table1_axios[i].hashtag.forEach((tag, i) => {
+                    if(i % 3 === 0 && i !== 0){
+                        hashtag += '\n#' + tag +'  '
+                    }
+                    else{    
+                    hashtag += '#' + tag + '  '
+                    }
+                })
+                const input = `${tf}\n${current}\n${hashtag}`
+                data.detail = this.add.text(infoObj.x + infoObj.width / 2 - 20, infoObj.y + infoObj.height / 2, input, detail_style);
+                data.detail.setDepth(45)
 
                 table_array[i] = data
             } 
@@ -278,7 +294,7 @@ class ssafyScene extends Phaser.Scene {
                     const chair_num = i * 6 + Number(obj.position) - 1
                     const chairObj = chairLayer.objects[chair_num]
                     const profile = this.add.sprite(chairObj.x + chairObj.width * 0.5, chairObj.y - chairObj.height * 0.5, 'bu')
-                    console.log(obj.image)
+                    // console.log(obj.image)
                     profile.setDisplaySize(50, 50)
                     const shape = this.add.graphics().setPosition(chairObj.x + chairObj.width * 0.5, chairObj.y - chairObj.height * 0.5).fillCircle(0, 0, 20)
                     profile.setMask(shape.createGeometryMask())
