@@ -15,7 +15,7 @@
  *
  */
 
-var ws = new WebSocket('wss://' + location.host + '/groupcall');
+var ws = new WebSocket('wss://i8d207.p.ssafy.io:8443/groupcall');
 var participants = {};
 var name;
 
@@ -38,6 +38,7 @@ ws.onmessage = function(message) {
 		onParticipantLeft(parsedMessage);
 		break;
 	case 'receiveVideoAnswer':
+		console.log("*****pm : " + parsedMessage)
 		receiveVideoResponse(parsedMessage);
 		break;
 	case 'iceCandidate':
@@ -74,6 +75,7 @@ function onNewParticipant(request) {
 }
 
 function receiveVideoResponse(result) {
+	console.log("result : " + result.data)
 	participants[result.name].rtcPeer.processAnswer (result.sdpAnswer, function (error) {
 		if (error) return console.error (error);
 	});
@@ -91,6 +93,7 @@ function callResponse(message) {
 }
 
 function onExistingParticipants(msg) {
+	
 	var constraints = {
 		audio : true,
 		video : {
@@ -111,11 +114,16 @@ function onExistingParticipants(msg) {
 	      mediaConstraints: constraints,
 	      onicecandidate: participant.onIceCandidate.bind(participant)
 	    }
+	options.configuration = {
+	        iceServers : [{"urls":"stun:i8d207.p.ssafy.io"},{"urls":"turn:i8d207.p.ssafy.io","username":"tipsy","credential":"ssafy"}]
+	      };
+	
 	participant.rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerSendonly(options,
 		function (error) {
 		  if(error) {
 			  return console.error(error);
 		  }
+		  console.log(this)
 		  this.generateOffer (participant.offerToReceiveVideo.bind(participant));
 	});
 
@@ -146,14 +154,16 @@ function receiveVideo(sender) {
       remoteVideo: video,
       onicecandidate: participant.onIceCandidate.bind(participant)
     }
-
+	options.configuration = {
+	        iceServers : [{"urls":"stun:i8d207.p.ssafy.io"},{"urls":"turn:i8d207.p.ssafy.io","username":"tipsy","credential":"ssafy"}]
+	      };
 	participant.rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerRecvonly(options,
 			function (error) {
 			  if(error) {
 				  return console.error(error);
 			  }
 			  this.generateOffer (participant.offerToReceiveVideo.bind(participant));
-	});;
+	});
 }
 
 function onParticipantLeft(request) {

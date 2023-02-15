@@ -20,7 +20,6 @@
 	<properties>
 		<demo.port>8443</demo.port>
 		<start-class>org.kurento.tutorial.groupcall.GroupCallApp</start-class>
-		
 	</properties>
 
 	<dependencies>
