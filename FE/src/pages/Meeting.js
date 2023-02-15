@@ -12,7 +12,7 @@ import { useParams } from 'react-router-dom';
 import QrModal from '../components/QrModal';
 import kurentoUtils from 'kurento-utils'
 
-const mySit = 0 //위치 설정
+const mySit = 2 //위치 설정
 const pointer = new THREE.Vector2()
 const textboxPointer = new THREE.Vector2(0,0)
 const textboxPointer2 = new THREE.Vector2(0,0)
@@ -45,9 +45,13 @@ const scene = new THREE.Scene()
 scene.background = new THREE.Color(0x000000)
 //const sit = [[2, 8, 12],[10, 8, 11.9],[-5, 8, 2],[-5, 8, -15],[12, 8, 2],[12, 8 , -15]] //x,y,z 좌표
 const sit = [
-  [0, 0, 0],[8, 0, 0],[-7, 0, -10],[-7, 2, -20],[10, 0, -10],[12, 2 , -20],
+  [[0, 0, 0],[8, 0, 0],[-7, 0, -10],[-7, 2, -20],[10, 0, -10],[12, 2 , -20]],
+  [[-8, 0, 0],[0, 0, 0],[-15, 0, -10],[-15, 2, -20],[2, 0, -10],[4, 2 , -20]],
+  [[4, 2, -10],[7, 2, -5],[0, 0, 0],[-5, 0, 5],[-4, 2, -8],[-8, 2, -4]],
+  [[16, 3, 6],[16, 3, -2],[7, 0, 7],[0, 0, 0],[10, 2, -6],[5, 2 , -10]],
+  [[-10, 1, -5],[-10, 0, 0],[-7, 1, -10],[0, 2, -10],[0, 0, 0],[5, 1, -5]],
+  [[-10, 0, -10],[-10, 0, -4],[-6, 0, -12],[0, 0, -10],[-7, 0, 0],[0,0,0]],
   ] //x,y,z 좌표
-
 
 const sendToMediaPipe = async (cam, index) => {
   if (!cam.videoWidth) {
@@ -430,45 +434,46 @@ function Meeting({match}) {
   scene.add(gridHelper);
 
   const cam = new THREE.Mesh(new THREE.PlaneGeometry(6,6))
-  cam.position.set(sit[0][0]-sit[mySit][0], sit[0][1]-sit[mySit][1], sit[0][2]-sit[mySit][2])
+  cam.position.set(sit[mySit][0][0], sit[mySit][0][1], sit[mySit][0][2])
   cam.lookAt(camera.position)
   cam.name = '00'
-  //scene.add(cam)
+  scene.add(cam)
    //threejs 공간에 띄움
    const cam2 = cam.clone()
    cam2.name = '44'
-   cam2.position.set(sit[4][0] -sit[mySit][0], sit[4][1]-sit[mySit][1], sit[4][2]-sit[mySit][2])
+   cam2.position.set(sit[mySit][4][0], sit[mySit][4][1], sit[mySit][4][2])
    cam2.lookAt(camera.position)
-   //scene.add(cam2)
+   scene.add(cam2)
 
    const cam5 = cam.clone()
    cam5.name = '55'
-   cam5.position.set(sit[5][0] -sit[mySit][0], sit[5][1] -sit[mySit][1], sit[5][2] -sit[mySit][2])
+   cam5.position.set(sit[mySit][5][0], sit[mySit][5][1], sit[mySit][5][2] )
    cam5.lookAt(camera.position)
-   //scene.add(cam5)
+   scene.add(cam5)
 
    const cam3 = cam.clone()
    cam3.name = '22'
-   cam3.position.set(sit[2][0] -sit[mySit][0], sit[2][1] -sit[mySit][1], sit[2][2] -sit[mySit][2])
+   cam3.position.set(sit[mySit][2][0], sit[mySit][2][1], sit[mySit][2][2] )
    cam3.lookAt(camera.position)
    //scene.add(cam3)
 
    const cam4 = cam.clone()
    cam4.name = '11'
-   cam4.position.set(sit[1][0] -sit[mySit][0], sit[1][1] -sit[mySit][1], sit[1][2] -sit[mySit][2])
+   cam4.position.set(sit[mySit][1][0], sit[mySit][1][1], sit[mySit][1][2])
    cam4.lookAt(camera.position)
-   //scene.add(cam4)
+   scene.add(cam4)
 
    const cam6 = cam.clone()
    cam6.name = '33'
-   cam6.position.set(sit[3][0] -sit[mySit][0], sit[3][1] -sit[mySit][1], sit[3][2] -sit[mySit][2])
+   cam6.position.set(sit[mySit][3][0], sit[mySit][3][1], sit[mySit][3][2] )
    cam6.lookAt(camera.position)
-   //scene.add(cam6)
+   scene.add(cam6)
 	// 광원
-  const basicLight = new THREE.HemisphereLight(0xffffff, 0x000000, 2)
+  const basicLight = new THREE.HemisphereLight(0xffffff, 0x000000, 1.5)
   scene.add(basicLight) // 몰라도됨
 
   //머리위 광원
+/*   
   const light = new THREE.SpotLight( 0xffffff, 10 )
   light.angle = Math.PI / 6
   light.penumbra = .8
@@ -479,15 +484,14 @@ function Meeting({match}) {
   const lightList = [];
   for (let i =0; i < 6 ; i ++){
     const temp = light.clone()
-    temp.position.set(sit[i][0], sit[i][1]+5, sit[i][2])
-    temp.target.position.set(sit[i][0], sit[i][1], sit[i][2])
+    temp.position.set(sit[mySit][i][0], sit[mySit][i][1]+5, sit[mySit][i][2])
+    temp.target.position.set(sit[mySit][i][0], sit[mySit][i][1], sit[mySit][i][2])
     lightList.push(temp)
     const temphelper = new THREE.SpotLightHelper(temp) 
     scene.add(temphelper)
-    scene.remove(temphelper)
-
+    //scene.remove(temphelper)
   } // 만질 필요 없음
-
+ */
     
     /* 배경 hdr 광원 */
     //const textureLoader = new THREE.TextureLoader();
@@ -512,8 +516,8 @@ function Meeting({match}) {
 	function skybox(rid,mysit) {
     console.log(rid)
     if ( rid < 200){
-      //const skyTexture = new THREE.TextureLoader().load(`/room/${rid}/${rid}_${mysit}.jpg`)
-      const skyTexture = new THREE.TextureLoader().load(`/room_212.jpg`)
+      const skyTexture = new THREE.TextureLoader().load(`/room/${rid}/${rid}_${mysit}.jpg`)
+      //const skyTexture = new THREE.TextureLoader().load(`/room_209.jpg`)
       //const skyGeometry = new THREE.SphereGeometry(400, 60, 40)
       const skyGeometry = new THREE.CylinderGeometry(150, 150, 400, 32, 2, true)
       skyGeometry.scale(-1,1,1)
@@ -769,9 +773,6 @@ function Meeting({match}) {
         const result = message.body.split(',')
         console.log(message.body)
         gameresult =  500
-        scene.remove(basicLight)
-        renderer.toneMappingExposure = 0.2
-        scene.add(lightList[test])
         if (result[0] === "Win") {
           const pTag = document.createElement('p')
           pTag.innerText = '라이어 승리!'
@@ -787,9 +788,6 @@ function Meeting({match}) {
       client.subscribe(`/topic/play/croco-game/${rid}`, message =>{
 		  	console.log(message.body)
         gameresult =  500
-        scene.remove(basicLight)
-        renderer.toneMappingExposure = 0.2
-        scene.add(lightList[test])
         const pTag = document.createElement('p')
         pTag.innerText = '당첨!'
         pTag.id = 'pTag'
@@ -798,9 +796,6 @@ function Meeting({match}) {
       client.subscribe(`/topic/play/drink-game/${rid}`, message =>{
         console.log(message.body)
         gameresult =  500
-        scene.remove(basicLight)
-        renderer.toneMappingExposure = 0.2
-        scene.add(lightList[test])
         const pTag = document.createElement('p')
         pTag.innerText = '당첨!'
         pTag.id = 'pTag'
@@ -809,9 +804,6 @@ function Meeting({match}) {
       client.subscribe(`/topic/play/drag-game/${rid}`, message =>{
         console.log(message.body)
         gameresult =  500
-        scene.remove(basicLight)
-        renderer.toneMappingExposure = 0.2
-        scene.add(lightList[test])
         const pTag = document.createElement('p')
         pTag.innerText = '승리!'
         pTag.id = 'pTag'
@@ -820,9 +812,6 @@ function Meeting({match}) {
       client.subscribe(`/topic/play/roulette-game/${rid}`, message =>{
         console.log(message.body)
         gameresult =  500
-        scene.remove(basicLight)
-        renderer.toneMappingExposure = 0.2
-        scene.add(lightList[test])
         const pTag = document.createElement('p')
         pTag.innerText = '당첨!'
         pTag.id = 'pTag'
@@ -831,9 +820,9 @@ function Meeting({match}) {
       client.subscribe(`/topic/play/ordering-game/${rid}`, message =>{
         console.log(message.body)
         gameresult =  500
-        scene.remove(basicLight)
+/*         scene.remove(basicLight)
         renderer.toneMappingExposure = 0.2
-        scene.add(lightList[test])
+        scene.add(lightList[test]) */
         const pTag = document.createElement('p')
         pTag.innerText = '승리!'
         pTag.id = 'pTag'
@@ -951,9 +940,9 @@ function Meeting({match}) {
       }
     }else if (gameresult === 0) {
       gameresult -= 1
-      scene.add(basicLight)
+/*       scene.add(basicLight)
       renderer.toneMappingExposure = 1
-      scene.remove(lightList[test])
+      scene.remove(lightList[test]) */
       const targetp = document.getElementById('pTag')
       console.log(targetp)
       document.body.removeChild(targetp)
