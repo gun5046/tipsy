@@ -7,6 +7,7 @@
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
     "@mediapipe/selfie_segmentation": "^0.1.1675465747",
+    "@mui/icons-material": "^5.11.9",
     "@mui/material": "^5.11.7",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.3",
     "@reduxjs/toolkit": "^1.9.2",

@@ -171,7 +171,7 @@ function Meeting({match}) {
     });
     console.log("************************video************************")
     if (result.name !== name) {
-      let seat = webcam.length
+      let seat = result.name.split(',')[2]
       console.log(result.name + 'seat %d', seat);
       selfieSegmentation.push(new SelfieSegmentation({
         locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/${file}`,
@@ -970,30 +970,33 @@ function Meeting({match}) {
   //// QRgame Url
   return (
     <>
+    <div>
       <div id="profileBox">
-			  <button 
+              <button 
           onClick={()=> {
-			  	  document.getElementById('profileBox').style.display = 'none'
+                    document.getElementById('profileBox').style.display = 'none'
             document.addEventListener('pointerdown', onPointerDown)
             document.addEventListener('click', onPointerMove2)
-			    }}
+                }}
           id='closeBtn'
         >
-			  	X
-			  </button>
-			  <br/>
-			  <img alt='' src='https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Ft1.daumcdn.net%2Fcfile%2Ftistory%2F2513B53E55DB206927'/> 
+                  X
+              </button>
+              <br/>
+              <img alt='' src='https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Ft1.daumcdn.net%2Fcfile%2Ftistory%2F2513B53E55DB206927'/> 
         <br/>
-			  <span id='nickname2'></span>
+              <span id='nickname2'></span>
         <button id='friend'>친구추가</button>
         <p id='interest'>관심사</p>
-			  {
-			  	arr.map((element)=>{
-			  		return ( <button key={element} variant="outlined" color="secondary"># {element}</button>)
-			  	})
-			  }
-        <QrModal paramsNum={params.id}/>
+              {
+                  arr.map((element)=>{
+                      return ( <button key={element} variant="outlined" color="secondary"># {element}</button>)
+                  })
+              }
       </div>
+      <QrModal paramsNum={params.id}/>
+      <SettingsIcon fontSize="large" color="primary" style={{position: 'absolute', bottom: 20, right: 30, zIndex: 'tooltip', width:'50px', height: '50px'}}/>
+    </div>
       {/* <Profile props={props}/> */}
     </>
   )

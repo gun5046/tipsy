@@ -263,7 +263,7 @@ class streetScene extends Phaser.Scene {
         //// 키보드 입력기
         this.cursors = this.input.keyboard.createCursorKeys();
         this.spaceBar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE)    
-        this.keyZ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z)    
+        this.Ctrl = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.CTRL)    
 
         //// 카메라 설정 ( 순서 중요!!!!!!!! )
         // 1. 경계 밖으로 카메라가 나가지 않도록 설정
@@ -323,7 +323,7 @@ class streetScene extends Phaser.Scene {
         //// 속도 설정
         let speed = 180;
         // Shift 키를 누르면서 이동하면 빠르게 이동
-        if (this.keyZ.isDown) {speed = 280;}
+        if (this.Ctrl.isDown) {speed = 280;}
 
 
         //// 이전 속도 (애니메이션 적용에 순서 중요!!!!)

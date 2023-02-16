@@ -388,8 +388,8 @@ class ssafyScene extends Phaser.Scene {
         //// 키보드 입력기
         this.cursors = this.input.keyboard.createCursorKeys();
         // 키보드 입력키 추가
-        this.keyZ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z)
-        this.keyX = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.X)
+        this.Ctrl = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.CTRL)
+        this.Alt = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ALT)
         this.spaceBar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE)   
 
 
@@ -430,7 +430,7 @@ class ssafyScene extends Phaser.Scene {
 
         let speed = 200;
         // Shift 키를 누르면서 이동하면 빠르게 이동
-        if (this.keyZ.isDown) {speed = 300;}
+        if (this.Ctrl.isDown) {speed = 300;}
 
 
         //// 이전 속도 (애니메이션 적용에 순서 중요!!!!)
@@ -513,7 +513,7 @@ class ssafyScene extends Phaser.Scene {
 
         // 앉는 애니메이션 적용
         // 'E' 키 눌렀을 때 앉는 모션 추가
-        if (this.keyX.isDown && current_table >= 0) {
+        if (this.Alt.isDown && current_table >= 0) {
             // console.log(prevVelocity)
             // this.player.anims.play(`${this.characterKey}_sit_left`, true);
             // console.log(this.overlapChair)

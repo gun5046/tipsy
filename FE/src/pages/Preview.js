@@ -35,7 +35,7 @@ const Preview =() => {
     <br/>
     <img src="../login/kakao_login.png" onClick={() => {
       Kakao.Auth.authorize({
-        redirectUri: 'http://127.0.0.1:3000/temp',
+        redirectUri: 'http://i8d207.p.ssafy.io:3000/temp',
       })
     }}/>
     </div>

@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import ssafyConfig from '../phaser/ssafyConfig';
 import axios from "axios";
 import styled from "styled-components"
-import RoomSetting from '../components/RoomSetting';
+import RoomSetting2 from '../components/RoomSetting2';
 import CheckPw from '../components/CheckPw';
 // import Setting from '../components/Setting';
 
@@ -143,7 +143,7 @@ const SsafyView = () => {
   return (
     <div>
       <GameViewContainer>
-        {isRoom && <RoomSetting/>}
+        {isRoom && <RoomSetting2/>}
         {!isPublic && <CheckPw/>}
         {/* <RoomSetting/> */}
       </GameViewContainer>
