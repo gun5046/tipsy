@@ -29,7 +29,7 @@ let lon = 0,
 let ws = new WebSocket('ws://'+'i8d207.p.ssafy.io:8443'+'/groupcall');
 let participants = {};
 // let name = localStorage.getItem("state");
-let name = "bosung";
+let name = "chadoll";
 
  //let room = match.params.id
 let room = 100

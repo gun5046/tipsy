@@ -38,7 +38,7 @@ const CheckPw = () => {
       .post(`${url}/entry`, { 
         code: roomNumber,
         id: currentUid,
-        password: checkPassword,
+        password: String(checkPassword),
         position: currentChair,
        })
       .then((res) => {

@@ -51,11 +51,6 @@ const RoomSetting = () => {
   const currentTable = useSelector((state) => state.game.table)
   const currentUid = useSelector((state) => state.auth.uid)
   const isCreate = useSelector((state) => state.info.createRoom)
-
-  if (isCreate) {
-    setOpen(true)
-  }
-
   const [chips, setChips] = useState([])
 
   const url = 'http://i8d207.p.ssafy.io:8083/room'

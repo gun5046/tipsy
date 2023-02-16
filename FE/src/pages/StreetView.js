@@ -41,7 +41,7 @@ const StreetView = () => {
   //// 스트릿 건물 정보 가져오기
   const getBuilding = () => {
     axios
-      .get(url)
+      .get(`${url}/building`)
       .then((res) => {
         console.log("건물별 정보");
         // console.log(res);

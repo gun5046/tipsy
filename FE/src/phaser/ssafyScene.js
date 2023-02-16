@@ -42,7 +42,7 @@ const roomTemp = [[-33, 0], [0, 0],[0, 0],[-10, 0],[0, 0],[0, 0],[-20, 0],[0, 0]
 
 // let roomInfo = ['room1', 'room2', 'room3', 'room4'];
 
-let roomTF = new Array(12);
+let roomTF = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
 class ssafyScene extends Phaser.Scene {
     constructor () {
@@ -103,7 +103,7 @@ class ssafyScene extends Phaser.Scene {
         // this.load.tilemapTiledJSON('map', map2)
 
         // redux
-        // console.log('table1_axios111111')
+        console.log('table1_axios111111')
         // this.table1_axios = store.getState().info.tableInfo1
         // console.log(this.table1_axios)
 
@@ -193,6 +193,8 @@ class ssafyScene extends Phaser.Scene {
                 
                 "hashtag":["정보공유","잡플래닛", "연봉"]}
             ]
+
+        console.log(this.table1_axios)
 
         //비공개 방 : 2, 공개방 : 1, 사람없음 : 0
         this.table1_axios.forEach((obj, i) => {
@@ -453,6 +455,7 @@ class ssafyScene extends Phaser.Scene {
                 }
                 current_table = -1
             }
+            store.dispatch(infoActions.isCreateRoom(false));
             store.dispatch(infoActions.isPublic(true));
 
         } else if (this.cursors.right.isDown) {
@@ -466,6 +469,7 @@ class ssafyScene extends Phaser.Scene {
                 }
                 current_table = -1
             }
+            store.dispatch(infoActions.isCreateRoom(false));
             store.dispatch(infoActions.isPublic(true));
 
         } else if (this.cursors.up.isDown) {
@@ -479,6 +483,7 @@ class ssafyScene extends Phaser.Scene {
                 }
                 current_table = -1
             }
+            store.dispatch(infoActions.isCreateRoom(false));
             store.dispatch(infoActions.isPublic(true));
 
         } else if (this.cursors.down.isDown) {
@@ -492,6 +497,7 @@ class ssafyScene extends Phaser.Scene {
                 }
                 current_table = -1
             }
+            // store.dispatch(infoActions.isCreateRoom(false));
             store.dispatch(infoActions.isPublic(true));
 
         } else {
@@ -528,25 +534,33 @@ class ssafyScene extends Phaser.Scene {
                     this.player.setPosition(chair_x, chair_y - 4)
                     break
             }
-
+            
+            console.log('앉기')
+            console.log(roomTF)
+            
             store.dispatch(getChair(current_chair + 1));
             store.dispatch(getTable(current_table + 1));
-            //// 사람없는 곳에 앉으면 리덕스에 true /// 여기에 하면될것 같습니당 윤경쓰~~
-            if(roomTF[current_table] == 0){
+            //// 사람없는 곳에 앉으면 리덕스에 true
+            // 0 방 개설
+            if (roomTF[current_table] == 0) {
                 store.dispatch(infoActions.isCreateRoom(true));
+                console.log('00000000000')
             }
-            // 1 공개
-            else if (roomTF[current_table] == 1) {
+            else {
                 store.dispatch(infoActions.isCreateRoom(false));
-                store.dispatch(infoActions.isPublic(true));
                 store.dispatch(infoActions.getRoomNum(this.table1_axios.code));
-            } 
-            // 2 비공개
-            else if (roomTF[current_table] == 2) {
-                store.dispatch(infoActions.isCreateRoom(false));
-                store.dispatch(infoActions.isPublic(false));
-                store.dispatch(infoActions.getPassword(this.table1_axios.password));
-                store.dispatch(infoActions.getRoomNum(this.table1_axios.code));              
+                // 1 공개
+                if (roomTF[current_table] == 1) {
+                    console.log('111111111111111111')
+                    store.dispatch(infoActions.isPublic(true));
+                } 
+                // 2 비공개
+                else if (roomTF[current_table] == 2) {
+                    console.log('222222222222222222222222222')
+                    store.dispatch(infoActions.isPublic(false));
+                    store.dispatch(infoActions.getPassword(this.table1_axios.password));
+                    // store.dispatch(infoActions.getRoomNum(this.table1_axios.code));              
+                }
             }
 
         }
