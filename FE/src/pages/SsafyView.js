@@ -82,7 +82,7 @@ const SsafyView = () => {
       .then((res) => {
         // console.log('입장성공 ssafyView');
         console.log(res.data);
-        if (currentRoom) {
+        if (res.data !=='overcapacity' && res.data !=='banned user' && res.data !=='failed'  && currentRoom) {
         // if (res.data == "success" && currentRoom) {
           console.log(currentRoom);
           navigate(`/meeting/${currentRoom}`)
