@@ -64,6 +64,7 @@ public class RoomController {
 	@ApiOperation(value = "code[테이블정보], title[방제목], max[최대인원], (password[비밀번호]), antrance[입장효과], silence[침묵효과]", notes = "방 생성한다.")
 	public ResponseEntity<?> createRoom(@RequestBody Room room) {
 		try {
+			System.out.println(room.getHashtag().getClass().getName());
 			System.out.println(room);
 			String roomcode = roomService.createRoom(room);
 			logger.info(roomcode + "방 생성 완료");
@@ -110,23 +111,24 @@ public class RoomController {
 	@ApiOperation(value = "code[방코드], id[사용자id], (password[비밀번호]), position[의자위치]", notes = "미팅룸 입장")
 	public ResponseEntity<?> enterRoom(@RequestBody Member member) {
 		try {
-
 			String status = "failed";
-			int result = roomService.enterRoom(member);
-			if (result == 0) {
-				status = "success";
-//				simpMessagingTemplate.convertAndSend("/room/info",bno);
-			} else if (result == 1) {
-				status = "does not exist room";
-			} else if (result == 2) {
-				status = "incorrect password";
-			} else if (result == 3) {
-				status = "banned user";
-			} else {
-				status = "overcapacity";
+			if(member.getUid() != null) {		
+				int result = roomService.enterRoom(member);
+				if (result == 0) {
+					status = "success";
+	//				simpMessagingTemplate.convertAndSend("/room/info",bno);
+				} else if (result == 1) {
+					status = "does not exist room";
+				} else if (result == 2) {
+					status = "incorrect password";
+				} else if (result == 3) {
+					status = "banned user";
+				} else if (result == 4) {
+					status = "overcapacity";
+				}			
+			}else {
+				status = "uid is null";
 			}
-			
-			
 			return new ResponseEntity<String>(status, HttpStatus.CREATED);
 
 		} catch (Exception e) {

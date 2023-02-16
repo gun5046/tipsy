@@ -69,6 +69,7 @@ public class RoomRepoImpl implements RoomRepo {
 		for (String tag : tags) {
 			stringSetOperations.add("room:" + room.getCode() + ":hashtag", tag);
 		}
+		
 	}
 
 	@Override
@@ -96,6 +97,8 @@ public class RoomRepoImpl implements RoomRepo {
 		for (String tag : room.getHashtag()) {
 			stringSetOperations.add("room:" + room.getCode() + ":hashtag", tag);
 		}
+		
+
 	}
 
 	@Override
