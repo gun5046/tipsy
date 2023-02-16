@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import ssafyConfig from '../phaser/ssafyConfig';
 import axios from "axios";
 import styled from "styled-components"
-import RoomSetting2 from '../components/RoomSetting2';
+import RoomSetting from '../components/RoomSetting';
 import CheckPw from '../components/CheckPw';
 // import Setting from '../components/Setting';
 
@@ -44,7 +44,7 @@ const SsafyView = () => {
   console.log(`방만들기 : ${isCreate}`)
   console.log(`공개방 : ${isPublic}`)
   // const [RoomNum, setRoomNum] = useState()
-  
+
 
   // 건물번호 1,2,3
   const url = 'http://i8d207.p.ssafy.io:8083/room'
@@ -71,7 +71,7 @@ const SsafyView = () => {
 
   // code[방코드], id[사용자id], (password[비밀번호]), position[의자위치]
   const enterRoom = () => {
-    console.log("방 입장 실행");
+    // console.log("공개방 입장 실행");
     axios
       .post(`${url}/entry`, { 
         code: currentRoom,
@@ -80,9 +80,10 @@ const SsafyView = () => {
         position: currentChair,
        })
       .then((res) => {
-        console.log('입장성공 ssafyView');
+        // console.log('입장성공 ssafyView');
         console.log(res.data);
-        if (res.data == "success" && currentRoom) {
+        if (currentRoom) {
+        // if (res.data == "success" && currentRoom) {
           console.log(currentRoom);
           navigate(`/meeting/${currentRoom}`)
         } 
@@ -120,7 +121,9 @@ const SsafyView = () => {
   // 공개방이고 의자랑 테이블이 넘어오면 미팅 페이지 이동 (103 : 1번건물에 3번 방)
   useEffect(() => {
     if (currentTable !== -1 && isPublic && isCreate == false){
-      enterRoom(currentRoom,currentUid, currentPassword, currentChair)
+
+      console.log('11111111111111111111111111111111111111111')
+      enterRoom(currentRoom, currentUid, currentPassword, currentChair)
     }
   }, [currentChair, currentTable])
   
@@ -143,7 +146,7 @@ const SsafyView = () => {
   return (
     <div>
       <GameViewContainer>
-        {isCreate && <RoomSetting2/>}
+        {isCreate && <RoomSetting/>}
         {!isPublic && <CheckPw/>}
         {/* <RoomSetting/> */}
       </GameViewContainer>

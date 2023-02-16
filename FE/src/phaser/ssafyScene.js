@@ -536,7 +536,7 @@ class ssafyScene extends Phaser.Scene {
             }
             
             console.log('앉기')
-            console.log(roomTF)
+            // console.log(roomTF)
             
             store.dispatch(getChair(current_chair + 1));
             store.dispatch(getTable(current_table + 1));
@@ -548,7 +548,9 @@ class ssafyScene extends Phaser.Scene {
             }
             else {
                 store.dispatch(infoActions.isCreateRoom(false));
-                store.dispatch(infoActions.getRoomNum(this.table1_axios.code));
+                store.dispatch(infoActions.getRoomNum(this.table1_axios[roomIndex[current_table]].code));
+                // console.log('1111111111111111112222222222222222222222')
+                console.log(this.table1_axios[roomIndex[current_table]].code)
                 // 1 공개
                 if (roomTF[current_table] == 1) {
                     console.log('111111111111111111')
@@ -558,7 +560,7 @@ class ssafyScene extends Phaser.Scene {
                 else if (roomTF[current_table] == 2) {
                     console.log('222222222222222222222222222')
                     store.dispatch(infoActions.isPublic(false));
-                    store.dispatch(infoActions.getPassword(this.table1_axios.password));
+                    store.dispatch(infoActions.getPassword(this.table1_axios[roomIndex[current_table]].password));
                     // store.dispatch(infoActions.getRoomNum(this.table1_axios.code));              
                 }
             }

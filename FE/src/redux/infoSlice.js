@@ -6,7 +6,7 @@ const initialState = {
     createRoom: false,
     publicRoom: true,
     roomNumber: '',
-    roomPassword: '',
+    roomPassword: null,
 }
 // reducers만드는 것을 도와줌
 export const infoSlice = createSlice({

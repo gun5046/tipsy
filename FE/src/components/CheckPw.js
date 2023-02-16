@@ -8,14 +8,17 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import axios from 'axios';
+import { infoActions } from '../redux/infoSlice';
 
 const CheckPw = () => {
   const [open, setOpen] = useState(true);
   const [checkPassword, setCheckPassword] = useState('');
   const passwordInput = useRef()
   const navigate = useNavigate()
-  const roomNumber = useSelector((state) => state.game.roomNumber)
+  const dispatch = useDispatch()
+  const roomNumber = useSelector((state) => state.info.roomNumber)
   // const roomPassword = useSelector((state) => state.game.roomPassword)
   const currentChair = useSelector((state) => state.game.chair)
   const currentTable = useSelector((state) => state.game.table)
@@ -34,7 +37,7 @@ const CheckPw = () => {
   //////////////// axios
   // code[방코드], id[사용자id], (password[비밀번호]), position[의자위치]
   const enterRoom = () => {
-    console.log("방 입장 실행");
+    console.log("비밀방 입장 실행");
     axios
       .post(`${url}/entry`, { 
         code: roomNumber,
@@ -43,11 +46,12 @@ const CheckPw = () => {
         position: currentChair,
        })
       .then((res) => {
-        console.log('입장성공');
+        console.log('비밀방입장성공');
         console.log(res.data);
         if (res.data == "success" && roomNumber) {
-          console.log(roomNumber);
+          // console.log(roomNumber);
           navigate(`/meeting/${roomNumber}`)
+          dispatch(infoActions.isPublic(true))
           setCheckPassword('')
         } 
       })

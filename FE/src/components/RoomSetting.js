@@ -1,6 +1,13 @@
 import React from 'react';
 import { useContext, useRef, useState, useEffect, useCallback } from "react"
 import axios from 'axios';
+import Stack from '@mui/material/Stack';
+import Switch from '@mui/material/Switch';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 // import { useNavigate } from "react-router-dom"
 // import styled from "styled-components"
 
@@ -13,21 +20,24 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import { Typography } from "@mui/material";
-import Switch from '@mui/material/Switch';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-
 import { useDispatch, useSelector } from 'react-redux'
 import { infoActions } from '../redux/infoSlice';
+import styled from "styled-components"
 import { useNavigate } from 'react-router-dom';
-import { set } from 'lodash';
 
+const GameSettingContainer = styled.section`
+  position: absolute;
+  width: 70vh;
+  // top: 10vh;
+  // left: 80vh;
+  padding: 30px;
+  background: white;
+  border-radius: 3%;
+  opacity: 0.8;
+  `;
 
 const RoomSetting = () => {
-
+  const [open, setOpen] = useState(true);
   const titleInput = useRef();
   const hashtagInput = useRef();
   const passwordInput = useRef();
@@ -41,8 +51,11 @@ const RoomSetting = () => {
     silence: 0,
     hashtag: []
   });
-
-  const [open, setOpen] = useState(true);
+  const [newTag, setNewTag] = useState('')
+  const [tag, setTag] = useState(roomState.hashtag)
+  
+  //특수 문자 정규표현식
+  const regExp = /\W|\s/g; 
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -50,12 +63,13 @@ const RoomSetting = () => {
   const currentChair = useSelector((state) => state.game.chair)
   const currentTable = useSelector((state) => state.game.table)
   const currentUid = useSelector((state) => state.auth.uid)
-  const isCreate = useSelector((state) => state.info.createRoom)
-  const [chips, setChips] = useState([])
-
   const url = 'http://i8d207.p.ssafy.io:8083/room'
+  // const url = 'http://localhost:8083/room'
+  
+  const handleClose = () => {
+    setOpen(false);
+  };
 
- 
   useEffect(() => {
     // 방이름 추가 && 구미이면 1번 서울이면 2번.... 이런식으로 방코드 저장
     if (currentTable !== -1){
@@ -92,7 +106,7 @@ const RoomSetting = () => {
           password: roomState.password,
           entrance: 0,
           silence: 0,
-          hashtag: [roomState.hashtag]
+          hashtag: roomState.hashtag
         }
       )
       .then((res) => {
@@ -103,7 +117,6 @@ const RoomSetting = () => {
           setRoomNum(res.data)
           console.log("방 생성 성공 //////////////////////////");
           dispatch(infoActions.getRoomNum(res.data))
-          // dispatch(infoActions.isCreateRoom(false))
         }
       })
       .catch((e) => {
@@ -115,7 +128,8 @@ const RoomSetting = () => {
         } else {
           alert('다시 입력해주세요.')
         }
-      });
+      }
+    );
   }
   
      
@@ -157,8 +171,9 @@ const RoomSetting = () => {
           if (e.response && e.response.status === 403) {
             console.log("로그인으로 이동");
             navigate('/')
-          }
+          } 
         });
+        
     };
   /////////////
   
@@ -173,20 +188,43 @@ const RoomSetting = () => {
     });
   };
 
-  const handleClose = () => {
-    setOpen(false);
-  };
   
+  const addhashtag = (newChips) => {
+    // console.log(roomState.hashtag);
+    setChips(newChips)
+  }
+
+  ///공개방인지 비공개방인지 판단
+  function EnableDisablePassword() {
+    if (document.getElementById("Public").checked) {
+      document.getElementById("Private").innerText = "비공개방";
+      document.getElementById("password").disabled = false;
+    } else {
+      document.getElementById("Private").innerText = "공개방";
+      document.getElementById("password").disabled = true;
+      setRoomState({...roomState, password: ""})
+    }
+  }
+
+
+
+
   //// 입장하기
   const handleSubmit = () => {
     if (roomState.title.length < 1) {
       // alert("작성자는 최소 1글자 이상 입력해주세요.")
+      // focus
       titleInput.current.focus();
       return;
     }
 
+    // if (roomState.password.length < 4) {
+    //   passwordInput.current.focus();
+    //   return;
+    // }
+
     // console.log(roomState);
-    // 앉으면 방만들기
+     // 앉으면 방만들기
     createRoom(roomState)
   }
   
@@ -195,40 +233,64 @@ const RoomSetting = () => {
   }, [RoomNum])
 
 
-  //////////////////////////////////////////
-  const addhashtag = (newChips) => {
-    console.log(roomState.hashtag);
-    setChips(newChips)
-  }
-  
-  ///공개방인지 비공개방인지 판단
-  function EnableDisablePassword() {
-    console.log(document.getElementById("Public"));
-    if (document.getElementById("Public").checked) {
-      document.getElementById("password").disabled = false;
-    } else {
-      console.log("not pwd");
-      document.getElementById("password").disabled = true;
+  const plusHashtag = () => {
+    if(!tag.includes(newTag)){
+
+      // const regExp = /[!?@#$%^&*():;+-=~{}<>\_\[\]\|\\\"\'\,\.\/\`\₩]/g;
+      // if(regExp.test(newTag)) {
+      //   alert("특수문자는 입력하실수 없습니다.");
+      //   return
+      // }
+      // if(newTag.search(/\s/) !== -1) {
+      //   alert("공백은 입력하실수 없습니다.");
+      //   return // 스페이스가 있는 경우
+      // } 
+
+      // if(newTag.length <= 0 || newTag.length >= 9) {
+      //   alert('8자리이하로 입력해주세요.')
+      //   return
+      // }
+
+      const newList = tag
+      newList.push(newTag)
+      setTag(newList)
+      setNewTag('')
+      setRoomState({...roomState, hashtag: tag})
     }
+    // console.log(roomState.hashtag)
   }
-
-
+  //입력 인풋값 바꿈
+  const changeInput = (e) => {
+    setNewTag(e.target.value)
+  }
+  const removeHashtag = (e) => {
+    console.log(e.target.id);
+    const newList = tag.filter((element) => element !== e.target.id)
+    setTag(newList)
+    setRoomState({...roomState, hashtag: tag})
+  }
 
   return (
     <div>
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>테이블 설정</DialogTitle>
+      <Dialog open={open} onClose={handleClose} 
+      fullWidth 
+      PaperProps={{ style: { 
+        borderRadius: 50,
+        backgroundColor: "#fafafa",
+        opacity: 0.8
+      }}} 
+      >
+        <DialogTitle fullwidth variant="h5" textAlign='center' >테이블 설정</DialogTitle>
         <DialogContent>
-          <DialogContentText>
+          {/* <DialogContentText>
             테이블에 처음으로 앉으셨습니다. 테이블 설정을 진행해주세요.
-          </DialogContentText>
+          </DialogContentText> */}
           <Grid container spacing={2}>
           <Grid item xs={3}>
             <Typography variant="h6" sx={{ mt: 3.5 }}>방 제목</Typography>
           </Grid>
           <Grid item xs={9}>
             <TextField
-              borderRadius="70%"
               margin="normal"
               required
               id="title"
@@ -239,7 +301,7 @@ const RoomSetting = () => {
               name="title"
               value={roomState.title}
               onChange={handleChangeState}
-              style={{ textAlign: "center" }}
+              InputProps={{ style: { borderRadius: 50 }}}
             />
           </Grid>
         </Grid>
@@ -255,7 +317,8 @@ const RoomSetting = () => {
               defaultValue="6"
               fullWidth
               type="number"
-              inputProps={{style: {fontSize: 18}}}
+              InputProps={{ style: { borderRadius: 50}}}
+              inputProps={{ style: {textAlign: 'center'} }}
             />
           </Grid>
         </Grid>
@@ -264,32 +327,46 @@ const RoomSetting = () => {
           <Grid item xs={3}>
             <Typography variant="h6" sx={{ mt: 3.5 }}>해시태그</Typography>
           </Grid>
-          <Grid item xs={9}>
+          <Grid item xs={8}>
             <TextField
               margin="normal"
               fullWidth
               id="hashTag"
               placeholder="관심 있는 해시태그를 입력해주세요"
               autoComplete="text"
-              autoFocus
               ref={hashtagInput}
               name="hashtag"
-              value={roomState.hashtag}
-              onChange={handleChangeState}
+              value={newTag}
+              onChange={changeInput}
+              InputProps={{ style: { borderRadius: 50 }}}
             />
           </Grid>
-        </Grid>
-        <Grid container spacing={2}>
-          <Grid item xs={3}>
-            <Typography sx={{ ml:4, mt:4 }}>공개방</Typography>
+          <Grid item xs={1} sx={{ ml:-3, mt:2.5 }} >
+          <Button style={{
+            borderRadius: 35,
+            height: 50
+          }}
+            onClick={plusHashtag}>추가</Button>
           </Grid>
-          <Grid item xs={1} sx={{ ml:-2, mt: 3, mr:3 }}>
+        </Grid>
+        <Grid container sx={{ mb:3 }} style={{justifyContent: 'center'}}>
+          {
+            roomState.hashtag.map((e)=>{return <Button className='hashtag' id={e} key={e} onClick={removeHashtag}>#{e}</Button>})
+          }
+        </Grid>
+
+
+        <Grid container spacing={2}>
+          <Grid item xs={2.5} sx={{ mt:3.5 }}>
+            <Typography variant="h6" id="Private">비공개방</Typography>
+          </Grid>
+          <Grid item xs={0.5} sx={{ ml:-5, mt:3, mr:5 }}>
             <Switch id="Public" defaultChecked sx={{ color: "white" }} onChange={EnableDisablePassword} />
           </Grid>
           {/* <Grid item xs={1.5}>
             <Typography sx={{ mt: 4 }}>비공개방</Typography>
           </Grid> */}
-          <Grid item xs={7} sx={{ ml:3 }}>
+          <Grid item xs={9}>
             <TextField
               margin="normal"
               fullWidth
@@ -301,12 +378,16 @@ const RoomSetting = () => {
               placeholder='password'
               value={roomState.password}
               onChange={handleChangeState}
+              InputProps={{ style: { borderRadius: 50 }}}
             />
           </Grid>
         </Grid>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleSubmit}>입장하기</Button>
+        <DialogActions sx={{ mb:3 }} style={{justifyContent: 'center'}}>
+          <Button variant="contained" style={{
+            borderRadius: 35,
+            backgroundcolor: "#bdbdbd"}}
+            onClick={handleSubmit}>입장하기</Button>
           <Button onClick={handleClose}>더 둘러보기</Button>
         </DialogActions>
       </Dialog>

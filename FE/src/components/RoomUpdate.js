@@ -382,9 +382,6 @@ const RoomSetting = () => {
             />
           </Grid>
         </Grid>
-        
-
-
         </DialogContent>
         <DialogActions sx={{ mb:3 }} style={{justifyContent: 'center'}}>
           <Button variant="contained" style={{
