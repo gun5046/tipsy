@@ -1,5 +1,9 @@
 import phaser from 'phaser';
 import React, { useRef, useEffect, useState } from 'react';
+
+import { Stomp } from "@stomp/stompjs"; 
+import SockJS from 'sockjs-client';
+
 import { useNavigate } from 'react-router-dom';
 import ssafyConfig from '../phaser/ssafyConfig';
 import axios from "axios";
@@ -28,6 +32,22 @@ const GameViewContainer = styled.section`
 
 // 게임 화면 뷰 영역 컴포넌트
 const SsafyView = () => {
+  
+  // 새로 추가!!!!!!!!!!!!!!!!!11
+  const socket = new SockJS('http://i8d207.p.ssafy.io:8082/ws/chat')
+  const client = Stomp.over(socket);
+  // client.connect({},(frame)=>{
+  //   client.subscribe(`/topic/room/enter`, message => {
+  //     // 구독을 해서 user를 서버에서 받으면 테이블 정보를 받아오면 화면에 띄워주는데 그게 바뀌면 redux에 있으면 리랜더링이 된다. member가 앉는 정보들을 redux에 계속 갱신, 앉고 나가고 둘다 관리하기
+  //     // 이전에서 time만 추가
+  //     // type = enter이면 원래 있던 redux에서 추가해주기
+  //     // exit면 빼주기
+  //     // type, userVo()
+  //     // ban도 들어옴
+  //   })
+  // })
+
+
   // 게임 화면 초기화
   const phaserEl = useRef(null);
   const [startGame, setStartGame] = useState()

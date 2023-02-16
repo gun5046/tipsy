@@ -101,12 +101,12 @@ const RoomSetting = () => {
       )
       .then((res) => {
         // 방번호
-        console.log("방 생성 성공");
-        console.log(res.data);
-        if (res.data) {
+        if (res.data !== "exist") {
           setRoomNum(res.data)
           console.log("방 생성 성공 //////////////////////////");
           dispatch(infoActions.getRoomNum(res.data))
+        }else{
+          alert("asd")
         }
       })
       .catch((e) => {
@@ -136,7 +136,7 @@ const RoomSetting = () => {
         .then((res) => {
           console.log('입장성공');
           console.log(res.data);
-          if (res.data == "success" && RoomNum) {
+          if (res.data === "success" && RoomNum) {
             console.log(RoomNum);
 
             navigate(`/meeting/${RoomNum}`)

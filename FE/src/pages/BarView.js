@@ -78,12 +78,12 @@ const BarView = () => {
        })
       .then((res) => {
         // console.log('입장성공 ssafyView');
-        console.log(res.data);
-        if (res.data !=='overcapacity' && res.data !=='banned user' && res.data !=='failed'  && currentRoom) {
-        // if (res.data == "success" && currentRoom) {
-          console.log(currentRoom);
-          navigate(`/meeting/${currentRoom}`)
-        } 
+        if (res.data !== "exist") {
+          // console.log(roomNumber);
+          navigate(`/meeting/${roomNumber}`)
+          dispatch(infoActions.isPublic(true))
+          setCheckPassword('')
+        }
       })
       .catch((e) => {
         console.log(e);

@@ -48,12 +48,12 @@ const CheckPw = () => {
       .then((res) => {
         console.log('비밀방입장성공');
         console.log(res.data);
-        if (res.data == "success" && roomNumber) {
+        if (res.data !== "exist") {
           // console.log(roomNumber);
           navigate(`/meeting/${roomNumber}`)
           dispatch(infoActions.isPublic(true))
           setCheckPassword('')
-        } 
+        }
       })
       .catch((e) => {
         console.log(e);
