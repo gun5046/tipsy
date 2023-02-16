@@ -16,10 +16,10 @@ import { useSelector } from "react-redux";
   
 function Meeting({match}) {
   const params = useParams().id.slice(-3)
-  const rid = 100
-  let mySit = 5
-  //const rid = useSelector((state) => state.game.table);
-  //const mySit = useSelector((state) => state.game.chair);//위치 설정
+  //const rid = 100
+  //let mySit = 5
+  const rid = useSelector((state) => state.game.table);
+  const mySit = useSelector((state) => state.game.chair) - 1;//위치 설정
   const pointer = new THREE.Vector2()
   const textboxPointer = new THREE.Vector2(0,0)
   const textboxPointer2 = new THREE.Vector2(0,0)
@@ -35,7 +35,7 @@ function Meeting({match}) {
   let ws = new WebSocket('ws://'+'i8d207.p.ssafy.io:8443'+'/groupcall');
   let participants = {};
   // let name = localStorage.getItem("state");
-  let name = useSelector((state) => state.auth.uid) + ',' + useSelector((state) => state.auth.nickname) + ',' + useSelector((state) => state.game.chair);
+  let name = useSelector((state) => state.auth.uid) + ',' + useSelector((state) => state.auth.nickname) + ',' + (useSelector((state) => state.game.chair)-1);
  //let room = match.params.id
   let room = rid
 
