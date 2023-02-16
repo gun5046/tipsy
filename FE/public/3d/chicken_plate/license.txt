@@ -1,0 +1,11 @@
+Model Information:
+* title:	Chicken Plate
+* source:	https://sketchfab.com/3d-models/chicken-plate-79c3ea1d69924b26b976b8e9be34648d
+* author:	captuar (https://sketchfab.com/captuar)
+
+Model License:
+* license type:	CC-BY-NC-4.0 (http://creativecommons.org/licenses/by-nc/4.0/)
+* requirements:	Author must be credited. No commercial use.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Chicken Plate" (https://sketchfab.com/3d-models/chicken-plate-79c3ea1d69924b26b976b8e9be34648d) by captuar (https://sketchfab.com/captuar) licensed under CC-BY-NC-4.0 (http://creativecommons.org/licenses/by-nc/4.0/)
