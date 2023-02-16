@@ -5,6 +5,7 @@ import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { selectCurrentAuth } from "../redux/authSlice";
 import axios from "axios";
+import MypageModal from "../components/MypageModal";
 
 
 let overlap = false
@@ -132,6 +133,7 @@ function Mypage() {
   return (
     isUpdate?(
       <div id="Mypage">
+        <MypageModal/>
         <p id="h1">Mypage</p>
 			  <img alt='' src={props.image}/>
 			  {/* <p id="nickname">{userdata.nickname}</p> */}
