@@ -10,6 +10,7 @@ import CheckPw from '../components/CheckPw';
 // 리덕스
 import { useDispatch, useSelector } from 'react-redux'
 import { infoActions } from '../redux/infoSlice';
+import { getStore } from '../redux/gameSlice';
 // useSelector 데이터 읽기
 // useDispatch 데이터 전달
 
