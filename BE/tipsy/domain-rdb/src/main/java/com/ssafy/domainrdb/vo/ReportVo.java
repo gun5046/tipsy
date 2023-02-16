@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ReportVo {
-	private Long rid;
+//	private Long rid;
 	private String content;
 	private Long from;
 	private Long to;

@@ -19,6 +19,7 @@ import com.ssafy.coreweb.provider.JwtTokenProvider;
 import com.ssafy.domainauth.entity.Auth;
 import com.ssafy.domainauth.repo.AuthRepository;
 import com.ssafy.domainrdb.dao.user.UserDao;
+import com.ssafy.domainrdb.vo.ReportVo;
 import com.ssafy.domainrdb.vo.UserVo;
 import com.ssafy.tipsyuser.dto.KakaoAccountDto;
 import com.ssafy.tipsyuser.dto.LoginDto;
@@ -168,4 +169,13 @@ public class UserServiceImpl implements UserService{
 		return userDao.updateUserInfo(userVo);
 	}
 
+	@Override
+	public int deleteUser(Long uid) {
+		return userDao.deleteUser(uid);
+	}
+	
+	@Override
+	public int reportUser(ReportVo reportvo) {
+		return userDao.reportUser(reportvo);
+	}
 }

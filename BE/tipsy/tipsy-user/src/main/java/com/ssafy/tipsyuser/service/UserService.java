@@ -1,5 +1,6 @@
 package com.ssafy.tipsyuser.service;
 
+import com.ssafy.domainrdb.vo.ReportVo;
 import com.ssafy.domainrdb.vo.UserVo;
 import com.ssafy.tipsyuser.dto.KakaoAccountDto;
 import com.ssafy.tipsyuser.dto.LoginDto;
@@ -18,4 +19,8 @@ public interface UserService {
 	int checkNickname(String nickname);
 
 	int updateUserInfo(UserVo userVo);
+	
+	int deleteUser(Long uid);
+	
+	int reportUser(ReportVo reportvo);
 }
