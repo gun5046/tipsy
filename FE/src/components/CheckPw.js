@@ -47,6 +47,7 @@ const CheckPw = () => {
         if (res.data == "success" && roomNumber) {
           console.log(roomNumber);
           navigate(`/meeting/${roomNumber}`)
+          setCheckPassword('')
         } 
       })
       .catch((e) => {
@@ -69,7 +70,7 @@ const CheckPw = () => {
       passwordInput.current.focus();
       return;
     }
-    enterRoom()
+    enterRoom(roomNumber,currentUid,checkPassword,currentChair)
   }
 
 
