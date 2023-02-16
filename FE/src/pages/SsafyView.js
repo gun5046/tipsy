@@ -119,7 +119,7 @@ const SsafyView = () => {
   //////////////////////////////////////
   // 공개방이고 의자랑 테이블이 넘어오면 미팅 페이지 이동 (103 : 1번건물에 3번 방)
   useEffect(() => {
-    if (currentTable !== -1 && isPublic && isRoom){
+    if (currentTable !== -1 && isPublic && isRoom == false){
       enterRoom(currentRoom,currentUid, currentPassword, currentChair)
     }
   }, [currentChair, currentTable])
