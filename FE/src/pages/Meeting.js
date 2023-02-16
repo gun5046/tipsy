@@ -12,6 +12,7 @@ import { useParams } from 'react-router-dom';
 import QrModal from '../components/QrModal';
 import kurentoUtils from 'kurento-utils'
 import { useSelector } from "react-redux";
+import SettingsIcon from '@mui/icons-material/Settings';
 
   
 function Meeting({match}) {
