@@ -317,9 +317,9 @@ class barScene extends Phaser.Scene {
             // 리덕스로 'street' 보냄
         }
 
-        let speed = 200;
+        let speed = 160;
         // Shift 키를 누르면서 이동하면 빠르게 이동
-        if (this.Ctrl.isDown) {speed = 300;}
+        if (this.Ctrl.isDown) {speed = 250;}
     
 
         //// 이전 속도 (애니메이션 적용에 순서 중요!!!!)
