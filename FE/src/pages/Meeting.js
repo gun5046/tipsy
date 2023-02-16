@@ -19,11 +19,17 @@ function Meeting({match}) {
   const params = useParams().id.slice(-3)
   //const rid = 100
   //let mySit = 5
-  const rid = useSelector((state) => state.game.table);
-  const mySit = useSelector((state) => state.game.chair) - 1;//위치 설정
+  const rid = 100 * useSelector((state) => state.game.store) + useSelector((state) => state.game.table) ;
+  //const rid =201
+  let mySit = useSelector((state) => state.game.chair) - 1;//위치 설정
+  const position = ['', '', '', '', '', ''] //자리 별 닉네임
+  const uidList = [-1, -1, -1, -1, -1, -1] // 자리별 uid
+
+  position[mySit] = useSelector((state) => state.auth.nickname)
   const pointer = new THREE.Vector2()
   const textboxPointer = new THREE.Vector2(0,0)
   const textboxPointer2 = new THREE.Vector2(0,0)
+  let target = 0 // 게임결과 타겟
   let gameresult = -1
   let INTERSECTED
   let lon = 0,
@@ -36,7 +42,8 @@ function Meeting({match}) {
   let ws = new WebSocket('ws://'+'i8d207.p.ssafy.io:8443'+'/groupcall');
   let participants = {};
   // let name = localStorage.getItem("state");
-  let name = useSelector((state) => state.auth.uid) + ',' + useSelector((state) => state.auth.nickname) + ',' + (useSelector((state) => state.game.chair)-1);
+  //let name = useSelector((state) => state.auth.uid) + ',' + useSelector((state) => state.auth.nickname) + ',' + (useSelector((state) => state.game.chair)-1);
+  let name = useSelector((state) => state.auth.uid) + ',aaa,' + (useSelector((state) => state.game.chair)-1);
  //let room = match.params.id
   let room = rid
 
@@ -172,7 +179,11 @@ function Meeting({match}) {
     });
     console.log("************************video************************")
     if (result.name !== name) {
-      let seat = result.name.split(',')[2]
+      let seat = webcam.length
+      const info = result.name.split(',')
+      uidList[info[2]] = info[0]
+      position[info[2]] = info[1]        //자리 닉네임 저장 => 게임 결과에 쓸려고!
+
       console.log(result.name + 'seat %d', seat);
       selfieSegmentation.push(new SelfieSegmentation({
         locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/${file}`,
@@ -209,10 +220,9 @@ function Meeting({match}) {
       })
     
       const cam = new THREE.Mesh(geometry, material)
-      const info = result.name.split(",")
       cam.scale.x = 3
       cam.scale.y = 3
-      cam.position.set(sit[seat][info[2]][0], sit[seat][info[2]][1], sit[seat][info[2]][2])
+      cam.position.set(sit[mySit][info[2]][0], sit[mySit][info[2]][1], sit[mySit][info[2]][2])
       cam.name= info[1]
       cam.uid = info[0]
       scene.add(cam)
@@ -384,30 +394,6 @@ function Meeting({match}) {
   //   }
   // };
 
-  var constraints = { audio: false, video: { width: 1280, height: 1024 } };
-  navigator.mediaDevices
-    .getUserMedia(constraints)
-    .then(function (mediaStream) {
-      //console.log(mediaStream);
-      /* const cat = document.createElement('source')
-            cat.setAttribute('src','../video/Cat.mp4')
-            cat.setAttribute('type', 'video/mp4')
-            webcam.appendChild(cat)
-            webcam.setAttribute('autoplay', 'true')
-            webcam.setAttribute('playsinline', 'true')
-            webcam.setAttribute('loop', 'true')
-            webcam.play() */
-      webcam.srcObject = mediaStream;
-      // sendToMediaPipe();
-      webcam.onloadedmetadata = function (e) {
-        webcam.setAttribute("autoplay", "true");
-        webcam.setAttribute("playsinline", "true");
-        webcam.play();
-      };
-    })
-    .catch(function (err) {
-      alert(err.name + ": " + err.message);
-    });
 
 
   const interest = "취향1,취향2,취향3,취향4,집에가고싶어요"
@@ -415,8 +401,6 @@ function Meeting({match}) {
   const [props, setProps] = useState({
     name: "",
   })
-
-  let test = 0
   
   //카메라ㅏㅏ
   const camera = new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 0.1, 1000)
@@ -535,7 +519,6 @@ function Meeting({match}) {
       scene.add(sky)
     }
     else if (rid < 300 && rid >= 200) {
-      console.log('zxcc-----------------------------zzzzz')
       const skyTexture = new THREE.TextureLoader().load(`/room/200/200_0.jpg`)
       //const skyGeometry = new THREE.SphereGeometry(400, 60, 40)
       const skyGeometry = new THREE.CylinderGeometry(150, 150, 400, 32, 2, true)
@@ -710,7 +693,7 @@ function Meeting({match}) {
    gltf2 => {
     var steak = gltf2.scene;
     steak.scale.set(5,5,5)
-    steak.position.set(-3,-1.5-3,-8,-3,-3)
+    steak.position.set(-8,-3,-3)
     scene.add(steak)
   })
   foodLoader.load( '/3d/ssafydesk.gltf',
@@ -781,6 +764,7 @@ function Meeting({match}) {
         const result = message.body.split(',')
         console.log(message.body)
         gameresult =  500
+        target = position.findIndex(result[1])
         if (result[0] === "Win") {
           const pTag = document.createElement('p')
           pTag.innerText = '라이어 승리!'
@@ -795,6 +779,7 @@ function Meeting({match}) {
       });
       client.subscribe(`/topic/play/croco-game/${rid}`, message =>{
 		  	console.log(message.body)
+        target = position.findIndex(message.body.nickname)
         gameresult =  500
         const pTag = document.createElement('p')
         pTag.innerText = '당첨!'
@@ -803,6 +788,7 @@ function Meeting({match}) {
       });
       client.subscribe(`/topic/play/drink-game/${rid}`, message =>{
         console.log(message.body)
+        target = position.findIndex(message.body.nickname)
         gameresult =  500
         const pTag = document.createElement('p')
         pTag.innerText = '당첨!'
@@ -811,6 +797,7 @@ function Meeting({match}) {
       });
       client.subscribe(`/topic/play/drag-game/${rid}`, message =>{
         console.log(message.body)
+        target = position.findIndex(message.body.nickname)
         gameresult =  500
         const pTag = document.createElement('p')
         pTag.innerText = '승리!'
@@ -819,6 +806,7 @@ function Meeting({match}) {
       });
       client.subscribe(`/topic/play/roulette-game/${rid}`, message =>{
         console.log(message.body)
+        target = position.findIndex(message.body)
         gameresult =  500
         const pTag = document.createElement('p')
         pTag.innerText = '당첨!'
@@ -827,6 +815,7 @@ function Meeting({match}) {
       });
       client.subscribe(`/topic/play/ordering-game/${rid}`, message =>{
         console.log(message.body)
+        target = position.findIndex(message.body.nickname)
         gameresult =  500
 /*         scene.remove(basicLight)
         renderer.toneMappingExposure = 0.2
@@ -941,10 +930,10 @@ function Meeting({match}) {
     let z = 500 * Math.sin( phi ) * Math.sin( theta );
     if (gameresult > 0) {
       gameresult -= 1
-      if (test !== mySit) {
-        x = sit[test][0]        //test용!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        y = sit[test][1]
-        z = sit[test][2]
+      if (target !== mySit) {
+        x = sit[mySit][target][0]       
+        y = sit[mySit][target][1]
+        z = sit[mySit][target][2]
       }
     }else if (gameresult === 0) {
       gameresult -= 1
@@ -955,7 +944,6 @@ function Meeting({match}) {
       console.log(targetp)
       document.body.removeChild(targetp)
       backgroundSound.stop()
-      test += 1                //test용!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     }
     camera.lookAt( x, y, z )
     render()
@@ -965,7 +953,7 @@ function Meeting({match}) {
   if (rid > 200){
     table('round_wooden_table_01')
     //chairMake("dining_chair_02")
-    anju(2)
+    anju(0)
   }
 	animate()
 
@@ -996,7 +984,7 @@ function Meeting({match}) {
                   })
               }
       </div>
-      <QrModal paramsNum={params.id}/>
+      <QrModal paramsNum={ useParams().id }/>
       <SettingsIcon fontSize="large" color="primary" style={{position: 'absolute', bottom: 20, right: 30, zIndex: 'tooltip', width:'50px', height: '50px'}}/>
     </div>
       {/* <Profile props={props}/> */}
