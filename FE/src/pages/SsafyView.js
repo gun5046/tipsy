@@ -36,16 +36,19 @@ const SsafyView = () => {
   // 새로 추가!!!!!!!!!!!!!!!!!11
   const socket = new SockJS('http://i8d207.p.ssafy.io:8082/ws/chat')
   const client = Stomp.over(socket);
-  // client.connect({},(frame)=>{
-  //   client.subscribe(`/topic/room/enter`, message => {
-  //     // 구독을 해서 user를 서버에서 받으면 테이블 정보를 받아오면 화면에 띄워주는데 그게 바뀌면 redux에 있으면 리랜더링이 된다. member가 앉는 정보들을 redux에 계속 갱신, 앉고 나가고 둘다 관리하기
-  //     // 이전에서 time만 추가
-  //     // type = enter이면 원래 있던 redux에서 추가해주기
-  //     // exit면 빼주기
-  //     // type, userVo()
-  //     // ban도 들어옴
-  //   })
-  // })
+  client.connect({},()=>{
+    client.subscribe(`/map/room/enter`, res => {
+      // 구독을 해서 user를 서버에서 받으면 테이블 정보를 받아오면 화면에 띄워주는데 그게 바뀌면 redux에 있으면 리랜더링이 된다. member가 앉는 정보들을 redux에 계속 갱신, 앉고 나가고 둘다 관리하기
+      // 이전에서 time만 추가
+      // type = enter이면 원래 있던 redux에서 추가해주기
+      // exit면 빼주기
+      // type, userVo()
+      // ban도 들어옴
+
+      dispatch(infoActions.getTable1(res.data))
+      
+    })
+  })
 
 
   // 게임 화면 초기화
@@ -102,6 +105,19 @@ const SsafyView = () => {
       .then((res) => {
         // console.log('입장성공 ssafyView');
         console.log(res.data);
+        if(res.data === 'overcapacity'){
+
+        }else if(res.data === 'banned user'){
+
+        }else if(res.data === 'incorrect password'){
+
+        }else if(res.data === 'does not exist room'){
+
+        }else if(res.data === 'uid is null'){
+
+        }else{
+          client.send(`/room/enterMessage`,1)
+        }
         if (res.data !=='overcapacity' && res.data !=='banned user' && res.data !=='failed'  && currentRoom) {
         // if (res.data == "success" && currentRoom) {
           console.log(currentRoom);
