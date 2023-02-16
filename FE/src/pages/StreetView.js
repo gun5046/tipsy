@@ -36,12 +36,12 @@ const StreetView = () => {
   
 
   //// axios
-  const url = "http://i8d207.p.ssafy.io:8083";
+  const url = "http://i8d207.p.ssafy.io:8083/room";
 
   //// 스트릿 건물 정보 가져오기
   const getBuilding = () => {
     axios
-      .get(`${url}/room`)
+      .get(url)
       .then((res) => {
         console.log("건물별 정보");
         // console.log(res);
@@ -62,7 +62,7 @@ const StreetView = () => {
   //// 테이블 정보 가져오기 (1번 구미) - 미리가져옴
   const getTable1 = function () {
     axios
-      .get(`${url}/room/1`)
+      .get(`${url}/1`)
       .then((res) => {
         console.log("1번 건물 테이블 정보");
         console.log(res.data);

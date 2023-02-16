@@ -80,7 +80,7 @@ const SsafyView = () => {
         position: currentChair,
        })
       .then((res) => {
-        console.log('입장성공');
+        console.log('입장성공 ssafyView');
         console.log(res.data);
         if (res.data == "success" && currentRoom) {
           console.log(currentRoom);

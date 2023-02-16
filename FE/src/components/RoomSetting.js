@@ -22,20 +22,9 @@ import DialogTitle from '@mui/material/DialogTitle';
 
 import { useDispatch, useSelector } from 'react-redux'
 import { infoActions } from '../redux/infoSlice';
-import styled from "styled-components"
 import { useNavigate } from 'react-router-dom';
+import { set } from 'lodash';
 
-
-const GameSettingContainer = styled.section`
-  // z-index: 1000;
-  // position: absolute;
-  // width: 50vh;
-  // top: 10vh;
-  // left: 80vh;
-  padding: 20px;
-  background: white;
-  
-  `;
 
 const RoomSetting = () => {
 
@@ -61,6 +50,11 @@ const RoomSetting = () => {
   const currentChair = useSelector((state) => state.game.chair)
   const currentTable = useSelector((state) => state.game.table)
   const currentUid = useSelector((state) => state.auth.uid)
+  const isCreate = useSelector((state) => state.info.createRoom)
+
+  if (isCreate) {
+    setOpen(true)
+  }
 
   const [chips, setChips] = useState([])
 
@@ -192,15 +186,9 @@ const RoomSetting = () => {
   const handleSubmit = () => {
     if (roomState.title.length < 1) {
       // alert("작성자는 최소 1글자 이상 입력해주세요.")
-      // focus
       titleInput.current.focus();
       return;
     }
-
-    // if (roomState.password.length < 4) {
-    //   passwordInput.current.focus();
-    //   return;
-    // }
 
     // console.log(roomState);
     // 앉으면 방만들기
