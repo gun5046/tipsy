@@ -25,16 +25,6 @@ import { infoActions } from '../redux/infoSlice';
 import styled from "styled-components"
 import { useNavigate } from 'react-router-dom';
 
-const GameSettingContainer = styled.section`
-  position: absolute;
-  width: 70vh;
-  // top: 10vh;
-  // left: 80vh;
-  padding: 30px;
-  background: white;
-  border-radius: 3%;
-  opacity: 0.8;
-  `;
 
 const RoomSetting = () => {
   const [open, setOpen] = useState(true);

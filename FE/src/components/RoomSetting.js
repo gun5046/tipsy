@@ -1,40 +1,22 @@
 import React from 'react';
-import { useContext, useRef, useState, useEffect, useCallback } from "react"
+import { useRef, useState, useEffect} from "react"
 import axios from 'axios';
+
 import Stack from '@mui/material/Stack';
 import Switch from '@mui/material/Switch';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-// import { useNavigate } from "react-router-dom"
-// import styled from "styled-components"
-
 import Grid from "@mui/material/Grid";
-import Link from "@mui/material/Link";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormControl from '@mui/material/FormControl';
 import { Typography } from "@mui/material";
+
 import { useDispatch, useSelector } from 'react-redux'
 import { infoActions } from '../redux/infoSlice';
-import styled from "styled-components"
 import { useNavigate } from 'react-router-dom';
 
-const GameSettingContainer = styled.section`
-  position: absolute;
-  width: 70vh;
-  // top: 10vh;
-  // left: 80vh;
-  padding: 30px;
-  background: white;
-  border-radius: 3%;
-  opacity: 0.8;
-  `;
 
 const RoomSetting = () => {
   const [open, setOpen] = useState(true);
