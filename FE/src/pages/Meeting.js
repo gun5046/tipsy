@@ -208,10 +208,12 @@ function Meeting({match}) {
       })
     
       const cam = new THREE.Mesh(geometry, material)
+      const info = result.name.split(",")
       cam.scale.x = 3
       cam.scale.y = 3
-      cam.position.set(sit[seat][0][0], sit[seat][1][0], sit[seat][2][0])
-      cam.name= result.name
+      cam.position.set(sit[seat][info[2]][0], sit[seat][info[2]][1], sit[seat][info[2]][2])
+      cam.name= info[1]
+      cam.uid = info[0]
       scene.add(cam)
     }
     //cube.add(new THREE.BoxHelper(cube, 0xff0000))
