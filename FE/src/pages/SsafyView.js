@@ -38,10 +38,10 @@ const SsafyView = () => {
   const currentRoom = useSelector((state) => state.info.roomNumber)
   const currentPassword = useSelector((state) => state.info.roomPassword)
   const currentUid = useSelector((state) => state.auth.uid)
-  const isRoom = useSelector((state) => state.info.createRoom)
+  const isCreate = useSelector((state) => state.info.createRoom)
   const isPublic = useSelector((state) => state.info.publicRoom)
   // const [isRoom, setisRoom] = useState(false)
-  console.log(`방만들기 : ${isRoom}`)
+  console.log(`방만들기 : ${isCreate}`)
   console.log(`공개방 : ${isPublic}`)
   // const [RoomNum, setRoomNum] = useState()
   
@@ -119,7 +119,7 @@ const SsafyView = () => {
   //////////////////////////////////////
   // 공개방이고 의자랑 테이블이 넘어오면 미팅 페이지 이동 (103 : 1번건물에 3번 방)
   useEffect(() => {
-    if (currentTable !== -1 && isPublic && isRoom == false){
+    if (currentTable !== -1 && isPublic && isCreate == false){
       enterRoom(currentRoom,currentUid, currentPassword, currentChair)
     }
   }, [currentChair, currentTable])
@@ -143,7 +143,7 @@ const SsafyView = () => {
   return (
     <div>
       <GameViewContainer>
-        {isRoom && <RoomSetting2/>}
+        {isCreate && <RoomSetting2/>}
         {!isPublic && <CheckPw/>}
         {/* <RoomSetting/> */}
       </GameViewContainer>
