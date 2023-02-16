@@ -148,7 +148,7 @@ const MypageModal =() => {
                 <Stack direction="row" spacing={1} justifyContent="center">
                     {
                         interest.map((element)=>{
-                            return ( <Chip label={element} />)
+                            return ( <Chip label={element} key={element} />)
                         })
 			        }
                 </Stack>

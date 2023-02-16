@@ -122,12 +122,13 @@ const RoomSetting = () => {
       axios
         .post(`${url}/entry`, { 
           code: RoomNum,
-          id: currentUid,
+          uid: currentUid,
           password: roomState.password,
           position: currentChair,
          })
         .then((res) => {
           console.log('입장성공');
+          console.log('111111',currentUid)
           console.log(res.data);
           if (res.data == "success" && RoomNum) {
             console.log(RoomNum);

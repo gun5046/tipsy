@@ -72,7 +72,7 @@ const BarView = () => {
     axios
       .post(`${url}/entry`, { 
         code: currentRoom,
-        id: currentUid,
+        uid: currentUid,
         password: currentPassword,
         position: currentChair,
        })

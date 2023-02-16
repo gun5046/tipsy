@@ -11,7 +11,7 @@ const initialState = localStorage.state ?
   name: '',
   nickname: '',
   reportcnt: '',
-  uid: 0,
+  uid: 1,
 }
 
 export const authSlice = createSlice({

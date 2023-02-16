@@ -129,7 +129,7 @@ const RoomSetting = () => {
       axios
         .post(`${url}/entry`, { 
           code: RoomNum,
-          id: currentUid,
+          uid: currentUid,
           password: roomState.password,
           position: currentChair,
          })

@@ -285,7 +285,7 @@ class streetScene extends Phaser.Scene {
 
         // 맵이동
         this.buildings.forEach((building, i) => {
-            console.log(building)
+            // console.log(building)
             // 건물 앞에 서있을 때 인식하기
              if (this.player.body.x > building.x && this.player.body.x < building.x + building.width ) {
                 building.info.title.visible = true;
@@ -299,9 +299,12 @@ class streetScene extends Phaser.Scene {
                 if(Phaser.Input.Keyboard.JustDown(this.spaceBar)){
                     store.dispatch(getScene(building.id))
                     store.dispatch(getStreetPosition(this.player.body.x))
-                    console.log(building.id);
+                    // console.log(building.id);
                     if(i === 1){
                         building.qr.visible = true;
+                    }
+                    if(i === 2){
+                        store.dispatch(infoActions.ismyPage(true))
                     }
                     if(i === 3){ //bar
                         store.dispatch(getStore(2))

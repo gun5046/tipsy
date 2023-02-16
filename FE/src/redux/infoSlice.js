@@ -8,6 +8,8 @@ const initialState = {
     publicRoom: true,
     roomNumber: '',
     roomPassword: null,
+    mypage: false,
+    logout: false,
 }
 // reducers만드는 것을 도와줌
 export const infoSlice = createSlice({
@@ -35,6 +37,12 @@ export const infoSlice = createSlice({
     isPublic: (state, action) => {
       state.publicRoom = action.payload;
     },
+    ismyPage: (state, action) => {
+      state.mypage = action.payload;
+    },
+    isLogout: (state, action) =>{
+      state.logout = action.payload;
+    }
   }
 })
 
