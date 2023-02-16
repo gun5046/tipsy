@@ -377,7 +377,7 @@ class ssafyScene extends Phaser.Scene {
                 }
                 current_table = -1
             }
-            // store.dispatch(infoActions.isCreateRoom(false));
+            store.dispatch(infoActions.isCreateRoom(false));
             store.dispatch(infoActions.isPublic(true));
 
         } else if (this.cursors.right.isDown) {
@@ -389,7 +389,7 @@ class ssafyScene extends Phaser.Scene {
                 }
                 current_table = -1
             }
-            // store.dispatch(infoActions.isCreateRoom(false));
+            store.dispatch(infoActions.isCreateRoom(false));
             store.dispatch(infoActions.isPublic(true));
 
         } else if (this.cursors.up.isDown) {
@@ -401,7 +401,7 @@ class ssafyScene extends Phaser.Scene {
                 }
                 current_table = -1
             }
-            // store.dispatch(infoActions.isCreateRoom(false));
+            store.dispatch(infoActions.isCreateRoom(false));
             store.dispatch(infoActions.isPublic(true));
         } else if (this.cursors.down.isDown) {
             this.player.setVelocityY(speed);

@@ -57,6 +57,8 @@ const CheckPw = () => {
           navigate('/')
         } else if (e == 'incorrect password') {
           passwordInput.current.focus();
+        } else if (e == 'banned user') {
+          alert('들어갈 수 없는 방 입니다.')
         }
       });
   };

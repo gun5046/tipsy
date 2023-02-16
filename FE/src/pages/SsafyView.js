@@ -93,6 +93,8 @@ const SsafyView = () => {
         if (e.response && e.response.status === 403) {
           console.log("로그인으로 이동");
           navigate('/')
+        } else if (e == 'banned user') {
+          alert('들어갈 수 없는 방 입니다.')
         }
       });
   };
@@ -118,7 +120,7 @@ const SsafyView = () => {
   // 공개방이고 의자랑 테이블이 넘어오면 미팅 페이지 이동 (103 : 1번건물에 3번 방)
   useEffect(() => {
     if (currentTable !== -1 && isPublic){
-      enterRoom()
+      enterRoom(currentRoom,currentUid, currentPassword, currentChair)
     }
   }, [currentChair, currentTable])
   
@@ -141,7 +143,7 @@ const SsafyView = () => {
   return (
     <div>
       <GameViewContainer>
-        {/* {isCreate && <RoomSetting/>} */}
+        {isCreate && <RoomSetting/>}
         {!isPublic && <CheckPw/>}
         {/* <RoomSetting/> */}
       </GameViewContainer>
