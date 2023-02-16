@@ -2,21 +2,38 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ssafy.domainrdb.dao.FriendsDao">
-	<select id = "findFriendsByUid" resultType="FriendsVo">
+<mapper namespace="com.ssafy.domainrdb.dao.user.FriendsDao">
+	<select id = "findFriendsInfoByUid" resultType="UserVo">
 		<![CDATA[
-		select * from user where uid in (select user2 from `friends` f where f.user1 = #{uid})
-			union
-		select * from user where uid in (select user1 from `friends` f where f.user2 = #{uid})
+			select * from user where uid in (select user2 from `friends` f where f.user1 = #{uid})
+				union
+			select * from user where uid in (select user1 from `friends` f where f.user2 = #{uid})
 		]]>
 	</select>
 	
-	<insert id = "insertFriends">
-		insert into friends values(#{user1}, #{user2});
+	<insert id = "insertFriendRequest" parameterType="FriendRequestVo">
+		<![CDATA[
+			insert into friendrequest (`from`,`to`,`time`) values(#{from}, #{to}, #{time})
+		]]>
 	</insert>
 	
-	<delete id = "deleteFriendsRequest">
-		
+	<insert id = "insertFriend" parameterType="FriendsVo">
+		<![CDATA[
+			insert into friends values(#{user1}, #{user2});
+		]]>
+	</insert>
+	
+	<delete id = "deleteFriendsRequest" parameterType="FriendsVo">
+		<![CDATA[
+			delete from friendrequest where (`from` = #{user1} and `to` = #{user2}) or (`from` = #{user2} and `to` = #{user1})
+		]]>
 	</delete>
+	
+	<delete id = "deleteFriend" parameterType="FriendsVo">
+		<![CDATA[
+			delete from friends where (user1 = #{user1} and user2 = #{user2}) or (user1 = #{user2} and user2 = #{user1})
+		]]>
+	</delete>
+	
 </mapper>
 	

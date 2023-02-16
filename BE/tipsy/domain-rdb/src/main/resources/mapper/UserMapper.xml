@@ -29,10 +29,22 @@
 	
 	<update id="updateUserInfo" parameterType="UserVo">
 		<![CDATA[
-			update user set nickname=#{nickname} and name =#{name}
-			 and gender=#{gender} and interest = #{interest} and birth = #{birth} and 
+			update user set nickname=#{nickname} , name =#{name}
+			 , gender=#{gender} , interest = #{interest} , birth = #{birth} , 
 			 image =#{image} where uid = #{uid}
 		]]>
 	</update>
+	
+	<delete id="deleteUser" parameterType="Long">
+		<![CDATA[
+			delete from user where uid = #{uid}
+		]]>
+	</delete>
+	
+	<insert id = "reportUser" parameterType="ReportVo">
+		<![CDATA[
+			insert into report(`content`,`from`,`to`) values(#{content}, #{from}, #{to})
+		]]>
+	</insert>
 </mapper>
 	
