@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import { MeshBasicMaterial, Plane } from 'three';
+import { MeshBasicMaterial } from 'three';
 //import {RGBELoader} from 'three/examples/jsm/loaders/RGBELoader'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { Stomp } from "@stomp/stompjs"; 
@@ -11,367 +11,358 @@ import { SelfieSegmentation } from "@mediapipe/selfie_segmentation";
 import { useParams } from 'react-router-dom';
 import QrModal from '../components/QrModal';
 import kurentoUtils from 'kurento-utils'
+import { useSelector } from "react-redux";
 
-const rid = 111
-const mySit = 2   //위치 설정
-const pointer = new THREE.Vector2()
-const textboxPointer = new THREE.Vector2(0,0)
-const textboxPointer2 = new THREE.Vector2(0,0)
-let gameresult = -1
-let INTERSECTED
-let lon = 0,
-  onPointerDownLon = 0,
-  lat = 0,
-  onPointerDownLat = 0,
-  phi = 0,
-  theta = 0;
-// let ws = new WebSocket('wss://i8d207.p.ssafy.io:8443/groupcall');
-let ws = new WebSocket('ws://'+'i8d207.p.ssafy.io:8443'+'/groupcall');
-let participants = {};
-// let name = localStorage.getItem("state");
-let name = "bosung";
-
+  
+function Meeting({match}) {
+  const params = useParams().id.slice(-3)
+  const rid = 100
+  let mySit = 5
+  //const rid = useSelector((state) => state.game.table);
+  //const mySit = useSelector((state) => state.game.chair);//위치 설정
+  const pointer = new THREE.Vector2()
+  const textboxPointer = new THREE.Vector2(0,0)
+  const textboxPointer2 = new THREE.Vector2(0,0)
+  let gameresult = -1
+  let INTERSECTED
+  let lon = 0,
+    onPointerDownLon = 0,
+    lat = 0,
+    onPointerDownLat = 0,
+    phi = 0,
+    theta = 0;
+  // let ws = new WebSocket('wss://i8d207.p.ssafy.io:8443/groupcall');
+  let ws = new WebSocket('ws://'+'i8d207.p.ssafy.io:8443'+'/groupcall');
+  let participants = {};
+  // let name = localStorage.getItem("state");
+  let name = useSelector((state) => state.auth.uid) + ',' + useSelector((state) => state.auth.nickname) + ',' + useSelector((state) => state.game.chair);
  //let room = match.params.id
-let room = 100
+  let room = rid
 
-//옮긴 것
-let webcam = []
-let webcamCanvas = []
-let canvasCtx = []
-let webcamCtx = []
-let webcamTexture = []
-let selfieSegmentation = []
+  //옮긴 것
+  let webcam = []
+  let webcamCanvas = []
+  let canvasCtx = []
+  let webcamCtx = []
+  let webcamTexture = []
+  let selfieSegmentation = []
 
-const scene = new THREE.Scene() 
-scene.background = new THREE.Color(0x000000)
-//const sit = [[2, 8, 12],[10, 8, 11.9],[-5, 8, 2],[-5, 8, -15],[12, 8, 2],[12, 8 , -15]] //x,y,z 좌표
-const sit = [
-  [[0, 0, 0],[8, 0, 0],[-7, 0, -10],[-7, 2, -20],[10, 0, -10],[12, 2 , -20]],
-  [[-8, 0, 0],[0, 0, 0],[-15, 0, -10],[-15, 2, -20],[2, 0, -10],[4, 2 , -20]],
-  [[4, 2, -10],[7, 2, -5],[0, 0, 0],[-5, 0, 5],[-4, 2, -8],[-8, 2, -4]],
-  [[16, 3, 6],[16, 3, -2],[7, 0, 7],[0, 0, 0],[10, 2, -6],[5, 2 , -10]],
-  [[-10, 1, -5],[-10, 0, 0],[-7, 1, -10],[0, 2, -10],[0, 0, 0],[5, 1, -5]],
-  [[-10, 0, -10],[-10, 0, -4],[-6, 0, -12],[0, 0, -10],[-7, 0, 0],[0,0,0]],
-  ] //x,y,z 좌표
-const radian = [
-  [0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0],
-  [0, 0, 0.5, 0, -1, -0.4],
-]
-const sendToMediaPipe = async (cam, index) => {
-  if (!cam.videoWidth) {
-    requestAnimationFrame(() => { sendToMediaPipe(cam, index) });
+  const scene = new THREE.Scene() 
+  scene.background = new THREE.Color(0x000000)
+  //const sit = [[2, 8, 12],[10, 8, 11.9],[-5, 8, 2],[-5, 8, -15],[12, 8, 2],[12, 8 , -15]] //x,y,z 좌표
+  const sit = []
+  if (rid <= 200){
+    sit.push([[0, 0, 0],[8, 0, 0],[-7, 0, -10],[-7, 2, -20],[10, 0, -12],[8, 2 , -16]])
+    sit.push([[-8, 0, 0],[0, 0, 0],[-9, 1, -9],[-8, 2, -14],[2, 0, -10],[8, 2 , -25]])
+    sit.push([[4, 2, -10],[7, 2, -5],[0, 0, 0],[-5, 0, 5],[-4, 2, -8],[-8, 2, -4]])
+    sit.push([[16, 3, 6],[16, 3, -2],[7, 0, 5],[0, 0, 0],[10, 2, -6],[6, 2 , -9]])
+    sit.push([[-10, 1, -5],[-10, 0, 2],[-7, 1, -10],[0, 2.5, -10],[0, 0, 0],[5, 1, -5]])
+    sit.push([[-10, 0, -10],[-10, 0, -2],[-6, 0, -12],[0, 0, -10],[-7, 0, 0],[0,0,0]])
   } else {
-    await selfieSegmentation[index].send({ image: cam });
-    console.log('send')
-    requestAnimationFrame(() => { sendToMediaPipe(cam, index) });
+    mySit = 0
+    sit.push([[0, 10, 0],[-7, 0, 0],[-7, 0, -10],[3, 0, -5],[10, 0, -12],[8, 2 , -16]])
   }
-};
 
-function vertexShader() { /// 초록색 어떤것을 없애주는 필터 
-  return `
-      varying vec2 vUv;
-      void main( void ) {     
-          vUv = uv;
-          gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0);
-      }
-  `
-}
-function fragmentShader() { //  ```
-  return `
-      uniform vec3 keyColor;
-      uniform float similarity;
-      uniform float smoothness;
-      varying vec2 vUv;
-      uniform sampler2D map;
-      void main() {
-
-          vec4 videoColor = texture2D(map, vUv);
-      
-          float Y1 = 0.299 * keyColor.r + 0.587 * keyColor.g + 0.114 * keyColor.b;
-          float Cr1 = keyColor.r - Y1;
-          float Cb1 = keyColor.b - Y1;
-
-          float Y2 = 0.299 * videoColor.r + 0.587 * videoColor.g + 0.114 * videoColor.b;
-          float Cr2 = videoColor.r - Y2; 
-          float Cb2 = videoColor.b - Y2; 
-
-          float blend = smoothstep(similarity, similarity + smoothness, distance(vec2(Cr2, Cb2), vec2(Cr1, Cb1)));
-          gl_FragColor = vec4(videoColor.rgb, videoColor.a * blend); 
-      }
-  `
-}
-
-//여기까지 옮긴 것
-
-const PARTICIPANT_MAIN_CLASS = 'participant main';
-const PARTICIPANT_CLASS = 'participant';
-
-function Participant(name) {
-	this.name = name;
-
-	var video = document.createElement('video');
-	var rtcPeer;
-
-
-	video.id = 'video-' + name;
-	video.autoplay = true;
-	video.controls = false;
-
-
-
-	this.getVideoElement = function() {
-		return video;
-	}
-
-
-	this.offerToReceiveVideo = function(error, offerSdp, wp){
-		if (error) return console.error ("sdp offer error")
-		console.log('Invoking SDP offer callback function');
-		var msg =  { id : "receiveVideoFrom",
-				sender : name,
-				sdpOffer : offerSdp
-			};
-		sendMessage(msg);
-	}
-
-
-	this.onIceCandidate = function (candidate, wp) {
-		  console.log("Local candidate" + JSON.stringify(candidate));
-
-		  var message = {
-		    id: 'onIceCandidate',
-		    candidate: candidate,
-		    name: name
-		  };
-		  sendMessage(message);
-	}
-
-	Object.defineProperty(this, 'rtcPeer', { writable: true});
-
-	this.dispose = function() {
-		console.log('Disposing participant ' + this.name);
-		this.rtcPeer.dispose();
-//		container.parentNode.removeChild(container);
-	};
-}
-function onNewParticipant(request) {
-  receiveVideo(request.name);
-}
-
-function receiveVideoResponse(result) {
-  console.log("result : " + result.data)
-  participants[result.name].rtcPeer.processAnswer (result.sdpAnswer, function (error) {
-    if (error) return console.error (error);
-  });
-  console.log("************************video************************")
-  if (result.name !== name) {
-    let seat = webcam.length
-    console.log(result.name + 'seat %d', seat);
-    selfieSegmentation.push(new SelfieSegmentation({
-      locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/${file}`,
-    }));
-    selfieSegmentation[seat].setOptions({
-      modelSelection: 1,
-      selfieMode: true,
-    });
-    webcam.push(participants[result.name].getVideoElement())
-    let canvas = document.createElement("canvas")
-    webcamCanvas.push(canvas)
-    webcamCtx.push(canvas.getContext("2d"))
-    let context = canvas.getContext("2d")
-    canvasCtx.push(context)
-    sendToMediaPipe(participants[result.name].getVideoElement(), seat)
-    context.fillStyle = "#00FF00"
-    context.fillRect(0, 0, webcamCanvas.width, webcamCanvas.height)
-    let texture = new THREE.Texture(canvas)
-    texture.minFilter = THREE.LinearFilter
-    texture.magFilter = THREE.LinearFilter
-    webcamTexture.push(texture)
-  
-    const geometry = new THREE.PlaneGeometry(2,2)
-    const material = new THREE.ShaderMaterial({
-        transparent: true,
-        uniforms: {
-            map: { value: texture },
-            keyColor: { value: [0.0, 1, 0] },
-            similarity: { value: 0.7 },
-            smoothness: { value: 0.0 },
-        },
-        vertexShader: vertexShader(),
-        fragmentShader: fragmentShader(),
-    })
-  
-    const cam = new THREE.Mesh(geometry, material)
-    cam.scale.x = 3
-    cam.scale.y = 3
-    cam.position.set(sit[seat][0], sit[seat][1], sit[seat][2])
-    cam.name= result.name
-    scene.add(cam)
-  }
-  //cube.add(new THREE.BoxHelper(cube, 0xff0000))
-
-  // scene.add(participants["asd"].getVideoElement()) // 이후 작업(ex 누끼)
-}
-
-function callResponse(message) {
-  if (message.response != 'accepted') {
-    console.info('Call not accepted by peer. Closing call');
-    stop();
-  } else {
-    webRtcPeer.processAnswer(message.sdpAnswer, function (error) {
-      if (error) return console.error (error);
-    });
-  }
-}
-
-function onExistingParticipants(msg) {
-  
-  var constraints = {
-    audio : true,
-    video : {
-      mandatory : {
-        maxWidth : 320,
-        maxFrameRate : 15,
-        minFrameRate : 15
-      }
+  const sendToMediaPipe = async (cam, index) => {
+    if (!cam.videoWidth) {
+      requestAnimationFrame(() => { sendToMediaPipe(cam, index) });
+    } else {
+      await selfieSegmentation[index].send({ image: cam });
+      //console.log('send')
+      requestAnimationFrame(() => { sendToMediaPipe(cam, index) });
     }
   };
-  console.log(name + " registered in room " + room);
-  var participant = new Participant(name);
-  participants[name] = participant;
-  var video = participant.getVideoElement();
-
-  var options = {
-        localVideo: video,
-        mediaConstraints: constraints,
-        onicecandidate: participant.onIceCandidate.bind(participant)
-      }
-  options.configuration = {
-          iceServers : [{"urls":"stun:i8d207.p.ssafy.io"},{"urls":"turn:i8d207.p.ssafy.io","username":"tipsy","credential":"ssafy"}]
-        };
   
-  participant.rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerSendonly(options,
-    function (error) {
-      if(error) {
-        return console.error(error);
-      }
-      console.log(this)
-      this.generateOffer (participant.offerToReceiveVideo.bind(participant));
-  });
+  function vertexShader() { /// 초록색 어떤것을 없애주는 필터 
+    return `
+        varying vec2 vUv;
+        void main( void ) {     
+            vUv = uv;
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0);
+        }
+    `
+  }
+  function fragmentShader() { //  ```
+    return `
+        uniform vec3 keyColor;
+        uniform float similarity;
+        uniform float smoothness;
+        varying vec2 vUv;
+        uniform sampler2D map;
+        void main() {
 
-  msg.data.forEach(receiveVideo);
-}
+            vec4 videoColor = texture2D(map, vUv);
+        
+            float Y1 = 0.299 * keyColor.r + 0.587 * keyColor.g + 0.114 * keyColor.b;
+            float Cr1 = keyColor.r - Y1;
+            float Cb1 = keyColor.b - Y1;
 
-function leaveRoom() {
-  sendMessage({
-    id : 'leaveRoom'
-  });
+            float Y2 = 0.299 * videoColor.r + 0.587 * videoColor.g + 0.114 * videoColor.b;
+            float Cr2 = videoColor.r - Y2; 
+            float Cb2 = videoColor.b - Y2; 
 
-  for ( var key in participants) {
-    participants[key].dispose();
+            float blend = smoothstep(similarity, similarity + smoothness, distance(vec2(Cr2, Cb2), vec2(Cr1, Cb1)));
+            gl_FragColor = vec4(videoColor.rgb, videoColor.a * blend); 
+        }
+    `
   }
 
-  ws.close();
-}
+  //여기까지 옮긴 것
 
-function receiveVideo(sender) {
+  const PARTICIPANT_MAIN_CLASS = 'participant main';
+  const PARTICIPANT_CLASS = 'participant';
 
-  var participant = new Participant(sender);
-  participants[sender] = participant;
-  var video = participant.getVideoElement();
+  function Participant(name) {
+  	this.name = name;
 
-  var options = {
-      remoteVideo: video,
-      onicecandidate: participant.onIceCandidate.bind(participant)
+  	var video = document.createElement('video');
+  	var rtcPeer;
+
+
+  	video.id = 'video-' + name;
+  	video.autoplay = true;
+  	video.controls = false;
+
+
+
+  	this.getVideoElement = function() {
+  		return video;
+  	}
+
+
+  	this.offerToReceiveVideo = function(error, offerSdp, wp){
+  		if (error) return console.error ("sdp offer error")
+  		console.log('Invoking SDP offer callback function');
+  		var msg =  { id : "receiveVideoFrom",
+  				sender : name,
+  				sdpOffer : offerSdp
+  			};
+  		sendMessage(msg);
+  	}
+
+
+  	this.onIceCandidate = function (candidate, wp) {
+  		  console.log("Local candidate" + JSON.stringify(candidate));
+
+  		  var message = {
+  		    id: 'onIceCandidate',
+  		    candidate: candidate,
+  		    name: name
+  		  };
+  		  sendMessage(message);
+  	}
+
+  	Object.defineProperty(this, 'rtcPeer', { writable: true});
+
+  	this.dispose = function() {
+  		console.log('Disposing participant ' + this.name);
+  		this.rtcPeer.dispose();
+  //		container.parentNode.removeChild(container);
+  	};
+  }
+  function onNewParticipant(request) {
+    receiveVideo(request.name);
+  }
+
+  function receiveVideoResponse(result) {
+    console.log("result : " + result.data)
+    participants[result.name].rtcPeer.processAnswer (result.sdpAnswer, function (error) {
+      if (error) return console.error (error);
+    });
+    console.log("************************video************************")
+    if (result.name !== name) {
+      let seat = webcam.length
+      console.log(result.name + 'seat %d', seat);
+      selfieSegmentation.push(new SelfieSegmentation({
+        locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/${file}`,
+      }));
+      selfieSegmentation[seat].setOptions({
+        modelSelection: 1,
+        selfieMode: true,
+      });
+      webcam.push(participants[result.name].getVideoElement())
+      let canvas = document.createElement("canvas")
+      webcamCanvas.push(canvas)
+      webcamCtx.push(canvas.getContext("2d"))
+      let context = canvas.getContext("2d")
+      canvasCtx.push(context)
+      sendToMediaPipe(participants[result.name].getVideoElement(), seat)
+      context.fillStyle = "#00FF00"
+      context.fillRect(0, 0, webcamCanvas.width, webcamCanvas.height)
+      let texture = new THREE.Texture(canvas)
+      texture.minFilter = THREE.LinearFilter
+      texture.magFilter = THREE.LinearFilter
+      webcamTexture.push(texture)
+    
+      const geometry = new THREE.PlaneGeometry(2,2)
+      const material = new THREE.ShaderMaterial({
+          transparent: true,
+          uniforms: {
+              map: { value: texture },
+              keyColor: { value: [0.0, 1, 0] },
+              similarity: { value: 0.7 },
+              smoothness: { value: 0.0 },
+          },
+          vertexShader: vertexShader(),
+          fragmentShader: fragmentShader(),
+      })
+    
+      const cam = new THREE.Mesh(geometry, material)
+      cam.scale.x = 3
+      cam.scale.y = 3
+      cam.position.set(sit[seat][0][0], sit[seat][1][0], sit[seat][2][0])
+      cam.name= result.name
+      scene.add(cam)
     }
-  options.configuration = {
-          iceServers : [{"urls":"stun:i8d207.p.ssafy.io"},{"urls":"turn:i8d207.p.ssafy.io","username":"tipsy","credential":"ssafy"}]
-        };
-  participant.rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerRecvonly(options,
+    //cube.add(new THREE.BoxHelper(cube, 0xff0000))
+
+    // scene.add(participants["asd"].getVideoElement()) // 이후 작업(ex 누끼)
+  }
+
+  function callResponse(message) {
+    if (message.response != 'accepted') {
+      console.info('Call not accepted by peer. Closing call');
+      stop();
+    } else {
+      webRtcPeer.processAnswer(message.sdpAnswer, function (error) {
+        if (error) return console.error (error);
+      });
+    }
+  }
+
+  function onExistingParticipants(msg) {
+
+    var constraints = {
+      audio : true,
+      video : {
+        mandatory : {
+          maxWidth : 320,
+          maxFrameRate : 15,
+          minFrameRate : 15
+        }
+      }
+    };
+    console.log(name + " registered in room " + room);
+    var participant = new Participant(name);
+    participants[name] = participant;
+    var video = participant.getVideoElement();
+
+    var options = {
+          localVideo: video,
+          mediaConstraints: constraints,
+          onicecandidate: participant.onIceCandidate.bind(participant)
+        }
+    options.configuration = {
+            iceServers : [{"urls":"stun:i8d207.p.ssafy.io"},{"urls":"turn:i8d207.p.ssafy.io","username":"tipsy","credential":"ssafy"}]
+          };
+        
+    participant.rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerSendonly(options,
       function (error) {
         if(error) {
           return console.error(error);
         }
+        console.log(this)
         this.generateOffer (participant.offerToReceiveVideo.bind(participant));
-  });
-  
-}
+    });
 
-function onParticipantLeft(request) {
-  console.log('Participant ' + request.name + ' left');
-  var participant = participants[request.name];
-  participant.dispose();
-  delete participants[request.name];
-}
+    msg.data.forEach(receiveVideo);
+  }
 
-function sendMessage(message) {
-  var jsonMessage = JSON.stringify(message);
-  console.log('Sending message: ' + jsonMessage);
-  ws.send(jsonMessage);
-}
-  
-function Meeting({match}) {
-  window.onbeforeunload = function() {
+  function leaveRoom() {
+    sendMessage({
+      id : 'leaveRoom'
+    });
+
+    for ( var key in participants) {
+      participants[key].dispose();
+    }
+
     ws.close();
-  };
-  
-  ws.onmessage = function(message) {
-    var parsedMessage = JSON.parse(message.data);
-    console.info('Received message: ' + message.data);
-  
-    switch (parsedMessage.id) {
-    case 'existingParticipants':
-      onExistingParticipants(parsedMessage);
-      break;
-    case 'newParticipantArrived':
-      onNewParticipant(parsedMessage);
-      break;
-    case 'participantLeft':
-      onParticipantLeft(parsedMessage);
-      break;
-    case 'receiveVideoAnswer':
-      console.log("*****pm : " + parsedMessage)
-      receiveVideoResponse(parsedMessage);
-      break;
-    case 'iceCandidate':
-      participants[parsedMessage.name].rtcPeer.addIceCandidate(parsedMessage.candidate, function (error) {
-            if (error) {
-            console.error("Error adding candidate: " + error);
-            return;
-            }
-        });
+  }
+
+  function receiveVideo(sender) {
+
+    var participant = new Participant(sender);
+    participants[sender] = participant;
+    var video = participant.getVideoElement();
+
+    var options = {
+        remoteVideo: video,
+        onicecandidate: participant.onIceCandidate.bind(participant)
+      }
+    options.configuration = {
+            iceServers : [{"urls":"stun:i8d207.p.ssafy.io"},{"urls":"turn:i8d207.p.ssafy.io","username":"tipsy","credential":"ssafy"}]
+          };
+    participant.rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerRecvonly(options,
+        function (error) {
+          if(error) {
+            return console.error(error);
+          }
+          this.generateOffer (participant.offerToReceiveVideo.bind(participant));
+    });
+
+  }
+
+  function onParticipantLeft(request) {
+    console.log('Participant ' + request.name + ' left');
+    var participant = participants[request.name];
+    participant.dispose();
+    delete participants[request.name];
+  }
+
+  function sendMessage(message) {
+    var jsonMessage = JSON.stringify(message);
+    console.log('Sending message: ' + jsonMessage);
+    ws.send(jsonMessage);
+  }
+    window.onbeforeunload = function() {
+      ws.close();
+    };
+
+    ws.onmessage = function(message) {
+      var parsedMessage = JSON.parse(message.data);
+      console.info('Received message: ' + message.data);
+      console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ")
+      switch (parsedMessage.id) {
+      case 'existingParticipants':
+        onExistingParticipants(parsedMessage);
         break;
-    default:
-      console.error('Unrecognized message', parsedMessage);
+      case 'newParticipantArrived':
+        onNewParticipant(parsedMessage);
+        break;
+      case 'participantLeft':
+        onParticipantLeft(parsedMessage);
+        break;
+      case 'receiveVideoAnswer':
+        console.log("*****pm : " + parsedMessage)
+        receiveVideoResponse(parsedMessage);
+        break;
+      case 'iceCandidate':
+        participants[parsedMessage.name].rtcPeer.addIceCandidate(parsedMessage.candidate, function (error) {
+              if (error) {
+              console.error("Error adding candidate: " + error);
+              return;
+              }
+          });
+          break;
+      default:
+        console.error('Unrecognized message', parsedMessage);
+      }
     }
-  }
-  
 
-  function register() {
-    
-    var message = {
-      id : 'joinRoom',
-      name : name,
-      room : room,
+
+    function register() {
+
+      var message = {
+        id : 'joinRoom',
+        name : name,
+        room : room,
+      }
+      sendMessage(message);
     }
-    sendMessage(message);
-  }
-  ws.onopen = () => { //webSocket이 맺어지고 난 후, 실행
-    register()
-  }
-
-
-  
+    ws.onopen = () => { //webSocket이 맺어지고 난 후, 실행
+      register()
+    }
 
 
 //////////////////////////////////////////// threejs 코드
@@ -394,7 +385,7 @@ function Meeting({match}) {
   navigator.mediaDevices
     .getUserMedia(constraints)
     .then(function (mediaStream) {
-      console.log(mediaStream);
+      //console.log(mediaStream);
       /* const cat = document.createElement('source')
             cat.setAttribute('src','../video/Cat.mp4')
             cat.setAttribute('type', 'video/mp4')
@@ -445,43 +436,43 @@ function Meeting({match}) {
 
   const gridHelper = new THREE.GridHelper(20, 20); //바닥 격자 크기, 갯수
   gridHelper.position.y = -3;
-  scene.add(gridHelper);
+  //scene.add(gridHelper);
 
   const cam = new THREE.Mesh(new THREE.PlaneGeometry(6,6))
   cam.position.set(sit[mySit][0][0], sit[mySit][0][1], sit[mySit][0][2])
   cam.lookAt(camera.position)
   cam.name = '00'
-  scene.add(cam)
+  //scene.add(cam)
   //threejs 공간에 띄움
   const cam2 = cam.clone()
   cam2.name = '44'
   cam2.position.set(sit[mySit][4][0], sit[mySit][4][1], sit[mySit][4][2])
   cam2.lookAt(camera.position)
-  scene.add(cam2)
+  //scene.add(cam2)
 
   const cam5 = cam.clone()
   cam5.name = '55'
   cam5.position.set(sit[mySit][5][0], sit[mySit][5][1], sit[mySit][5][2] )
   cam5.lookAt(camera.position)
-  scene.add(cam5)
+  //scene.add(cam5)
 
   const cam3 = cam.clone()
   cam3.name = '22'
   cam3.position.set(sit[mySit][2][0], sit[mySit][2][1], sit[mySit][2][2] )
   cam3.lookAt(camera.position)
-  scene.add(cam3)
+  //scene.add(cam3)
 
   const cam4 = cam.clone()
   cam4.name = '11'
   cam4.position.set(sit[mySit][1][0], sit[mySit][1][1], sit[mySit][1][2])
   cam4.lookAt(camera.position)
-  scene.add(cam4)
+  //scene.add(cam4)
 
   const cam6 = cam.clone()
   cam6.name = '33'
   cam6.position.set(sit[mySit][3][0], sit[mySit][3][1], sit[mySit][3][2] )
   cam6.lookAt(camera.position)
-  scene.add(cam6)
+  //scene.add(cam6)
 	// 광원
   const basicLight = new THREE.HemisphereLight(0xffffff, 0x000000, 1.5)
   scene.add(basicLight) // 몰라도됨
@@ -530,17 +521,15 @@ function Meeting({match}) {
 	function skybox(rid,mysit) {
     console.log(rid)
     if ( rid < 200){
-      const skyTexture = new THREE.TextureLoader().load(`/room/${rid}/${rid}_${mysit}.jpg`)
+      const skyTexture = new THREE.TextureLoader().load(`/room/111/111_${mysit}.jpg`)
       //const skyTexture = new THREE.TextureLoader().load(`/room_209.jpg`)
       //const skyGeometry = new THREE.SphereGeometry(400, 60, 40)
       const skyGeometry = new THREE.CylinderGeometry(150, 150, 400, 32, 2, true)
       skyGeometry.scale(-1,1,1)
       const skyMaterial = new MeshBasicMaterial({ map: skyTexture })
-
       const sky = new THREE.Mesh(skyGeometry, skyMaterial)
       sky.position.set(0, 0, 0)
       scene.add(sky)
-      sky.rotateY(radian[rid-101][mySit])
     }
     else if (rid < 300 && rid >= 200) {
       const skyTexture = new THREE.TextureLoader().load(`/room/200/200_0.jpg`)
@@ -557,11 +546,11 @@ function Meeting({match}) {
     /* 테이블 */
  	function table(tableFolder){
   	const tableLoader = new GLTFLoader()
-  	const diff = textureLoader.load(`3d/${tableFolder}_4k/textures/${tableFolder}_diff_4k.jpg`)
-  	const nor = textureLoader.load(`3d/${tableFolder}_4k/textures/${tableFolder}_nor_gl_4k.jpg`)
-  	const metal = textureLoader.load(`3d/${tableFolder}_4k/textures/${tableFolder}_metal_4k.jpg`)
-  	const rough = textureLoader.load(`3d/${tableFolder}_4k/textures/${tableFolder}_rough_4k.jpg`)
-  	tableLoader.load( `3d/${tableFolder}_4k/${tableFolder}_4k.gltf`,
+  	const diff =  new THREE.TextureLoader().load(`/3d/${tableFolder}_4k/textures/${tableFolder}_diff_4k.jpg`)
+  	const nor =  new THREE.TextureLoader().load(`/3d/${tableFolder}_4k/textures/${tableFolder}_nor_gl_4k.jpg`)
+  	const metal =  new THREE.TextureLoader().load(`/3d/${tableFolder}_4k/textures/${tableFolder}_metal_4k.jpg`)
+  	const rough =  new THREE.TextureLoader().load(`/3d/${tableFolder}_4k/textures/${tableFolder}_rough_4k.jpg`)
+  	tableLoader.load( `/3d/${tableFolder}_4k/${tableFolder}_4k.gltf`,
   	  gltf2 => {
   	    //gltf.scene.scale(3,3,3)
   	    var table = gltf2.scene;
@@ -577,8 +566,8 @@ function Meeting({match}) {
   	          o.material.roughness = 0.5
   	      }
   	    });
-  	  table.scale.set(8,8,8)
-  	  table.position.set(2,-2,5)
+  	  table.scale.set(6,6,6)
+  	  table.position.set(-3,-8,-3)
   	  scene.add(table)
   	})
 	}
@@ -613,7 +602,7 @@ function Meeting({match}) {
 			const chair4 = chair.clone()
 			const chair5 = chair.clone()
 			
-			chair.position.set(2,0,0)
+			chair.position.set(0,0,0)
 			chair2.position.set(-7, 0, 0)
 			chair3.position.set(12,0,4)
 			chair4.position.set(2,0,12)
@@ -625,10 +614,10 @@ function Meeting({match}) {
 			chair5.rotateY(Math.PI)
 			
 			scene.add( chair );
-			scene.add( chair2 )
-			scene.add( chair3 )
-			scene.add( chair4 )
-			scene.add( chair5 )
+			//scene.add( chair2 )
+			//scene.add( chair3 )
+			//scene.add( chair4 )
+			//scene.add( chair5 )
 			
 			// 시간에 따라 회전함
 			/*
@@ -680,21 +669,21 @@ function Meeting({match}) {
       var pizza = gltf2.scene;
       //bottle.scale.set(30,30,30)
       pizza.position.set(0,6.4,5)
-      scene.add(pizza)
+      //scene.add(pizza)
     })
     foodLoader.load( '/3d/pizza/frenchfries.gltf',
      gltf2 => {
       var pizza = gltf2.scene;
       //bottle.scale.set(30,30,30)
       pizza.position.set(3,6.4,5)
-      scene.add(pizza)
+      //scene.add(pizza)
     })
     foodLoader.load( '/3d/krispy_fried_chicken_resize.glb',
     gltf2 => {
      var leg = gltf2.scene;
      leg.scale.set(1.5, 1.5, 1.5)
      leg.position.set(0,6.4,9)
-     scene.add(leg)
+     //scene.add(leg)
    })
    foodLoader.load( '/3d/krispy_fried_chicken_resize.glb',
    gltf2 => {
@@ -702,7 +691,7 @@ function Meeting({match}) {
     leg.scale.set(1.5, 1.5, 1.5)
     leg.position.set(0.5,6.4,9)
     leg.rotateX(0.3)
-    scene.add(leg)
+    //scene.add(leg)
   })
   foodLoader.load( '/3d/krispy_fried_chicken_resize.glb',
   gltf2 => {
@@ -711,13 +700,13 @@ function Meeting({match}) {
    leg.position.set(1,6.4,9)
    leg.rotateX(-0.5)
    leg.rotateY(-0.5)
-   scene.add(leg)
+   //scene.add(leg)
   })
   foodLoader.load( '/3d/florence_steak_-_fiorentina_bistecca/scene.gltf',
    gltf2 => {
     var steak = gltf2.scene;
-    steak.scale.set(10,10,10)
-    steak.position.set(5, 6.4 ,7)
+    steak.scale.set(5,5,5)
+    steak.position.set(-3,-1.5-3,-8,-3,-3)
     scene.add(steak)
   })
   foodLoader.load( '/3d/ssafydesk.gltf',
@@ -728,10 +717,10 @@ function Meeting({match}) {
     desk.rotateX( - Math.PI/2 )
     //scene.add(desk)
   })
-  sojumaker(2, 6, 2)
-  sojumaker(3, 6, 2)
-  sojumaker(-5, 6, 2)
-  sojumaker(5, 6, 10)
+  //sojumaker(0, -2, -5)
+  //sojumaker(3, 6, 2)
+  //sojumaker(-5, 6, 2)
+  //sojumaker(5, 6, 10)
   }
   let raycaster = new THREE.Raycaster()
   function onWindowResize() {
@@ -913,8 +902,8 @@ function Meeting({match}) {
     //if (webcam.readyState === webcam.HAVE_ENOUGH_DATA) {
     selfieSegmentation.forEach((seg, index) => {
       seg.onResults((results) => {
-        console.log(index);
-        console.log(results);
+        //console.log(index);
+        //console.log(results);
         webcamCtx[index].save();
         webcamCtx[index].clearRect(0, 0, webcamCanvas[index].width, webcamCanvas[index].height);
         webcamCtx[index].drawImage(results.segmentationMask, 0, 0, webcamCanvas[index].width, webcamCanvas[index].height);
@@ -942,7 +931,7 @@ function Meeting({match}) {
     //lat = Math.max( 0 );
     phi = THREE.MathUtils.degToRad( 90 - lat );
     theta = THREE.MathUtils.degToRad( lon );
-    //theta = THREE.MathUtils.degToRad( Math.max( - 150, Math.min( 30, lon ) ) );
+    //theta = THREE.MathUtils.degToRad( Math.max( - 180, Math.min( 20, lon ) ) );
     let x = 500 * Math.sin( phi ) * Math.cos( theta );
     let y = 500 * Math.cos( phi );
     let z = 500 * Math.sin( phi ) * Math.sin( theta );
@@ -969,14 +958,14 @@ function Meeting({match}) {
   }
   connect(11)
   skybox(rid, mySit)
-  //table('round_wooden_table_01')
-  //chairMake("dining_chair_02")
-  anju(2)
+  if (rid > 200){
+    table('round_wooden_table_01')
+    //chairMake("dining_chair_02")
+    anju(2)
+  }
 	animate()
 
   //// QRgame Url
-  const params = useParams()
-  console.log(params.id)
   return (
     <>
       <div id="profileBox">
