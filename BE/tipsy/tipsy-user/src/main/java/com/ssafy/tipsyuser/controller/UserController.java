@@ -85,14 +85,14 @@ public class UserController {
 	@GetMapping("/nickname")
 	@ApiOperation(value = "중복 확인", notes = "사용자가 입력한 닉네임이 중복인지 확인")
 	public boolean checkName(@RequestParam String nickname) {
-		int n =userServiceImpl.checkNickname(nickname);
-		if(n==0) {
+		int n = userServiceImpl.checkNickname(nickname);
+		if (n == 0) {
 			return true;
-		}else {
+		} else {
 			return false;
 		}
 	}
-	
+
 	@PostMapping("/check") // Mobile
 	@ApiOperation(value = "모바일 앱 로그인", notes = "kako_id, birth, gender, image를 body로 보내면 loginDto를 보내줌")
 	public LoginDto checkUser(HttpServletRequest request, HttpServletResponse response,
@@ -101,13 +101,13 @@ public class UserController {
 
 		LoginDto loginDto = userServiceImpl.checkUser("mobile", accountDto);
 		if (loginDto.getUserCheck()) {
-		Cookie cookie1 = new Cookie("Authorization", loginDto.getTokenDto().getAccessToken());
-		Cookie cookie2 = new Cookie("RefreshToken", loginDto.getTokenDto().getRefreshToken());
+			Cookie cookie1 = new Cookie("Authorization", loginDto.getTokenDto().getAccessToken());
+			Cookie cookie2 = new Cookie("RefreshToken", loginDto.getTokenDto().getRefreshToken());
 			cookie1.setHttpOnly(true);
 			cookie2.setHttpOnly(true);
 			response.addCookie(cookie1); ///////// 나중에 따로 만들자
 			response.addCookie(cookie2);
-		} 
+		}
 		return loginDto;
 	}
 
@@ -121,16 +121,17 @@ public class UserController {
 	public UserVo getUserInfo(@RequestParam Long uid) {
 		return userServiceImpl.getUserInfo(uid);
 	}
-	
+
 	@PutMapping("/mypage/modify")
 	@ApiOperation(value = "유저 정보 수정", notes = "사용자 정보를 보내면 DB에 업데이트 한 결과 알려줌")
 	public Boolean updateUserInfo(@RequestBody UserVo userVo) {
-		if(userServiceImpl.updateUserInfo(userVo) == 0) return false;
+		if (userServiceImpl.updateUserInfo(userVo) == 0)
+			return false;
 		else {
 			return true;
 		}
 	}
-	
+
 	@DeleteMapping("/delete")
 	@ApiOperation(value = "회원탈퇴", notes = "uid를 통해 사용자정보를 삭제한다.")
 	public boolean deleteUser(@RequestParam Long uid) {
@@ -142,7 +143,7 @@ public class UserController {
 			return false;
 		}
 	}
-	
+
 	@PostMapping("/report")
 	@ApiOperation(value = "회원신고", notes = "user1이 user2를 conent의 내용으로 신고한다.")
 	public boolean reportUser(@RequestBody ReportVo reportvo) {
@@ -151,6 +152,23 @@ public class UserController {
 			logger.info(reportvo.getFrom() + " reported " + reportvo.getTo() + " as " + reportvo.getContent());
 			return true;
 		} else {
+			return false;
+		}
+	}
+
+	@GetMapping("/logout")
+	@ApiOperation(value ="로그아웃", notes = "쿠키 제거")
+	public boolean repostUser(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			Cookie deleteCookie1 = new Cookie("Authorization", null);
+			deleteCookie1.setMaxAge(0);
+			response.addCookie(deleteCookie1);
+			Cookie deleteCookie2 = new Cookie("RefreshToken", null);
+			deleteCookie2.setMaxAge(0);
+			response.addCookie(deleteCookie2);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
 			return false;
 		}
 	}

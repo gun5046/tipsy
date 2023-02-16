@@ -48,10 +48,7 @@ public class GameServiceImpl implements GameService{
 		commonData = new HashMap<String, List<CommonGameDto>>();
 		constant = new Constant();
 	}
-	public void room() {
-		Member member = Member.builder().code("asd").uid(2).password("asd").build();
-		roomRepository.save(member);
-	}
+	
 	public String checkGameRoom(Long uid, String rid) {
 		List<String> longs = Arrays.asList(rid);
 		

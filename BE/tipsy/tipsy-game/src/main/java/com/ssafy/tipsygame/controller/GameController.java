@@ -33,7 +33,6 @@ public class GameController {
 	@GetMapping("/game/room")
 	@ApiOperation(value = "방 정보 확인", notes = "요청받은 rid의 방 정보를 확인하고 결과 반환")
 	public String checkGameRoom(@RequestParam Long uid, @RequestParam String rid) {
-		gameServiceImpl.room();
 		return gameServiceImpl.checkGameRoom(uid, rid);
 	}
 
