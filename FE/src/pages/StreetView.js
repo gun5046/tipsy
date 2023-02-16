@@ -11,19 +11,20 @@ import MypageModal from '../components/MypageModal';
 // 리덕스
 import { useSelector} from 'react-redux'
 import { infoActions } from '../redux/infoSlice';
-import { useSlider } from '@mui/base';
-// import { infoActions } from '../redux/infoSlice';
+
 // useSelector 데이터 읽기
 // useDispatch 데이터 부르기
 
 
 const GameViewContainer = styled.section`
-  z-index: 6;
+  z-index: 1000;
   position: absolute;
-  top: 0px;
-  left: 100px;
-  color: white;
-`;
+  width: 50vh;
+  top: 10vh;
+  left: 80vh;
+  // padding: 20px;
+  
+  `;
 
 // 게임 화면 뷰 영역 컴포넌트
 const StreetView = () => {
@@ -32,7 +33,7 @@ const StreetView = () => {
   const [startGame, setStartGame] = useState()
   const navigate = useNavigate(); 
   const changeScene = useSelector((state) => state.game.scene)
-  const ismypage = useSelector((state) => state.info.mypage)
+  const ismypage = useSelector((state) => state.info.openMypage)
 
   const [building, setBuilding] = useState()
   const dispatch = useDispatch()
@@ -128,10 +129,6 @@ const StreetView = () => {
     <div>
       <GameViewContainer>
         {ismypage && <MypageModal/>}
-        {/* <div className='text1'>ssss</div>
-        <div>ssss</div>
-        <div>ssss</div>
-        <div>ssss</div> */}
       </GameViewContainer>
       
       <div ref={phaserEl} className="game-container"></div>

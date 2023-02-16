@@ -304,7 +304,8 @@ class streetScene extends Phaser.Scene {
                         building.qr.visible = true;
                     }
                     if(i === 2){
-                        store.dispatch(infoActions.ismyPage(true))
+                        console.log('마이페이지')
+                        store.dispatch(infoActions.isMyPage(true))
                     }
                     if(i === 3){ //bar
                         store.dispatch(getStore(2))
@@ -350,11 +351,12 @@ class streetScene extends Phaser.Scene {
             this.player.setVelocityX(-speed);
             // 애니메이션
             this.player.anims.play(`${this.characterKey}_run_left`, true);
+            store.dispatch(infoActions.isMyPage(false))
 
         } else if (this.cursors.right.isDown) {
             this.player.setVelocityX(speed);
             this.player.anims.play(`${this.characterKey}_run_right`, true);
- 
+            store.dispatch(infoActions.isMyPage(false))
         } else {
             // 이동하다 멈추면, 사용할 프레임 선택 & idle상태로 전환
             // console.log(current_table)

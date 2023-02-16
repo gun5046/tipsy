@@ -29,6 +29,7 @@ const BarView = () => {
   const [startGame, setStartGame] = useState()
   const navigate = useNavigate();
   const dispatch = useDispatch()
+  dispatch(getStore(2))
   const changeScene = useSelector((state) => state.game.scene)
   const currentChair = useSelector((state) => state.game.chair)
   const currentTable = useSelector((state) => state.game.table)

@@ -113,76 +113,76 @@ const MypageModal =() => {
     })
     }
     const updateData = () => {
-    setIsUpdate(!isUpdate)
+        setIsUpdate(!isUpdate)
     }
 
 
-    const [open, setOpen] = useState(false);
-    const handleOpen = () => setOpen(true);
+    const [open, setOpen] = useState(true);
+
     const handleClose = () => setOpen(false);
 
     return (
-    isUpdate?(
-        <div>
-            <Button onClick={handleOpen}>Open modal</Button>
-            <Modal
-            open={open}
-            onClose={handleClose}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
-            >
-            <Box sx={style}>
-                <Typography id="modal-modal-title" variant="h3" component="h2" align="center">
-                    Mypage
-                </Typography>
-                <Avatar 
-                    src = {props.image} 
-                    sx = {{ width: 100, height: 100, top: '10px', left: '38%',}} 
-                />
-                <Typography id="modal-modal-description" sx={{ mt: 2 }} align="center" variant="h6">
-                    {state.nickname}
-                </Typography>
-                <Typography gutterBottom variant="body1" align="center" sx={{ mt: 2 }}>
-                    #hashtag
-                </Typography>
-                <Stack direction="row" spacing={1} justifyContent="center">
-                    {
-                        interest.map((element)=>{
-                            return ( <Chip label={element} key={element} />)
-                        })
-			        }
-                </Stack>
-                <Button onClick={updateData} sx={{ mt: 2 }}>Update</Button>
-            </Box>
-            </Modal>
-        </div>
-    ):(
-        <div>
-            <Modal
-            open={open}
-            onClose={handleClose}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
-            >
-            <Box sx={style}>
-                <Typography id="modal-modal-title" variant="h3" component="h2" align="center">
-                    Update
-                </Typography>
-                <div>
+        isUpdate?(
+            <div>
+                <Modal
+                    open={open}
+                    onClose={handleClose}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                >
+                    <Box sx={style}>
+                        <Typography id="modal-modal-title" variant="h3" component="h2" align="center">
+                            Mypage
+                        </Typography>
+                        <Avatar 
+                            src = {props.image} 
+                            sx = {{ width: 100, height: 100, top: '10px', left: '38%',}} 
+                        />
+                        <Typography id="modal-modal-description" sx={{ mt: 2 }} align="center" variant="h6">
+                            {state.nickname}
+                        </Typography>
+                        <Typography gutterBottom variant="body1" align="center" sx={{ mt: 2 }}>
+                            #hashtag
+                        </Typography>
+                        <Stack direction="row" spacing={1} justifyContent="center">
+                            {
+                                interest.map((element)=>{
+                                    return ( <Chip label={element} key={element} />)
+                                })
+                            }
+                        </Stack>
+                        <Button onClick={updateData}>수정하기</Button>
+                        <Button onClick={handleClose}>나가기</Button>
+                    </Box>
+                </Modal>
+            </div>
+        ):(
+            <div>
+                <Modal
+                    open={open}
+                    onClose={handleClose}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                >
+                <Box sx={style}>
+                    <Typography id="modal-modal-title" variant="h3" component="h2" align="center">
+                        Update
+                    </Typography>
+                    <div>
+                        <TextField
+                            sx={{width: 250}}
+                            autoFocus
+                            margin="dense"
+                            label="닉네임"
+                            value={state.nickname}
+                            onChange={NicknameInput}
+                            type = "text"
+                            variant="standard"
+                        />
+                        <Button onClick={check} sx={{top:"20px"}}>중복확인</Button>
+                    </div>
+                    <div>
                     <TextField
-                        sx={{width: 250}}
-                        autoFocus
-                        margin="dense"
-                        label="닉네임"
-                        value={state.nickname}
-                        onChange={NicknameInput}
-                        type = "text"
-                        variant="standard"
-                    />
-                    <Button onClick={check} sx={{top:"20px"}}>중복확인</Button>
-                </div>
-                <div>
-                <TextField
                         sx={{width: 200}}
                         autoFocus
                         margin="dense"
@@ -200,17 +200,16 @@ const MypageModal =() => {
                     }
                     </div>
                 </div>
-            <div sx={{ mt: 2 }}>
-                <Button onClick={handleClose}>Cancle</Button>
-                <Button onClick={updateData}>Update</Button>
+                <div sx={{ mt: 2 }}>
+                    <Button onClick={handleClose}>취소하기</Button>
+                    <Button onClick={updateData}>수정하기</Button>
+                </div>
 
-            </div>
-
-            </Box>
+                </Box>
             </Modal>
         </div>
         )
-    
+        
     )
 }
 

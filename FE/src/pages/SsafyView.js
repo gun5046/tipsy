@@ -13,8 +13,9 @@ import CheckPw from '../components/CheckPw';
 // import Setting from '../components/Setting';
 
 // 리덕스
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { infoActions } from '../redux/infoSlice';
+import { getStore } from '../redux/gameSlice';
 // useSelector 데이터 읽기
 // useDispatch 데이터 전달
 
@@ -55,6 +56,8 @@ const SsafyView = () => {
   const phaserEl = useRef(null);
   const [startGame, setStartGame] = useState()
   const navigate = useNavigate();
+  const dispatch = useDispatch()
+  dispatch(getStore(1))
   const changeScene = useSelector((state) => state.game.scene)
   const currentChair = useSelector((state) => state.game.chair)
   const currentTable = useSelector((state) => state.game.table)
