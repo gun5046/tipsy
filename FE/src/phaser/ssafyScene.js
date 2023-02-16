@@ -104,95 +104,95 @@ class ssafyScene extends Phaser.Scene {
 
         // redux
         console.log('table1_axios111111')
-        // this.table1_axios = store.getState().info.tableInfo1
+        this.table1_axios = store.getState().info.tableInfo1
         // console.log(this.table1_axios)
 
-        this.table1_axios = [
-            {"title":"핸들이고장난8톤트럭 ","password":"1111","entrance":"off","silence":"off","time":"20230210155347","host":"6","max":4,
-            "code":"uawm5101","current":4,
-            "member":[
-                {"uid":6,"image":"https://mblogthumb-phinf.pstatic.net/MjAyMTAxMTJfMjE1/MDAxNjEwNDE3OTAzMzU1.5rBqpvTwt6jnlgmFHO0TnzFkPpLtLxpEqLao1PyOVI0g.xZIsZCh2zKaCd4c2U_lecYp3PaoZ9Urx4hCbhJJFGcwg.JPEG.sosohan_n/IMG_0596.JPG?type=w800",
-                "gender":"male","interest":"개껌","reportcnt":"0","name":"",
-                "nickname":"a","birth":"","position":"1","kakao_id":"2638215374"},
+        // this.table1_axios = [
+        //     {"title":"핸들이고장난8톤트럭 ","password":"1111","entrance":"off","silence":"off","time":"20230210155347","host":"6","max":4,
+        //     "code":"uawm5101","current":4,
+        //     "member":[
+        //         {"uid":6,"image":"https://mblogthumb-phinf.pstatic.net/MjAyMTAxMTJfMjE1/MDAxNjEwNDE3OTAzMzU1.5rBqpvTwt6jnlgmFHO0TnzFkPpLtLxpEqLao1PyOVI0g.xZIsZCh2zKaCd4c2U_lecYp3PaoZ9Urx4hCbhJJFGcwg.JPEG.sosohan_n/IMG_0596.JPG?type=w800",
+        //         "gender":"male","interest":"개껌","reportcnt":"0","name":"",
+        //         "nickname":"a","birth":"","position":"1","kakao_id":"2638215374"},
 
-                {"uid":6,"image":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQVqcjabQrrTIVVSKMzT8wJcMyUgqIlmxQr8Q&usqp=CAU",
-                "gender":"male","interest":"개껌","reportcnt":"0","name":"",
-                "nickname":"k","birth":"","position":"4","kakao_id":"2638215374"},
+        //         {"uid":6,"image":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQVqcjabQrrTIVVSKMzT8wJcMyUgqIlmxQr8Q&usqp=CAU",
+        //         "gender":"male","interest":"개껌","reportcnt":"0","name":"",
+        //         "nickname":"k","birth":"","position":"4","kakao_id":"2638215374"},
 
-                {"uid":6,"image":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQBxhB93u-HvL3D0ALV3GiUMWgWrYkUzhJHOQ&usqp=CAU",
-                "gender":"male","interest":"개껌","reportcnt":"0","name":"",
-                "nickname":"l","birth":"","position":"5","kakao_id":"2638215374"},
+        //         {"uid":6,"image":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQBxhB93u-HvL3D0ALV3GiUMWgWrYkUzhJHOQ&usqp=CAU",
+        //         "gender":"male","interest":"개껌","reportcnt":"0","name":"",
+        //         "nickname":"l","birth":"","position":"5","kakao_id":"2638215374"},
 
-                {"uid":5,"image":"https://mblogthumb-phinf.pstatic.net/MjAyMDEyMTBfMjU0/MDAxNjA3NTg0NTk3MzYx.4V0OKu3R4IQ5PkwyazJb18bBcxBAy_lbX0MaVkFiIHAg.TwY4F5GIKDqptJ5NrAaM70CJGW8WkDmO-sNvv5M3bAQg.JPEG.sosohan_n/Mz_Stoned_on_Twitter.jpg?type=w800",
-                "gender":"male","interest":"","reportcnt":"0","name":"",
-                "nickname":"b","birth":"","position":"2","kakao_id":"2542925662"}],
+        //         {"uid":5,"image":"https://mblogthumb-phinf.pstatic.net/MjAyMDEyMTBfMjU0/MDAxNjA3NTg0NTk3MzYx.4V0OKu3R4IQ5PkwyazJb18bBcxBAy_lbX0MaVkFiIHAg.TwY4F5GIKDqptJ5NrAaM70CJGW8WkDmO-sNvv5M3bAQg.JPEG.sosohan_n/Mz_Stoned_on_Twitter.jpg?type=w800",
+        //         "gender":"male","interest":"","reportcnt":"0","name":"",
+        //         "nickname":"b","birth":"","position":"2","kakao_id":"2542925662"}],
 
-                "hashtag":["달려","가보자고","노브레이크"]},
-            {"title":"친목딱대","entrance":"off","silence":"off","time":"20230210155418","host":"5","max":4,
-            "code":"8vvak103","current":3,
-            "member":[
-                {"uid":6,"image":"https://mblogthumb-phinf.pstatic.net/MjAyMTAxMTJfMTI2/MDAxNjEwNDE3OTAxNTU4.b5gdWuqbuXOJv8fnKIoLc7yiuLxMlM254Qtme9ErMR0g.SVCWBa5pZgbitLqy89qd03SZcUK7bpTvNp71wmphYn8g.JPEG.sosohan_n/IMG_0594.JPG?type=w800",
-                "gender":"male","interest":"개껌","reportcnt":"0","name":"",
-                "nickname":"c","birth":"","position":"3","kakao_id":"2638215374"},
+        //         "hashtag":["달려","가보자고","노브레이크"]},
+        //     {"title":"친목딱대","entrance":"off","silence":"off","time":"20230210155418","host":"5","max":4,
+        //     "code":"8vvak103","current":3,
+        //     "member":[
+        //         {"uid":6,"image":"https://mblogthumb-phinf.pstatic.net/MjAyMTAxMTJfMTI2/MDAxNjEwNDE3OTAxNTU4.b5gdWuqbuXOJv8fnKIoLc7yiuLxMlM254Qtme9ErMR0g.SVCWBa5pZgbitLqy89qd03SZcUK7bpTvNp71wmphYn8g.JPEG.sosohan_n/IMG_0594.JPG?type=w800",
+        //         "gender":"male","interest":"개껌","reportcnt":"0","name":"",
+        //         "nickname":"c","birth":"","position":"3","kakao_id":"2638215374"},
                 
-                {"uid":6,"image":"https://mblogthumb-phinf.pstatic.net/MjAyMTAxMTJfMTAw/MDAxNjEwNDE3OTAxMDgw.nhG7gI3ZaCdBYgZgaAhj-c9nhHBWYFniRAu3up9m8XQg.lKFFOpTxcmieMsRj6phVQNhz8LtTP2hRSjHq4LGxpe4g.JPEG.sosohan_n/IMG_0585.JPG?type=w800",
-                "gender":"male","interest":"개껌","reportcnt":"0","name":"",
-                "nickname":"m","birth":"","position":"6","kakao_id":"2638215374"},
+        //         {"uid":6,"image":"https://mblogthumb-phinf.pstatic.net/MjAyMTAxMTJfMTAw/MDAxNjEwNDE3OTAxMDgw.nhG7gI3ZaCdBYgZgaAhj-c9nhHBWYFniRAu3up9m8XQg.lKFFOpTxcmieMsRj6phVQNhz8LtTP2hRSjHq4LGxpe4g.JPEG.sosohan_n/IMG_0585.JPG?type=w800",
+        //         "gender":"male","interest":"개껌","reportcnt":"0","name":"",
+        //         "nickname":"m","birth":"","position":"6","kakao_id":"2638215374"},
 
-                {"uid":5,"image":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTftkFjTeoyMGxP8TDcQVzH5B2UKeNJRDpULw&usqp=CAU",
-                "gender":"male","interest":"","reportcnt":"0","name":"",
-                "nickname":"d","birth":"","position":"5","kakao_id":"2542925662"}],
+        //         {"uid":5,"image":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTftkFjTeoyMGxP8TDcQVzH5B2UKeNJRDpULw&usqp=CAU",
+        //         "gender":"male","interest":"","reportcnt":"0","name":"",
+        //         "nickname":"d","birth":"","position":"5","kakao_id":"2542925662"}],
                 
-                "hashtag":["놀아요","아무나환영", "구미"]},
-            {"title":"재밌게 놀아요","entrance":"off","silence":"off","time":"20230210155418","host":"5","max":4,
-            "code":"8vvak104","current":3,
-            "member":[
-                {"uid":6,"image":"https://mblogthumb-phinf.pstatic.net/MjAyMTAxMTJfMTAw/MDAxNjEwNDE3OTAxMDgw.nhG7gI3ZaCdBYgZgaAhj-c9nhHBWYFniRAu3up9m8XQg.lKFFOpTxcmieMsRj6phVQNhz8LtTP2hRSjHq4LGxpe4g.JPEG.sosohan_n/IMG_0585.JPG?type=w800",
-                "gender":"male","interest":"개껌","reportcnt":"0","name":"",
-                "nickname":"e","birth":"","position":"2","kakao_id":"2638215374"},
+        //         "hashtag":["놀아요","아무나환영", "구미"]},
+        //     {"title":"재밌게 놀아요","entrance":"off","silence":"off","time":"20230210155418","host":"5","max":4,
+        //     "code":"8vvak104","current":3,
+        //     "member":[
+        //         {"uid":6,"image":"https://mblogthumb-phinf.pstatic.net/MjAyMTAxMTJfMTAw/MDAxNjEwNDE3OTAxMDgw.nhG7gI3ZaCdBYgZgaAhj-c9nhHBWYFniRAu3up9m8XQg.lKFFOpTxcmieMsRj6phVQNhz8LtTP2hRSjHq4LGxpe4g.JPEG.sosohan_n/IMG_0585.JPG?type=w800",
+        //         "gender":"male","interest":"개껌","reportcnt":"0","name":"",
+        //         "nickname":"e","birth":"","position":"2","kakao_id":"2638215374"},
 
-                {"uid":6,"image":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQqrR5aWkpOo_q6UG0Rpqjt9Wvzz2XAdRDkWg&usqp=CAU",
-                "gender":"male","interest":"개껌","reportcnt":"0","name":"",
-                "nickname":"n","birth":"","position":"6","kakao_id":"2638215374"},
+        //         {"uid":6,"image":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQqrR5aWkpOo_q6UG0Rpqjt9Wvzz2XAdRDkWg&usqp=CAU",
+        //         "gender":"male","interest":"개껌","reportcnt":"0","name":"",
+        //         "nickname":"n","birth":"","position":"6","kakao_id":"2638215374"},
 
-                {"uid":5,"image":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGX2N6n2i4Wk7t9gX2gitUGCNWl3H7DNV_eA&usqp=CAU",
-                "gender":"male","interest":"","reportcnt":"0","name":"",
-                "nickname":"f","birth":"","position":"4","kakao_id":"2542925662"}],
+        //         {"uid":5,"image":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGX2N6n2i4Wk7t9gX2gitUGCNWl3H7DNV_eA&usqp=CAU",
+        //         "gender":"male","interest":"","reportcnt":"0","name":"",
+        //         "nickname":"f","birth":"","position":"4","kakao_id":"2542925662"}],
                 
-                "hashtag":["친목환영","게임", "간술해요"]},
-            {"title":"8기7조회식","entrance":"off","silence":"off","time":"20230210155418","host":"5","max":4,
-            "code":"8vvak111","current":2,
-            "member":[
-                {"uid":6,"image":"http://k.kakaocdn.net/dn/c0405I/btrUKnHeIku/kvehoKnkkYs9H8pLUD0wY1/img_640x640.jpg",
-                "gender":"male","interest":"개껌","reportcnt":"0","name":"",
-                "nickname":"g","birth":"","position":"3","kakao_id":"2638215374"},
+        //         "hashtag":["친목환영","게임", "간술해요"]},
+        //     {"title":"8기7조회식","entrance":"off","silence":"off","time":"20230210155418","host":"5","max":4,
+        //     "code":"8vvak111","current":2,
+        //     "member":[
+        //         {"uid":6,"image":"http://k.kakaocdn.net/dn/c0405I/btrUKnHeIku/kvehoKnkkYs9H8pLUD0wY1/img_640x640.jpg",
+        //         "gender":"male","interest":"개껌","reportcnt":"0","name":"",
+        //         "nickname":"g","birth":"","position":"3","kakao_id":"2638215374"},
 
-                {"uid":5,"image":"http://k.kakaocdn.net/dn/Qs7jd/btrMxCykHAJ/AyV40fXVb5uJegzLKRMzAk/img_640x640.jpg",
-                "gender":"male","interest":"","reportcnt":"0","name":"",
-                "nickname":"h","birth":"","position":"6","kakao_id":"2542925662"}],
+        //         {"uid":5,"image":"http://k.kakaocdn.net/dn/Qs7jd/btrMxCykHAJ/AyV40fXVb5uJegzLKRMzAk/img_640x640.jpg",
+        //         "gender":"male","interest":"","reportcnt":"0","name":"",
+        //         "nickname":"h","birth":"","position":"6","kakao_id":"2542925662"}],
                 
-                "hashtag":["오랜만이야", "소맥장인팀장님"]},
-            {"title":"이직준비힘들다","entrance":"off","silence":"off","time":"20230210155418","host":"5","max":4,
-            "code":"8vvak107","current":4,
-            "member":[
-                {"uid":6,"image":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEo8Uos4vhuXXgQVabJKEhUCW0CUje1LX0Xg&usqp=CAU",
-                "gender":"male","interest":"개껌","reportcnt":"0","name":"",
-                "nickname":"i","birth":"","position":"1","kakao_id":"2638215374"},
+        //         "hashtag":["오랜만이야", "소맥장인팀장님"]},
+        //     {"title":"이직준비힘들다","entrance":"off","silence":"off","time":"20230210155418","host":"5","max":4,
+        //     "code":"8vvak107","current":4,
+        //     "member":[
+        //         {"uid":6,"image":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEo8Uos4vhuXXgQVabJKEhUCW0CUje1LX0Xg&usqp=CAU",
+        //         "gender":"male","interest":"개껌","reportcnt":"0","name":"",
+        //         "nickname":"i","birth":"","position":"1","kakao_id":"2638215374"},
 
-                {"uid":6,"image":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXykM4ZnAgEGuZQyEhgM-9JN-BYy_eyHKLXg&usqp=CAU",
-                "gender":"male","interest":"개껌","reportcnt":"0","name":"",
-                "nickname":"o","birth":"","position":"6","kakao_id":"2638215374"},
+        //         {"uid":6,"image":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXykM4ZnAgEGuZQyEhgM-9JN-BYy_eyHKLXg&usqp=CAU",
+        //         "gender":"male","interest":"개껌","reportcnt":"0","name":"",
+        //         "nickname":"o","birth":"","position":"6","kakao_id":"2638215374"},
 
-                {"uid":6,"image":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxpc0fXu4d1C-LQRvbVIcwJlGh9Yf4zQpKxA&usqp=CAU",
-                "gender":"male","interest":"개껌","reportcnt":"0","name":"",
-                "nickname":"p","birth":"","position":"2","kakao_id":"2638215374"},
+        //         {"uid":6,"image":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxpc0fXu4d1C-LQRvbVIcwJlGh9Yf4zQpKxA&usqp=CAU",
+        //         "gender":"male","interest":"개껌","reportcnt":"0","name":"",
+        //         "nickname":"p","birth":"","position":"2","kakao_id":"2638215374"},
                 
-                {"uid":5,"image":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZlQ4vNXdRfuTd2sazNIr_nAWUDcdAwZG4rQ&usqp=CAU",
-                "gender":"male","interest":"","reportcnt":"0","name":"",
-                "nickname":"j","birth":"","position":"4","kakao_id":"2542925662"}],
+        //         {"uid":5,"image":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZlQ4vNXdRfuTd2sazNIr_nAWUDcdAwZG4rQ&usqp=CAU",
+        //         "gender":"male","interest":"","reportcnt":"0","name":"",
+        //         "nickname":"j","birth":"","position":"4","kakao_id":"2542925662"}],
                 
-                "hashtag":["정보공유","잡플래닛", "연봉"]}
-            ]
+        //         "hashtag":["정보공유","잡플래닛", "연봉"]}
+        //     ]
 
         console.log(this.table1_axios)
 
