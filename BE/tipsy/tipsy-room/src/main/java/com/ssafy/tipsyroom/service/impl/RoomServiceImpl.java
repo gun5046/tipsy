@@ -115,7 +115,7 @@ public class RoomServiceImpl implements RoomService {
 	}
 	
 	@Override
-	public List<Map<Object, Object>> getTable(int bno) {
+	public List<Map<Object, Object>> getTable(int bno) throws NullPointerException {
 		List<Map<Object, Object>> info = roomRepo.getTable(bno);
 		List<Map<Object, Object>> memberlist = new ArrayList<>(); 
 		UserVo uservo;
@@ -138,7 +138,9 @@ public class RoomServiceImpl implements RoomService {
 					Map<Object, Object> member = new HashMap();
 					logger.info(arr[0] + "님이 앉은 자리는 " + arr[1] + "번입니다.");
 					uservo = userDao.findUserByUid(Long.parseLong(arr[0]));
-
+					
+					if(uservo.getUid() == null) continue;
+					
 					member.put("uid", uservo.getUid());
 					member.put("kakao_id", uservo.getKakao_id());
 					member.put("name", uservo.getName());
@@ -151,6 +153,7 @@ public class RoomServiceImpl implements RoomService {
 					member.put("position", arr[1]);
 
 					memberlist.add(member);
+
 				}
 				map.put("member", memberlist);
 			}		
