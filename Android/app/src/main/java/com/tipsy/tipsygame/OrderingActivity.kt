@@ -26,6 +26,7 @@ class OrderingActivity : AppCompatActivity() {
     private val btnList = mutableListOf<Button>()
     private var count = 1
     private var wait: Job? = null
+    private var start = false
     private var rightId = 0
     private var failId = 0
     private var countId = 0
@@ -101,6 +102,7 @@ class OrderingActivity : AppCompatActivity() {
                 binding.timer1.visibility = View.GONE
                 binding.timerBackground.visibility = View.GONE
             }
+            start = true
             while (time>0){
                 time--
                 runOnUiThread {
@@ -157,7 +159,7 @@ class OrderingActivity : AppCompatActivity() {
     fun buttonSetOnClick(){
         for(i in 0..14){
             btnList[i].setOnClickListener {
-                if(count == btnList[i].text.toString().toInt()){
+                if(start && count == btnList[i].text.toString().toInt()){
                     GlobalApplication.sp.play(rightId, 1f, 1f, 0, 0, 1f)
                     if(count == 15){
                         timer.cancel()

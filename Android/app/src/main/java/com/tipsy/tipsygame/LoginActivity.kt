@@ -76,7 +76,7 @@ class LoginActivity : AppCompatActivity() {
                         startActivity(intent)
                         finish()
                     } else {
-                        val builder = AlertDialog.Builder(this@LoginActivity)
+                        val builder = AlertDialog.Builder(this@LoginActivity, R.style.Theme_dialog)
                         val dialogBinding = CommonDialogBinding.inflate(LayoutInflater.from(this@LoginActivity))
                         builder.setView(dialogBinding.root)
                         dialogBinding.messageText.text = "웹에서 회원가입을 해주세요"
