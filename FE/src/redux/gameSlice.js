@@ -15,6 +15,9 @@ export const gameSlice = createSlice({
     getScene: (state, action) => {
       state.scene = action.payload;
     },
+    getStore: (state, action) => {
+      state.store = action.payload;
+    },
     getTable: (state, action) => {
       state.table = action.payload;
     },
@@ -30,6 +33,6 @@ export const gameSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { getScene, getTable, getChair, getStreetPosition } = gameSlice.actions
+export const { getScene, getTable, getChair, getStreetPosition, getStore } = gameSlice.actions
 
 export default gameSlice.reducer

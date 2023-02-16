@@ -35,7 +35,7 @@ import popup_m from '../assets/street/popup_m.png'
 import QR from '../assets/street/appQR.png'
 
 
-import { getScene, getStreetPosition } from '../redux/gameSlice';
+import { getScene, getStreetPosition, getStore } from '../redux/gameSlice';
 import { infoActions } from '../redux/infoSlice';
 import { store } from '../redux/store';
 
@@ -285,6 +285,7 @@ class streetScene extends Phaser.Scene {
 
         // 맵이동
         this.buildings.forEach((building, i) => {
+            console.log(building)
             // 건물 앞에 서있을 때 인식하기
              if (this.player.body.x > building.x && this.player.body.x < building.x + building.width ) {
                 building.info.title.visible = true;
@@ -299,8 +300,14 @@ class streetScene extends Phaser.Scene {
                     store.dispatch(getScene(building.id))
                     store.dispatch(getStreetPosition(this.player.body.x))
                     console.log(building.id);
-                    if(i===1){
+                    if(i === 1){
                         building.qr.visible = true;
+                    }
+                    if(i === 3){ //bar
+                        store.dispatch(getStore(2))
+                    }
+                    if(i === 6){ //gumi
+                        store.dispatch(getStore(1))
                     }
                 }
             }

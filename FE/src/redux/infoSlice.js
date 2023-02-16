@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit'
 const initialState = {
     buildingInfo: [],
     tableInfo1: [],
+    tableInfo2: [],
     createRoom: false,
     publicRoom: true,
     roomNumber: '',
@@ -18,6 +19,9 @@ export const infoSlice = createSlice({
     },
     getTable1: (state, action) => {
       state.tableInfo1 = action.payload;
+    },
+    getTable2: (state, action) => {
+      state.tableInfo2 = action.payload;
     },
     isCreateRoom: (state, action) => {
       state.createRoom = action.payload

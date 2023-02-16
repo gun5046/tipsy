@@ -535,6 +535,7 @@ function Meeting({match}) {
       scene.add(sky)
     }
     else if (rid < 300 && rid >= 200) {
+      console.log('zxcc-----------------------------zzzzz')
       const skyTexture = new THREE.TextureLoader().load(`/room/200/200_0.jpg`)
       //const skyGeometry = new THREE.SphereGeometry(400, 60, 40)
       const skyGeometry = new THREE.CylinderGeometry(150, 150, 400, 32, 2, true)

@@ -23,6 +23,9 @@ import bu from '../assets/photo/김부경.png';
 import popup from '../assets/street/popup.png'
 
 import { getScene } from '../redux/gameSlice';
+import { getChair } from '../redux/gameSlice';
+import { getTable } from '../redux/gameSlice';
+import { infoActions } from '../redux/infoSlice';
 import { store } from '../redux/store';
 
 let current_chair = -1
@@ -30,7 +33,7 @@ let current_table = -1
 let chair_x = -1
 let chair_y = -1
 let table_array = new Array(11);
-let roomTF = new Array(11);
+let roomTF = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 //테이블 위치랑 axios 배열의 위치 대응
 let roomIndex = new Array(11);
 const roomTemp = [[0, 0], [0, 0],[0, 0],[0, 0],[10, 0],[0, 0],[0, 0],[0, 0],[0, 0],[0, 0],[0, 0]]
@@ -72,65 +75,70 @@ class barScene extends Phaser.Scene {
         // 타일맵 Json 불러오기
         this.load.tilemapTiledJSON('map', bar_map)
 
-        this.table1_axios = [
-            {"title":"별이빛나는밤에","password":"1111","entrance":"off","silence":"off","time":"20230210155347","host":"6","max":4,
-            "code":"uawm5103","current":2,
-            "member":[
-                {"uid":6,"image":"https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAxODA3MDRfMTk4%2FMDAxNTMwNzEyMDA4Mzg0.wOQo5UtyC0UgJXf2ARs4wYoVq7xKN-YFLFd8ALMTwjUg.Rd98r1apdrj6l13X7Oksb7OoOy_SeGB3VhB-770OGT8g.JPEG.kiko13%2FIMG_2521.JPG&type=a340",
-                "gender":"male","interest":"개껌","reportcnt":"0","name":"",
-                "nickname":"a","birth":"","position":"1","kakao_id":"2638215374"},
 
-                {"uid":5,"image":"https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMTA0MzBfNjUg%2FMDAxNjE5Nzg3NjgzNjQ4.RSfPWBkbvlElEzX2Mmh1DCxHIlLpY4lwQ-BHdrxY1wkg.kz22rF5m2KNE_P5ioVXXaGHdmRRY_Toc6iYDCjknTzQg.JPEG.espart1226%2F2005a7f5c29ae260b899329501ffeb6f.jpg&type=a340",
-                "gender":"male","interest":"","reportcnt":"0","name":"",
-                "nickname":"b","birth":"","position":"2","kakao_id":"2542925662"}],
+        ///// redux
+        console.log('table1_axios222222222222222')
+        this.table1_axios = store.getState().info.tableInfo2
 
-                "hashtag":["친목좋아요","무드","감성"]},
-            {"title":"술꾼도시여자들","entrance":"off","silence":"off","time":"20230210155418","host":"5","max":4,
-            "code":"8vvak101","current":4,
-            "member":[
-                {"uid":6,"image":"https://post-phinf.pstatic.net/MjAyMTEwMTVfOTQg/MDAxNjM0MzA0ODMwMjAx.vPlmE3Q5CojBYPgTFJHGfMRTJSdeMD2N3TKzWmxB3j4g.eoJsC5dbz4G1wTo2EOUxpK-qpCcJN5Uny9vF31gZLssg.JPEG/%EC%9E%94%EB%93%A0%EB%AF%95.jpg?type=w1200",
-                "gender":"male","interest":"개껌","reportcnt":"0","name":"",
-                "nickname":"강지구","birth":"","position":"1","kakao_id":"2638215374"},
+        // this.table1_axios = [
+        //     {"title":"별이빛나는밤에","password":"1111","entrance":"off","silence":"off","time":"20230210155347","host":"6","max":4,
+        //     "code":"uawm5103","current":2,
+        //     "member":[
+        //         {"uid":6,"image":"https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAxODA3MDRfMTk4%2FMDAxNTMwNzEyMDA4Mzg0.wOQo5UtyC0UgJXf2ARs4wYoVq7xKN-YFLFd8ALMTwjUg.Rd98r1apdrj6l13X7Oksb7OoOy_SeGB3VhB-770OGT8g.JPEG.kiko13%2FIMG_2521.JPG&type=a340",
+        //         "gender":"male","interest":"개껌","reportcnt":"0","name":"",
+        //         "nickname":"a","birth":"","position":"1","kakao_id":"2638215374"},
 
-                {"uid":5,"image":"https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMjEyMTFfMTI4%2FMDAxNjcwNjg5NTUxOTYz._WO-fQMUBo-loq4ozfUHdP4xbt8rAyybWS1v7_QicaUg.MJpwLLOfneGM9vj_jTc6eXmaRH2JeJU0CdaemdbEYMcg.JPEG.cjdthddl83%2FIMG%25A3%25DF20221211%25A3%25DF012119%25A3%25DF280.jpg&type=a340",
-                "gender":"male","interest":"","reportcnt":"0","name":"",
-                "nickname":"한지연","birth":"","position":"2","kakao_id":"2542925662"},
+        //         {"uid":5,"image":"https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMTA0MzBfNjUg%2FMDAxNjE5Nzg3NjgzNjQ4.RSfPWBkbvlElEzX2Mmh1DCxHIlLpY4lwQ-BHdrxY1wkg.kz22rF5m2KNE_P5ioVXXaGHdmRRY_Toc6iYDCjknTzQg.JPEG.espart1226%2F2005a7f5c29ae260b899329501ffeb6f.jpg&type=a340",
+        //         "gender":"male","interest":"","reportcnt":"0","name":"",
+        //         "nickname":"b","birth":"","position":"2","kakao_id":"2542925662"}],
 
-                {"uid":5,"image":"https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMzAxMTNfMTkz%2FMDAxNjczNjIwOTI1ODAx.7zFi4sggkorfte4aRgtsO7zGgBfOQse7G1lAWsOC5cEg.aSWjs6Fj_mq2YCpW1VNquaaq-T1DautbsUXQ3FCMEpwg.PNG.kws3128pdm%2F%25C1%25A6%25B8%25F1%25C0%25BB_%25C0%25D4%25B7%25C2%25C7%25CF%25BC%25BC%25BF%25E4_%25283%2529.png&type=a340",
-                "gender":"male","interest":"","reportcnt":"0","name":"",
-                "nickname":"안소희","birth":"","position":"3","kakao_id":"2542925662"},
+        //         "hashtag":["친목좋아요","무드","감성"]},
+        //     {"title":"술꾼도시여자들","entrance":"off","silence":"off","time":"20230210155418","host":"5","max":4,
+        //     "code":"8vvak101","current":4,
+        //     "member":[
+        //         {"uid":6,"image":"https://post-phinf.pstatic.net/MjAyMTEwMTVfOTQg/MDAxNjM0MzA0ODMwMjAx.vPlmE3Q5CojBYPgTFJHGfMRTJSdeMD2N3TKzWmxB3j4g.eoJsC5dbz4G1wTo2EOUxpK-qpCcJN5Uny9vF31gZLssg.JPEG/%EC%9E%94%EB%93%A0%EB%AF%95.jpg?type=w1200",
+        //         "gender":"male","interest":"개껌","reportcnt":"0","name":"",
+        //         "nickname":"강지구","birth":"","position":"1","kakao_id":"2638215374"},
 
-                {"uid":5,"image":"https://search.pstatic.net/common/?src=http%3A%2F%2Fimgnews.naver.net%2Fimage%2F311%2F2022%2F12%2F23%2F0001538407_003_20221223095601555.jpg&type=a340",
-                "gender":"male","interest":"","reportcnt":"0","name":"",
-                "nickname":"강북구","birth":"","position":"4","kakao_id":"2542925662"},
-                ],
+        //         {"uid":5,"image":"https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMjEyMTFfMTI4%2FMDAxNjcwNjg5NTUxOTYz._WO-fQMUBo-loq4ozfUHdP4xbt8rAyybWS1v7_QicaUg.MJpwLLOfneGM9vj_jTc6eXmaRH2JeJU0CdaemdbEYMcg.JPEG.cjdthddl83%2FIMG%25A3%25DF20221211%25A3%25DF012119%25A3%25DF280.jpg&type=a340",
+        //         "gender":"male","interest":"","reportcnt":"0","name":"",
+        //         "nickname":"한지연","birth":"","position":"2","kakao_id":"2542925662"},
+
+        //         {"uid":5,"image":"https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMzAxMTNfMTkz%2FMDAxNjczNjIwOTI1ODAx.7zFi4sggkorfte4aRgtsO7zGgBfOQse7G1lAWsOC5cEg.aSWjs6Fj_mq2YCpW1VNquaaq-T1DautbsUXQ3FCMEpwg.PNG.kws3128pdm%2F%25C1%25A6%25B8%25F1%25C0%25BB_%25C0%25D4%25B7%25C2%25C7%25CF%25BC%25BC%25BF%25E4_%25283%2529.png&type=a340",
+        //         "gender":"male","interest":"","reportcnt":"0","name":"",
+        //         "nickname":"안소희","birth":"","position":"3","kakao_id":"2542925662"},
+
+        //         {"uid":5,"image":"https://search.pstatic.net/common/?src=http%3A%2F%2Fimgnews.naver.net%2Fimage%2F311%2F2022%2F12%2F23%2F0001538407_003_20221223095601555.jpg&type=a340",
+        //         "gender":"male","interest":"","reportcnt":"0","name":"",
+        //         "nickname":"강북구","birth":"","position":"4","kakao_id":"2542925662"},
+        //         ],
                 
-                "hashtag":["적시자","아우디", "오복집"]},
-            {"title":"집사모임","entrance":"off","silence":"off","time":"20230210155418","host":"5","max":4,
-            "code":"8vvak105","current":2,
-            "member":[
-                {"uid":6,"image":"https://search.pstatic.net/common/?src=http%3A%2F%2Fpost.phinf.naver.net%2FMjAyMDA2MDlfMjEw%2FMDAxNTkxNjk1MTM4OTI4.LvldwiT0_pjrP8xtQeJUifXhtvO4WFXeEz6xwJmz0J8g.k9LyAkihXYNAGlO-LNG2aDh4MHT1uEw7jdZmssrRddsg.JPEG%2FIUh3Uhbp3qRQKP34LfrZKVLLagB4.jpg&type=a340",
-                "gender":"male","interest":"개껌","reportcnt":"0","name":"",
-                "nickname":"c","birth":"","position":"2","kakao_id":"2638215374"},
+        //         "hashtag":["적시자","아우디", "오복집"]},
+        //     {"title":"집사모임","entrance":"off","silence":"off","time":"20230210155418","host":"5","max":4,
+        //     "code":"8vvak105","current":2,
+        //     "member":[
+        //         {"uid":6,"image":"https://search.pstatic.net/common/?src=http%3A%2F%2Fpost.phinf.naver.net%2FMjAyMDA2MDlfMjEw%2FMDAxNTkxNjk1MTM4OTI4.LvldwiT0_pjrP8xtQeJUifXhtvO4WFXeEz6xwJmz0J8g.k9LyAkihXYNAGlO-LNG2aDh4MHT1uEw7jdZmssrRddsg.JPEG%2FIUh3Uhbp3qRQKP34LfrZKVLLagB4.jpg&type=a340",
+        //         "gender":"male","interest":"개껌","reportcnt":"0","name":"",
+        //         "nickname":"c","birth":"","position":"2","kakao_id":"2638215374"},
 
-                {"uid":5,"image":"https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAxOTAzMTRfMTg1%2FMDAxNTUyNTI4NjI5NzE3.aViiuuxxvSKuj-NyEuf4qpJMqooATX5LuJYaaPzogkgg.xJ9__dAz6jX0bURfELp-OFeyAsMfd3__XpgpZPcF0egg.JPEG.aveeya%2FIMG_0830.jpg&type=a340",
-                "gender":"male","interest":"","reportcnt":"0","name":"",
-                "nickname":"d","birth":"","position":"3","kakao_id":"2542925662"}],
+        //         {"uid":5,"image":"https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAxOTAzMTRfMTg1%2FMDAxNTUyNTI4NjI5NzE3.aViiuuxxvSKuj-NyEuf4qpJMqooATX5LuJYaaPzogkgg.xJ9__dAz6jX0bURfELp-OFeyAsMfd3__XpgpZPcF0egg.JPEG.aveeya%2FIMG_0830.jpg&type=a340",
+        //         "gender":"male","interest":"","reportcnt":"0","name":"",
+        //         "nickname":"d","birth":"","position":"3","kakao_id":"2542925662"}],
                 
-                "hashtag":["집사","귀여워", "츄르츄르"]},
-            {"title":"2:2소개팅","entrance":"off","silence":"off","time":"20230210155418","host":"5","max":4,
-            "code":"8vvak108","current":2,
-            "member":[
-                {"uid":6,"image":"https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMzAxMjZfNDcg%2FMDAxNjc0NzAwOTA4MDk5.PGM4aDYSmIG0mHqKdEw3IBZXh2X57ulDzlJ8gN1KOAEg.5BoD8nJxnEoWtVH8VkoYRWDffIe0MPVVTei0WnXfchgg.JPEG.withinarts%2FUntitled-4_copy.jpg&type=a340",
-                "gender":"male","interest":"개껌","reportcnt":"0","name":"",
-                "nickname":"e","birth":"","position":"1","kakao_id":"2638215374"},
+        //         "hashtag":["집사","귀여워", "츄르츄르"]},
+        //     {"title":"2:2소개팅","entrance":"off","silence":"off","time":"20230210155418","host":"5","max":4,
+        //     "code":"8vvak108","current":2,
+        //     "member":[
+        //         {"uid":6,"image":"https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMzAxMjZfNDcg%2FMDAxNjc0NzAwOTA4MDk5.PGM4aDYSmIG0mHqKdEw3IBZXh2X57ulDzlJ8gN1KOAEg.5BoD8nJxnEoWtVH8VkoYRWDffIe0MPVVTei0WnXfchgg.JPEG.withinarts%2FUntitled-4_copy.jpg&type=a340",
+        //         "gender":"male","interest":"개껌","reportcnt":"0","name":"",
+        //         "nickname":"e","birth":"","position":"1","kakao_id":"2638215374"},
 
-                {"uid":5,"image":"https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMjA3MTNfMTI1%2FMDAxNjU3Njg5ODQ2MjIx.55D9DLEri46TT5dqocmEMxkWo6aHZmmA6vw42fjTc9Ug.H2SgvGfavaIXiKgotDvuUnT7KPTmYJ5heJpKg8sAG-Mg.JPEG.lyj0900%2FScreenshot%25A3%25DF20220713%25A3%25AD141515%25A3%25DFInstagram.jpg&type=sc960_832",
-                "gender":"male","interest":"","reportcnt":"0","name":"",
-                "nickname":"f","birth":"","position":"2","kakao_id":"2542925662"}],
+        //         {"uid":5,"image":"https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMjA3MTNfMTI1%2FMDAxNjU3Njg5ODQ2MjIx.55D9DLEri46TT5dqocmEMxkWo6aHZmmA6vw42fjTc9Ug.H2SgvGfavaIXiKgotDvuUnT7KPTmYJ5heJpKg8sAG-Mg.JPEG.lyj0900%2FScreenshot%25A3%25DF20220713%25A3%25AD141515%25A3%25DFInstagram.jpg&type=sc960_832",
+        //         "gender":"male","interest":"","reportcnt":"0","name":"",
+        //         "nickname":"f","birth":"","position":"2","kakao_id":"2542925662"}],
                 
-                "hashtag":["26살","구미살아요", "자만추"]}
-            ]
+        //         "hashtag":["26살","구미살아요", "자만추"]}
+        //     ]
 
         //비공개 방 : 2, 공개방 : 1, 사람없음 : 0
         this.table1_axios.forEach((obj, i)=> {
@@ -337,6 +345,8 @@ class barScene extends Phaser.Scene {
                 current_table = -1
                 current_chair = -1
             }
+            store.dispatch(infoActions.isCreateRoom(false));
+            store.dispatch(infoActions.isPublic(true));
 
         } else if (this.cursors.right.isDown) {
             this.player.setVelocityX(speed);
@@ -350,6 +360,8 @@ class barScene extends Phaser.Scene {
                 current_table = -1
                 current_chair = -1
             }
+            store.dispatch(infoActions.isCreateRoom(false));
+            store.dispatch(infoActions.isPublic(true));
 
         } else if (this.cursors.up.isDown) {
             this.player.setVelocityY(-speed);
@@ -363,6 +375,8 @@ class barScene extends Phaser.Scene {
                 current_table = -1
                 current_chair = -1
             }
+            store.dispatch(infoActions.isCreateRoom(false));
+            store.dispatch(infoActions.isPublic(true));
 
         } else if (this.cursors.down.isDown) {
             this.player.setVelocityY(speed);
@@ -376,6 +390,8 @@ class barScene extends Phaser.Scene {
                 current_table = -1
                 current_chair = -1
             }
+            store.dispatch(infoActions.isCreateRoom(false));
+            store.dispatch(infoActions.isPublic(true));
 
         } else {
             // this.player.anims.stop();
@@ -411,6 +427,36 @@ class barScene extends Phaser.Scene {
                     this.player.setDepth(5)
                     break
                 
+            }
+
+            console.log('앉기')
+            // console.log(roomTF)
+            
+            store.dispatch(getChair(current_chair + 1));
+            store.dispatch(getTable(current_table + 1));
+            //// 사람없는 곳에 앉으면 리덕스에 true
+            // 0 방 개설
+            if (roomTF[current_table] == 0) {
+                store.dispatch(infoActions.isCreateRoom(true));
+                console.log('00000000000')
+            }
+            else {
+                store.dispatch(infoActions.isCreateRoom(false));
+                store.dispatch(infoActions.getRoomNum(this.table1_axios[roomIndex[current_table]].code));
+                // console.log('1111111111111111112222222222222222222222')
+                console.log(this.table1_axios[roomIndex[current_table]].code)
+                // 1 공개
+                if (roomTF[current_table] == 1) {
+                    console.log('111111111111111111')
+                    store.dispatch(infoActions.isPublic(true));
+                } 
+                // 2 비공개
+                else if (roomTF[current_table] == 2) {
+                    console.log('222222222222222222222222222')
+                    store.dispatch(infoActions.isPublic(false));
+                    store.dispatch(infoActions.getPassword(this.table1_axios[roomIndex[current_table]].password));
+                    // store.dispatch(infoActions.getRoomNum(this.table1_axios.code));              
+                }
             }
         }
     }

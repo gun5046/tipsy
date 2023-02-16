@@ -44,6 +44,7 @@ const RoomSetting = () => {
   const currentScene = useSelector((state) => state.game.scene)
   const currentChair = useSelector((state) => state.game.chair)
   const currentTable = useSelector((state) => state.game.table)
+  const currentStore = useSelector((state) => state.game.store)
   const currentUid = useSelector((state) => state.auth.uid)
   const url = 'http://i8d207.p.ssafy.io:8083/room'
   // const url = 'http://localhost:8083/room'
@@ -51,24 +52,24 @@ const RoomSetting = () => {
   const handleClose = () => {
     setOpen(false);
   };
-
+  console.log(currentStore)
   useEffect(() => {
     // 방이름 추가 && 구미이면 1번 서울이면 2번.... 이런식으로 방코드 저장
     if (currentTable !== -1){
-      if (String(currentTable).length === 1) {
-        setRoomState({
-          ...roomState,
-          code:`10${currentTable}`
-        });
-        
-      } else {
-        setRoomState({
-          ...roomState,
-          code:`1${currentTable}`
-        });
-      }
-    }
-  }, [currentChair, currentTable])
+        if (String(currentTable).length === 1) {
+          setRoomState({
+            ...roomState,
+            code:`${currentStore}0${currentTable}`
+          });
+          
+        } else {
+          setRoomState({
+            ...roomState,
+            code:`${currentStore}${currentTable}`
+          });
+        }
+      } 
+  }, [currentChair, currentTable, currentScene])
   // console.log(currentChair, currentTable)
   console.log(roomState.code)
 
