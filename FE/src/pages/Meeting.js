@@ -1,11 +1,9 @@
 import * as THREE from 'three'
 import { MeshBasicMaterial } from 'three';
-//import {RGBELoader} from 'three/examples/jsm/loaders/RGBELoader'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { Stomp } from "@stomp/stompjs"; 
 import SockJS from 'sockjs-client';
 import { useState } from 'react';
-//import { GUI } from 'dat.gui'
 import './Meeting.css'
 import { SelfieSegmentation } from "@mediapipe/selfie_segmentation";
 import { useParams } from 'react-router-dom';
@@ -42,8 +40,8 @@ function Meeting({match}) {
   let ws = new WebSocket('ws://'+'i8d207.p.ssafy.io:8443'+'/groupcall');
   let participants = {};
   // let name = localStorage.getItem("state");
-  //let name = useSelector((state) => state.auth.uid) + ',' + useSelector((state) => state.auth.nickname) + ',' + (useSelector((state) => state.game.chair)-1);
-  let name = useSelector((state) => state.auth.uid) + ',aaa,' + (useSelector((state) => state.game.chair)-1);
+  let name = useSelector((state) => state.auth.uid) + ',' + useSelector((state) => state.auth.nickname) + ',' + (useSelector((state) => state.game.chair)-1);
+  //let name = useSelector((state) => state.auth.uid) + ',aaa,' + (useSelector((state) => state.game.chair)-1);
  //let room = match.params.id
   let room = rid
 
@@ -416,7 +414,17 @@ function Meeting({match}) {
     backgroundSound.setVolume(0.4)
   })
   listener.setMasterVolume(1)
-
+  if ( rid > 200 ) {
+    const backgroundSound2 = new THREE.Audio( listener)
+    const audioLoader = new THREE.AudioLoader()
+    audioLoader.load('../src/assets/mp3/jazzbar.mp3', function( buffer ) {
+      backgroundSound.setBuffer(buffer)
+      backgroundSound.setLoop(true)
+      backgroundSound.setVolume(0.4)
+      backgroundSound.play()
+    })
+    listener.setMasterVolume(1)
+  }
   const renderer = new THREE.WebGLRenderer()
   renderer.setSize(window.innerWidth, window.innerHeight)
   document.body.appendChild(renderer.domElement)
@@ -626,7 +634,7 @@ function Meeting({match}) {
               o.material.opacity = 0.28
   	      }
   	    });
-  	  bottle.scale.set(40, 40, 40)
+  	  bottle.scale.set(20, 20, 20)
   	  bottle.position.set(x, y, z)
   	  scene.add(bottle)
       bottle.rotation.x = -Math.PI/2
@@ -643,71 +651,47 @@ function Meeting({match}) {
             //o.material.map = diff;
         }
       });
-    label.scale.set(40, 40, 40)
+    label.scale.set(20, 20, 20)
     label.position.set(x, y, z)
     scene.add(label)
     label.rotation.x = -Math.PI/2
   })
 	}
-  function anju(sit){
+  function anju(x1,y1, z1, x2,y2,z2,x3,y3,z3,){
     const foodLoader = new GLTFLoader()
     foodLoader.load( '/3d/pizza/pizza.gltf',
     gltf2 => {
       var pizza = gltf2.scene;
-      //bottle.scale.set(30,30,30)
-      pizza.position.set(0,6.4,5)
-      //scene.add(pizza)
+      pizza.scale.set(0.5, 0.5, 0.5)
+      pizza.position.set(x1, y1, z1)
+      scene.add(pizza)
     })
-    foodLoader.load( '/3d/pizza/frenchfries.gltf',
+    foodLoader.load( '/3d/charcuterie_board_for_oncyber_spaces/scene.gltf',
      gltf2 => {
       var pizza = gltf2.scene;
-      //bottle.scale.set(30,30,30)
-      pizza.position.set(3,6.4,5)
-      //scene.add(pizza)
+      pizza.scale.set(3, 3, 3)
+      pizza.position.set(x2, y2, z2)
+      scene.add(pizza)
     })
-    foodLoader.load( '/3d/krispy_fried_chicken_resize.glb',
-    gltf2 => {
-     var leg = gltf2.scene;
-     leg.scale.set(1.5, 1.5, 1.5)
-     leg.position.set(0,6.4,9)
-     //scene.add(leg)
-   })
-   foodLoader.load( '/3d/krispy_fried_chicken_resize.glb',
-   gltf2 => {
-    var leg = gltf2.scene;
-    leg.scale.set(1.5, 1.5, 1.5)
-    leg.position.set(0.5,6.4,9)
-    leg.rotateX(0.3)
-    //scene.add(leg)
-  })
-  foodLoader.load( '/3d/krispy_fried_chicken_resize.glb',
-  gltf2 => {
-   var leg = gltf2.scene;
-   leg.scale.set(1.5, 1.5, 1.5)
-   leg.position.set(1,6.4,9)
-   leg.rotateX(-0.5)
-   leg.rotateY(-0.5)
-   //scene.add(leg)
-  })
   foodLoader.load( '/3d/florence_steak_-_fiorentina_bistecca/scene.gltf',
    gltf2 => {
     var steak = gltf2.scene;
-    steak.scale.set(5,5,5)
-    steak.position.set(-8,-3,-3)
+    steak.scale.set(3,3,3)
+    steak.position.set(x3, y3, z3)
     scene.add(steak)
   })
-  foodLoader.load( '/3d/ssafydesk.gltf',
-  gltf2 => {
-    var desk = gltf2.scene;
-    desk.scale.set( 20, 20, 20 )
-    desk.position.set( 8, 5, -7 )
-    desk.rotateX( - Math.PI/2 )
-    //scene.add(desk)
-  })
-  //sojumaker(0, -2, -5)
-  //sojumaker(3, 6, 2)
-  //sojumaker(-5, 6, 2)
-  //sojumaker(5, 6, 10)
+
+
+  }
+  function cheese(x1,y1, z1){
+    const foodLoader = new GLTFLoader()
+    foodLoader.load( '/3d/chicken_plate/scene.gltf',
+    gltf2 => {
+      var pizza = gltf2.scene;
+      pizza.scale.set(2.4, 2.4, 2.4 )
+      pizza.position.set(x1, y1, z1)
+      scene.add(pizza)
+    })
   }
   let raycaster = new THREE.Raycaster()
   function onWindowResize() {
@@ -920,11 +904,11 @@ function Meeting({match}) {
     // if (webcamTexture) webcamTexture.needsUpdate = true
     //}
 
-    lat = Math.max( - 85, Math.min( 85, lat ) );
-    //lat = Math.max( 0 );
+    //lat = Math.max( - 85, Math.min( 85, lat ) );
+    lat = Math.max( 0 );
     phi = THREE.MathUtils.degToRad( 90 - lat );
-    theta = THREE.MathUtils.degToRad( lon );
-    //theta = THREE.MathUtils.degToRad( Math.max( - 180, Math.min( 20, lon ) ) );
+    //theta = THREE.MathUtils.degToRad( lon );
+    theta = THREE.MathUtils.degToRad( Math.max( - 180, Math.min( 20, lon ) ) );
     let x = 500 * Math.sin( phi ) * Math.cos( theta );
     let y = 500 * Math.cos( phi );
     let z = 500 * Math.sin( phi ) * Math.sin( theta );
@@ -948,13 +932,43 @@ function Meeting({match}) {
     camera.lookAt( x, y, z )
     render()
   }
-  connect(11)
+  connect(rid)
   skybox(rid, mySit)
   if (rid > 200){
     table('round_wooden_table_01')
     //chairMake("dining_chair_02")
-    anju(0)
-  }
+    sojumaker(-2,-1,-3)
+    anju(-2,-1,-2,-1,-1, 0, 0,-1,-2,  8000, -3, -25,  - Math.PI/2,  0.2,  - Math.PI/2 )
+    } else if (mySit === 0){
+        anju(0,-1,-4,0,-1,-8, 0,-1,-2,  8, -3, -25,  - Math.PI/2,  0.2,  - Math.PI/2 )
+        sojumaker(0,-1,-3)
+        sojumaker(2, -1, -8)
+    } else if (mySit === 1){
+        anju(-3,-1,-4, -3 ,-1,-8, -3,-1,-2,  5, -3, -25,  - Math.PI/2,  0.2,  - Math.PI/2 )
+        sojumaker(-4,-1,-3)
+        sojumaker(-2, -1, -8)
+    } else if (mySit === 2){
+        anju(0,-1,-4 ,-3,-1,-2, 1 ,-1, -2, -8, -3, -25,  - Math.PI/2,  0.2,  - Math.PI/2 )
+        sojumaker(-4,-1,-3)
+        sojumaker(-2, -1, -3)
+    } else if (mySit === 3){
+        anju(4,-1,-1 ,5,-1,-2, 1 ,-1, -2, -8, -3, -25,  - Math.PI/2,  0.2,  - Math.PI/2 )
+        sojumaker(4,-1,-3)
+        sojumaker(4, -1, 1)
+        sojumaker(3 ,-1, -1)
+        cheese(4, -0.5, 0)
+    } else if (mySit === 4){
+        anju(-1,-1,-2, 3 ,-1,-4, -3,-1,-2,  5, -3, -25,  - Math.PI/2,  0.2,  - Math.PI/2 )
+        sojumaker(-4,-1,-3)
+        sojumaker(-3, -2, -3)
+        sojumaker(-2, -1, -8)
+        cheese(1, -1, -4)
+    } else if (mySit === 5){
+        anju(-6,-2,-3 ,-2,-1,-2, 0,-1, -3, -8, -3, -5,  - Math.PI/2,  0.2,  - Math.PI/2 )
+        sojumaker(-4,-1,-3)
+        sojumaker(0, -2, -2)
+        cheese(-1, -1, -1)
+    } 
 	animate()
 
   //// QRgame Url
@@ -976,7 +990,6 @@ function Meeting({match}) {
               <img alt='' src='https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Ft1.daumcdn.net%2Fcfile%2Ftistory%2F2513B53E55DB206927'/> 
         <br/>
               <span id='nickname2'></span>
-        <button id='friend'>친구추가</button>
         <p id='interest'>관심사</p>
               {
                   arr.map((element)=>{
