@@ -6,6 +6,7 @@ import java.util.Map;
 import com.ssafy.domainnosql.entity.Member;
 import com.ssafy.domainnosql.entity.Room;
 import com.ssafy.domainnosql.entity.User;
+import com.ssafy.domainrdb.vo.UserVo;
 
 public interface RoomService {
 	String createRoom(Room room);
@@ -16,4 +17,6 @@ public interface RoomService {
 	void changeHost(User user);
 	List<Map<Object, Object>> getTable(int bno);
 	List<int[]> getBuilding();
+	boolean findRoomByCode(String rid);
+	UserVo getUserInfo(Long uid);
 }

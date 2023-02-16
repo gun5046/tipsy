@@ -1,5 +1,6 @@
 package com.ssafy.tipsyroom.controller;
 
+import java.io.Console;
 import java.util.List;
 import java.util.Map;
 
@@ -7,6 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,9 +35,8 @@ import lombok.RequiredArgsConstructor;
 @Api(tags = {"미팅룸 관련 API"})
 public class RoomController {
 	private final Logger logger = LoggerFactory.getLogger(RoomController.class);
-
+	private final SimpMessagingTemplate simpMessagingTemplate;
 	private final RoomService roomService;
-//	private final SimpMessagingTemplate simpMessagingTemplate;
 	@GetMapping("/building")
 	@ApiOperation(value = "술집별 정보를 제공(현재 인원, 만석 테이블)", notes = "거리 페이지에서 술집별로 현재 들어간 인원, 합석하지 못하는 테이블을 제공한다.")
 	public ResponseEntity<?> getBuilding() {
@@ -56,6 +58,7 @@ public class RoomController {
 			return new ResponseEntity<List<Map<Object, Object>>>(TableInfo, HttpStatus.CREATED);
 		} catch (Exception e) {
 			return exceptionHandling(e);
+			
 		}
 	}
 
@@ -64,21 +67,21 @@ public class RoomController {
 	@ApiOperation(value = "code[테이블정보], title[방제목], max[최대인원], (password[비밀번호]), antrance[입장효과], silence[침묵효과]", notes = "방 생성한다.")
 	public ResponseEntity<?> createRoom(@RequestBody Room room) {
 		try {
-			System.out.println(room);
-			String roomcode = roomService.createRoom(room);
-			logger.info(roomcode + "방 생성 완료");
-			return new ResponseEntity<String>(roomcode, HttpStatus.CREATED);
-
+			if(roomService.findRoomByCode(room.getCode())) {
+				logger.info("방 있음");
+				return new ResponseEntity<String>("exist",HttpStatus.OK);
+			}else {
+				logger.info("방 없음");
+				String roomcode = roomService.createRoom(room);
+				
+				logger.info(roomcode + "방 생성 완료");
+				return new ResponseEntity<String>(roomcode, HttpStatus.CREATED);
+			}
+			
 		} catch (Exception e) {
 			return exceptionHandling(e);
 		}
 	}
-
-//	@MessageMapping("/info")
-//	public void getTotalRoomInfo(int bno) {
-//		List<Map<Object, Object>> TableInfo = roomService.getTable(bno);
-//		simpMessagingTemplate.convertAndSend("/map/"+bno,TableInfo);
-//	}
 	
 	
 	// change room setting
@@ -112,20 +115,22 @@ public class RoomController {
 		try {
 
 			String status = "failed";
-			int result = roomService.enterRoom(member);
-			if (result == 0) {
-				status = "success";
-//				simpMessagingTemplate.convertAndSend("/room/info",bno);
-			} else if (result == 1) {
-				status = "does not exist room";
-			} else if (result == 2) {
-				status = "incorrect password";
-			} else if (result == 3) {
-				status = "banned user";
-			} else {
-				status = "overcapacity";
+			if(member.getUid() != null) {		
+				int result = roomService.enterRoom(member);
+				if (result == 0) {
+					status = "success";
+				} else if (result == 1) {
+					status = "does not exist room";
+				} else if (result == 2) {
+					status = "incorrect password";
+				} else if (result == 3) {
+					status = "banned user";
+				} else if (result == 4) {
+					status = "overcapacity";
+				}			
+			}else {
+				status = "uid is null";
 			}
-			
 			
 			return new ResponseEntity<String>(status, HttpStatus.CREATED);
 

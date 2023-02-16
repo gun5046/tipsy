@@ -22,4 +22,6 @@ public interface RoomRepo {
 	void changeHost(User user);
 	
 	boolean isExists(String key);
+	boolean checkMember(String uid, String rid);
+	boolean checkRoom(String rid);
 }

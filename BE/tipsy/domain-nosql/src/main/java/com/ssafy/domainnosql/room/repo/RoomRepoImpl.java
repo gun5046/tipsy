@@ -70,7 +70,29 @@ public class RoomRepoImpl implements RoomRepo {
 			stringSetOperations.add("room:" + room.getCode() + ":hashtag", tag);
 		}
 	}
-
+	@Override
+	public boolean checkRoom(String rid) {
+		ZSetinit();
+		if(isExists("room:" + rid)) {
+			return true; 		
+		}else {
+			return false;
+		}
+	}
+	@Override
+	public boolean checkMember(String uid, String rid) {
+		ZSetinit();
+		Set<String> members = stringZSetOperations.range("room:" + rid + ":member", 0, -1);
+		
+		for (String member : members) {
+			if(member.equals(uid)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	
 	@Override
 	public void changeSet(Room room) {
 		Hashinit();
@@ -141,6 +163,9 @@ public class RoomRepoImpl implements RoomRepo {
 		if (stringZSetOperations.zCard("room:" + roomcode + ":member") == 1) {
 			System.out.println("host지정");
 			stringHashOperations.put("room:" + roomcode, "host", String.valueOf(member.getUid()));
+			stringHashOperations.put("room:" + roomcode + ":member:" + String.valueOf(member.getUid()), "host", "true");
+		}else {
+			stringHashOperations.put("room:" + roomcode + ":member:" + String.valueOf(member.getUid()), "host", "false");
 		}
 		
 		// 방에 들어온 사람들
@@ -185,7 +210,7 @@ public class RoomRepoImpl implements RoomRepo {
 		stringZSetOperations.remove("room:" + roomcode + ":member", uid);
 		
 		// 호스트가 나간다면 호스트 변경
-		if(stringHashOperations.get("room:" + roomcode, "host").equals(uid)) {
+		if(stringHashOperations.get("room:" + roomcode + ":member:" + uid, "host").equals("true")) {
 			System.out.println("host가 나간대요");
 			// 이 방에 남아있는 사람들
 			Set<String> members = stringZSetOperations.range("room:" + roomcode + ":member", 0, -1);
@@ -223,6 +248,7 @@ public class RoomRepoImpl implements RoomRepo {
 			stringRedisTemplate.delete("room:" + roomcode);
 			stringRedisTemplate.delete("room:" + roomcode + ":banlist");
 			stringRedisTemplate.delete("room:" + roomcode + ":hashtag");
+			stringRedisTemplate.delete("room:" + roomcode + ":member:*");
 			return "delete";
 		}
 		
@@ -238,8 +264,8 @@ public class RoomRepoImpl implements RoomRepo {
 		Hashinit();
 		String roomcode = user.getCode();
 		String uid = String.valueOf(user.getId());
-		
-		stringHashOperations.put("room:" + roomcode, "host", uid);
+		stringHashOperations.put("room:" + roomcode + ":member:" + uid, "host", "true");
+//		stringHashOperations.put("room:" + roomcode, "host", uid);
 	}
 
 
@@ -263,7 +289,8 @@ public class RoomRepoImpl implements RoomRepo {
 		}
 
 		for (int i = 1; i <= 6; i++) {
-			Set<String> set = stringRedisTemplate.keys("room:?????" + i + "??");
+//			Set<String> set = stringRedisTemplate.keys("room:?????" + i + "??");
+			Set<String> set = stringRedisTemplate.keys("room:" + i + "??");
 
 			logger.info(i + "번 건물에서 생성되어 있는 방 : " + set);
 
@@ -276,7 +303,8 @@ public class RoomRepoImpl implements RoomRepo {
 				String str = (String) iter.next();
 
 				Map<Object, Object> map = stringHashOperations.entries(str);
-				map.put("code", str.substring(5));
+//				map.put("code", str.substring(5));
+				map.put("code", str);
 				list[i].add(map);
 
 				long max = Long.parseLong(String.valueOf(stringHashOperations.get(str, "max")));
@@ -300,7 +328,8 @@ public class RoomRepoImpl implements RoomRepo {
 		Hashinit();
 		ZSetinit();
 		Setinit();
-		Set<String> set = stringRedisTemplate.keys("room:?????" + bno + "??");
+//		Set<String> set = stringRedisTemplate.keys("room:?????" + bno + "??");
+		Set<String> set = stringRedisTemplate.keys("room:" + bno + "??");
 		List<Map<Object, Object>> list = new ArrayList<>();
 
 		Iterator iter = set.iterator();
@@ -317,7 +346,8 @@ public class RoomRepoImpl implements RoomRepo {
 			map.remove("max");
 			map.put("max", Integer.parseInt(String.valueOf(max)));
 
-			map.put("code", str.substring(5));
+//			map.put("code", str.substring(5));
+			map.put("code", str);
 			map.put("current", stringZSetOperations.zCard(str + ":member"));	
 			
 			List<String[]> memberinfo = new ArrayList<>();

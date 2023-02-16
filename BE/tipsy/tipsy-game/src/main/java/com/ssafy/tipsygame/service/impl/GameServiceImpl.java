@@ -1,7 +1,6 @@
 package com.ssafy.tipsygame.service.impl;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -13,7 +12,7 @@ import javax.annotation.PostConstruct;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.domainnosql.entity.Member;
-import com.ssafy.domainnosql.game.repo.RoomRepository;
+import com.ssafy.domainnosql.room.repo.RoomRepo;
 import com.ssafy.tipsygame.constant.Constant;
 import com.ssafy.tipsygame.dto.CommonGameDto;
 import com.ssafy.tipsygame.dto.GameCommDto;
@@ -29,7 +28,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class GameServiceImpl implements GameService{
 	
-	private final RoomRepository roomRepository;
+	private final RoomRepo roomRepo;
 	private Map<String, GameDto> roomList;
 	private Map<String, Integer> count;
 	private Map<String, String> liarNickname;
@@ -50,24 +49,15 @@ public class GameServiceImpl implements GameService{
 	}
 	
 	public String checkGameRoom(Long uid, String rid) {
-		List<String> longs = Arrays.asList(rid);
 		
-		List<Member> memberList = (List<Member>) roomRepository.findAllById(longs);
-		System.out.println("list " + memberList);
-		if(memberList.isEmpty()) {
+		
+		
+		if(!roomRepo.checkRoom(rid)) {
 			return "WrongRoomId";
 		}
-		Boolean wrongUser = true;
-		for(Member m : memberList) {
-			if(m.getUid()==(long)uid) {
-				wrongUser=false;
-			}
-		}
-		
-		if(wrongUser) {
+		if(!roomRepo.checkMember(Long.toString((long)uid), rid)) {
 			return "WrongUser";
 		}
-		
 		if(roomList.containsKey(rid)){
 			if(roomList.get(rid).getPlaying()) {
 				return "Playing";

@@ -20,5 +20,5 @@ public class Member {
 	private String password;
 	private Long uid;
 	private String position;
-
+	private String host;
 }
