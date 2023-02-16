@@ -36,6 +36,9 @@ let current_table = -1
 let chair_x = -1
 let chair_y = -1
 let table_array = new Array(12);
+//테이블 위치랑 axios 배열의 위치 대응
+let roomIndex = new Array(12);
+const roomTemp = [[-33, 0], [0, 0],[0, 0],[-10, 0],[0, 0],[0, 0],[-20, 0],[0, 0],[0, 0],[0, 0],[0, 0],[0, 0]]
 
 // let roomInfo = ['room1', 'room2', 'room3', 'room4'];
 
@@ -99,38 +102,100 @@ class ssafyScene extends Phaser.Scene {
         this.load.tilemapTiledJSON('map', ssafy_map)
         // this.load.tilemapTiledJSON('map', map2)
 
-        // redux 실패
+        // redux
         // console.log('table1_axios111111')
         // this.table1_axios = store.getState().info.tableInfo1
         // console.log(this.table1_axios)
 
         this.table1_axios = [
-            {"title":"101호101호","password":"1111","entrance":"off","silence":"off","time":"20230210155347","host":"6","max":4,
-            "code":"uawm5101","current":1,
+            {"title":"핸들이고장난8톤트럭 ","password":"1111","entrance":"off","silence":"off","time":"20230210155347","host":"6","max":4,
+            "code":"uawm5101","current":4,
             "member":[
-                {"uid":6,"image":"http://k.kakaocdn.net/dn/c0405I/btrUKnHeIku/kvehoKnkkYs9H8pLUD0wY1/img_640x640.jpg",
+                {"uid":6,"image":"https://mblogthumb-phinf.pstatic.net/MjAyMTAxMTJfMjE1/MDAxNjEwNDE3OTAzMzU1.5rBqpvTwt6jnlgmFHO0TnzFkPpLtLxpEqLao1PyOVI0g.xZIsZCh2zKaCd4c2U_lecYp3PaoZ9Urx4hCbhJJFGcwg.JPEG.sosohan_n/IMG_0596.JPG?type=w800",
                 "gender":"male","interest":"개껌","reportcnt":"0","name":"",
-                "nickname":"변윤경","birth":"","position":"1","kakao_id":"2638215374"},
+                "nickname":"a","birth":"","position":"1","kakao_id":"2638215374"},
 
-                {"uid":5,"image":"http://k.kakaocdn.net/dn/Qs7jd/btrMxCykHAJ/AyV40fXVb5uJegzLKRMzAk/img_640x640.jpg",
+                {"uid":6,"image":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQVqcjabQrrTIVVSKMzT8wJcMyUgqIlmxQr8Q&usqp=CAU",
+                "gender":"male","interest":"개껌","reportcnt":"0","name":"",
+                "nickname":"k","birth":"","position":"4","kakao_id":"2638215374"},
+
+                {"uid":6,"image":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQBxhB93u-HvL3D0ALV3GiUMWgWrYkUzhJHOQ&usqp=CAU",
+                "gender":"male","interest":"개껌","reportcnt":"0","name":"",
+                "nickname":"l","birth":"","position":"5","kakao_id":"2638215374"},
+
+                {"uid":5,"image":"https://mblogthumb-phinf.pstatic.net/MjAyMDEyMTBfMjU0/MDAxNjA3NTg0NTk3MzYx.4V0OKu3R4IQ5PkwyazJb18bBcxBAy_lbX0MaVkFiIHAg.TwY4F5GIKDqptJ5NrAaM70CJGW8WkDmO-sNvv5M3bAQg.JPEG.sosohan_n/Mz_Stoned_on_Twitter.jpg?type=w800",
                 "gender":"male","interest":"","reportcnt":"0","name":"",
-                "nickname":"김부경","birth":"","position":"2","kakao_id":"2542925662"}],
+                "nickname":"b","birth":"","position":"2","kakao_id":"2542925662"}],
 
-                "hashtag":["101호","테스트"]},
-            {"title":"102호","entrance":"off","silence":"off","time":"20230210155418","host":"5","max":4,"code":"8vvak102","current":1,
+                "hashtag":["달려","가보자고","노브레이크"]},
+            {"title":"친목딱대","entrance":"off","silence":"off","time":"20230210155418","host":"5","max":4,
+            "code":"8vvak103","current":3,
             "member":[
-                {"uid":6,"image":"http://k.kakaocdn.net/dn/c0405I/btrUKnHeIku/kvehoKnkkYs9H8pLUD0wY1/img_640x640.jpg",
+                {"uid":6,"image":"https://mblogthumb-phinf.pstatic.net/MjAyMTAxMTJfMTI2/MDAxNjEwNDE3OTAxNTU4.b5gdWuqbuXOJv8fnKIoLc7yiuLxMlM254Qtme9ErMR0g.SVCWBa5pZgbitLqy89qd03SZcUK7bpTvNp71wmphYn8g.JPEG.sosohan_n/IMG_0594.JPG?type=w800",
                 "gender":"male","interest":"개껌","reportcnt":"0","name":"",
-                "nickname":"변윤경","birth":"","position":"3","kakao_id":"2638215374"},
-
-                {"uid":5,"image":"http://k.kakaocdn.net/dn/Qs7jd/btrMxCykHAJ/AyV40fXVb5uJegzLKRMzAk/img_640x640.jpg",
-                "gender":"male","interest":"","reportcnt":"0","name":"",
-                "nickname":"김부경","birth":"","position":"4","kakao_id":"2542925662"}],
+                "nickname":"c","birth":"","position":"3","kakao_id":"2638215374"},
                 
-                "hashtag":["102호","테스트", "102호","테스트", "102호","테스트", "102호","테스트"]}]
+                {"uid":6,"image":"https://mblogthumb-phinf.pstatic.net/MjAyMTAxMTJfMTAw/MDAxNjEwNDE3OTAxMDgw.nhG7gI3ZaCdBYgZgaAhj-c9nhHBWYFniRAu3up9m8XQg.lKFFOpTxcmieMsRj6phVQNhz8LtTP2hRSjHq4LGxpe4g.JPEG.sosohan_n/IMG_0585.JPG?type=w800",
+                "gender":"male","interest":"개껌","reportcnt":"0","name":"",
+                "nickname":"m","birth":"","position":"6","kakao_id":"2638215374"},
 
-        //비공개 방 : 2, 공개방 : 1
-        this.table1_axios.forEach(obj => {
+                {"uid":5,"image":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTftkFjTeoyMGxP8TDcQVzH5B2UKeNJRDpULw&usqp=CAU",
+                "gender":"male","interest":"","reportcnt":"0","name":"",
+                "nickname":"d","birth":"","position":"5","kakao_id":"2542925662"}],
+                
+                "hashtag":["놀아요","아무나환영", "구미"]},
+            {"title":"재밌게 놀아요","entrance":"off","silence":"off","time":"20230210155418","host":"5","max":4,
+            "code":"8vvak104","current":3,
+            "member":[
+                {"uid":6,"image":"https://mblogthumb-phinf.pstatic.net/MjAyMTAxMTJfMTAw/MDAxNjEwNDE3OTAxMDgw.nhG7gI3ZaCdBYgZgaAhj-c9nhHBWYFniRAu3up9m8XQg.lKFFOpTxcmieMsRj6phVQNhz8LtTP2hRSjHq4LGxpe4g.JPEG.sosohan_n/IMG_0585.JPG?type=w800",
+                "gender":"male","interest":"개껌","reportcnt":"0","name":"",
+                "nickname":"e","birth":"","position":"2","kakao_id":"2638215374"},
+
+                {"uid":6,"image":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQqrR5aWkpOo_q6UG0Rpqjt9Wvzz2XAdRDkWg&usqp=CAU",
+                "gender":"male","interest":"개껌","reportcnt":"0","name":"",
+                "nickname":"n","birth":"","position":"6","kakao_id":"2638215374"},
+
+                {"uid":5,"image":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGX2N6n2i4Wk7t9gX2gitUGCNWl3H7DNV_eA&usqp=CAU",
+                "gender":"male","interest":"","reportcnt":"0","name":"",
+                "nickname":"f","birth":"","position":"4","kakao_id":"2542925662"}],
+                
+                "hashtag":["친목환영","게임", "간술해요"]},
+            {"title":"8기7조회식","entrance":"off","silence":"off","time":"20230210155418","host":"5","max":4,
+            "code":"8vvak111","current":2,
+            "member":[
+                {"uid":6,"image":"http://k.kakaocdn.net/dn/c0405I/btrUKnHeIku/kvehoKnkkYs9H8pLUD0wY1/img_640x640.jpg",
+                "gender":"male","interest":"개껌","reportcnt":"0","name":"",
+                "nickname":"g","birth":"","position":"3","kakao_id":"2638215374"},
+
+                {"uid":5,"image":"http://k.kakaocdn.net/dn/Qs7jd/btrMxCykHAJ/AyV40fXVb5uJegzLKRMzAk/img_640x640.jpg",
+                "gender":"male","interest":"","reportcnt":"0","name":"",
+                "nickname":"h","birth":"","position":"6","kakao_id":"2542925662"}],
+                
+                "hashtag":["오랜만이야", "소맥장인팀장님"]},
+            {"title":"이직준비힘들다","entrance":"off","silence":"off","time":"20230210155418","host":"5","max":4,
+            "code":"8vvak107","current":4,
+            "member":[
+                {"uid":6,"image":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEo8Uos4vhuXXgQVabJKEhUCW0CUje1LX0Xg&usqp=CAU",
+                "gender":"male","interest":"개껌","reportcnt":"0","name":"",
+                "nickname":"i","birth":"","position":"1","kakao_id":"2638215374"},
+
+                {"uid":6,"image":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXykM4ZnAgEGuZQyEhgM-9JN-BYy_eyHKLXg&usqp=CAU",
+                "gender":"male","interest":"개껌","reportcnt":"0","name":"",
+                "nickname":"o","birth":"","position":"6","kakao_id":"2638215374"},
+
+                {"uid":6,"image":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxpc0fXu4d1C-LQRvbVIcwJlGh9Yf4zQpKxA&usqp=CAU",
+                "gender":"male","interest":"개껌","reportcnt":"0","name":"",
+                "nickname":"p","birth":"","position":"2","kakao_id":"2638215374"},
+                
+                {"uid":5,"image":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZlQ4vNXdRfuTd2sazNIr_nAWUDcdAwZG4rQ&usqp=CAU",
+                "gender":"male","interest":"","reportcnt":"0","name":"",
+                "nickname":"j","birth":"","position":"4","kakao_id":"2542925662"}],
+                
+                "hashtag":["정보공유","잡플래닛", "연봉"]}
+            ]
+
+        //비공개 방 : 2, 공개방 : 1, 사람없음 : 0
+        this.table1_axios.forEach((obj, i) => {
             const room_num = Number(obj.code.substring(6, 8)) - 1
             if (obj.password){
                 roomTF[room_num] = 2
@@ -138,6 +203,11 @@ class ssafyScene extends Phaser.Scene {
             else{
                 roomTF[room_num] = 1
             }
+            roomIndex[room_num] = i
+            // 프로필에 들어갈 이미지 load해두기
+            obj.member.forEach(user => {
+                this.load.image(user.nickname, user.image)
+            })
         })
         // console.log(roomTF)
     }
@@ -239,15 +309,16 @@ class ssafyScene extends Phaser.Scene {
           infoLayer.objects.forEach((infoObj, i) => {
             if(roomTF[i]){
                 let data = {};
-                data.popup = this.add.image(infoObj.x + infoObj.width / 2 + 20, infoObj.y + infoObj.height / 2, 'popup')
-                data.popup.setDisplaySize(200, 100)
+                data.popup = this.add.image(infoObj.x + infoObj.width / 2 + 20, infoObj.y + infoObj.height / 2 + 17, 'popup')
+                data.popup.setDisplaySize(250, 120)
                 data.popup.setDepth(40)
                 data.popup.alpha = 0.7
                 data.popup.visible = false
 
                 const title_style = { font: "18px Arial", fill: '#ffffff'};
-                data.title = this.add.text(infoObj.x + infoObj.width / 2 - this.table1_axios[i].title.length * 2, infoObj.y + infoObj.height / 2 - 20, this.table1_axios[i].title, title_style);
+                data.title = this.add.text(infoObj.x + infoObj.width / 2 - this.table1_axios[roomIndex[i]].title.length * 3 + roomTemp[i][0], infoObj.y + infoObj.height / 2 - 10, this.table1_axios[roomIndex[i]].title, title_style);
                 data.title.setDepth(45)
+                data.title.visible = false
 
                 const detail_style = { font: "10px Arial", fill: '#ffffff',  align: "center"};
                 let tf = ''
@@ -258,19 +329,20 @@ class ssafyScene extends Phaser.Scene {
                     tf = '공개방'
                     // const public = '공개방'
                 }
-                const current = '현재 인원 : '+ this.table1_axios[i].current.toString()+' / 6'
+                const current = '현재 인원 : '+ this.table1_axios[roomIndex[i]].current.toString()+' / 6'
                 let hashtag = ''
-                this.table1_axios[i].hashtag.forEach((tag, i) => {
+                this.table1_axios[roomIndex[i]].hashtag.forEach((tag, i) => {
                     if(i % 3 === 0 && i !== 0){
                         hashtag += '\n#' + tag +'  '
                     }
                     else{    
-                    hashtag += '#' + tag + '  '
+                    hashtag += '# ' + tag + '   '
                     }
                 })
                 const input = `${tf}\n${current}\n${hashtag}`
-                data.detail = this.add.text(infoObj.x + infoObj.width / 2 - 20, infoObj.y + infoObj.height / 2, input, detail_style);
+                data.detail = this.add.text(infoObj.x + infoObj.width / 2 - 50, infoObj.y + infoObj.height / 2 + 15, input, detail_style);
                 data.detail.setDepth(45)
+                data.detail.visible = false
 
                 table_array[i] = data
             } 
@@ -290,15 +362,17 @@ class ssafyScene extends Phaser.Scene {
         // profile 출력
         roomTF.forEach((is_room, i) => {
             if (is_room > 0){
-                this.table1_axios[i].member.forEach( obj => {
+                this.table1_axios[roomIndex[i]].member.forEach( obj => {
                     const chair_num = i * 6 + Number(obj.position) - 1
                     const chairObj = chairLayer.objects[chair_num]
-                    const profile = this.add.sprite(chairObj.x + chairObj.width * 0.5, chairObj.y - chairObj.height * 0.5, 'bu')
+                    const profile = this.add.sprite(chairObj.x + chairObj.width * 0.5, chairObj.y - chairObj.height * 0.5, obj.nickname)
                     // console.log(obj.image)
-                    profile.setDisplaySize(50, 50)
-                    const shape = this.add.graphics().setPosition(chairObj.x + chairObj.width * 0.5, chairObj.y - chairObj.height * 0.5).fillCircle(0, 0, 20)
+                    profile.setDisplaySize(60, 60)
+                    const shape = this.add.graphics().setPosition(chairObj.x + chairObj.width * 0.5, chairObj.y - chairObj.height * 0.5).fillCircle(0, 0, 27)
                     profile.setMask(shape.createGeometryMask())
-                    profile.setDepth(50)
+                    profile.setDepth(35)
+                    this.physics.add.collider(this.player, profile);
+                    this.physics.add.collider(this.player, shape);
                 })
             }
         })
@@ -374,10 +448,11 @@ class ssafyScene extends Phaser.Scene {
             if (current_table >= 0){
                 if (roomTF[current_table]){
                     table_array[current_table].popup.visible = false
+                    table_array[current_table].title.visible = false
+                    table_array[current_table].detail.visible = false
                 }
                 current_table = -1
             }
-            store.dispatch(infoActions.isCreateRoom(false));
             store.dispatch(infoActions.isPublic(true));
 
         } else if (this.cursors.right.isDown) {
@@ -386,10 +461,11 @@ class ssafyScene extends Phaser.Scene {
             if (current_table >= 0){
                 if (roomTF[current_table]){
                     table_array[current_table].popup.visible = false
+                    table_array[current_table].title.visible = false
+                    table_array[current_table].detail.visible = false
                 }
                 current_table = -1
             }
-            store.dispatch(infoActions.isCreateRoom(false));
             store.dispatch(infoActions.isPublic(true));
 
         } else if (this.cursors.up.isDown) {
@@ -398,22 +474,26 @@ class ssafyScene extends Phaser.Scene {
             if (current_table >= 0){
                 if (roomTF[current_table]){
                     table_array[current_table].popup.visible = false
+                    table_array[current_table].title.visible = false
+                    table_array[current_table].detail.visible = false
                 }
                 current_table = -1
             }
-            store.dispatch(infoActions.isCreateRoom(false));
             store.dispatch(infoActions.isPublic(true));
+
         } else if (this.cursors.down.isDown) {
             this.player.setVelocityY(speed);
             this.player.anims.play(`${this.characterKey}_run_down`, true);
             if (current_table >= 0){
                 if (roomTF[current_table]){
                     table_array[current_table].popup.visible = false
+                    table_array[current_table].title.visible = false
+                    table_array[current_table].detail.visible = false
                 }
                 current_table = -1
             }
-            // store.dispatch(infoActions.isCreateRoom(false));
             store.dispatch(infoActions.isPublic(true));
+
         } else {
             // this.player.anims.stop();
             // console.log(prevVelocity)
@@ -432,7 +512,7 @@ class ssafyScene extends Phaser.Scene {
             // this.player.anims.play(`${this.characterKey}_sit_left`, true);
             // console.log(this.overlapChair)
 
-            // 의자 모양에 따라 모션이 바뀜 !!!!!!!!!!!!!!!
+            // 나중에 의자 모양에 따라 모션이 바뀌는 걸로 조정 !!!!!!!!!!!!!!!!!!!!!!
             switch(sit){
                 case 9: //옆면
                     this.player.anims.play(`${this.characterKey}_sit_right`, true);
@@ -448,15 +528,12 @@ class ssafyScene extends Phaser.Scene {
                     this.player.setPosition(chair_x, chair_y - 4)
                     break
             }
-            
 
             store.dispatch(getChair(current_chair + 1));
             store.dispatch(getTable(current_table + 1));
-            //// 사람없는 곳에 앉으면 리덕스에 true, 공개 방이면 리덕스에 true
-            // 0 사람없음
-            if (roomTF[current_table] == 0){
+            //// 사람없는 곳에 앉으면 리덕스에 true /// 여기에 하면될것 같습니당 윤경쓰~~
+            if(roomTF[current_table] == 0){
                 store.dispatch(infoActions.isCreateRoom(true));
-
             }
             // 1 공개
             else if (roomTF[current_table] == 1) {
@@ -471,6 +548,7 @@ class ssafyScene extends Phaser.Scene {
                 store.dispatch(infoActions.getPassword(this.table1_axios.password));
                 store.dispatch(infoActions.getRoomNum(this.table1_axios.code));              
             }
+
         }
 
     }
@@ -495,6 +573,8 @@ class ssafyScene extends Phaser.Scene {
             if (roomTF[current_table]){
                 // console.log(table_array[current_table])
                 table_array[current_table].popup.visible = true
+                table_array[current_table].title.visible = true
+                table_array[current_table].detail.visible = true
             }
             // console.log(parseInt(current_chair / 4), current_chair % 4)
         }
