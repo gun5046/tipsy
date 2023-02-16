@@ -13,22 +13,18 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import { Typography } from "@mui/material";
+import Switch from '@mui/material/Switch';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+
 import { useDispatch, useSelector } from 'react-redux'
 import { infoActions } from '../redux/infoSlice';
-import styled from "styled-components"
 import { useNavigate } from 'react-router-dom';
+import { set } from 'lodash';
 
-
-const GameSettingContainer = styled.section`
-  // z-index: 1000;
-  // position: absolute;
-  // width: 50vh;
-  // top: 10vh;
-  // left: 80vh;
-  padding: 20px;
-  background: white;
-  
-  `;
 
 const RoomSetting = () => {
 
@@ -46,12 +42,17 @@ const RoomSetting = () => {
     hashtag: []
   });
 
+  const [open, setOpen] = useState(true);
+
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const currentScene = useSelector((state) => state.game.scene)
   const currentChair = useSelector((state) => state.game.chair)
   const currentTable = useSelector((state) => state.game.table)
   const currentUid = useSelector((state) => state.auth.uid)
+  const isCreate = useSelector((state) => state.info.createRoom)
+  const [chips, setChips] = useState([])
+
   const url = 'http://i8d207.p.ssafy.io:8083/room'
 
  
@@ -102,7 +103,7 @@ const RoomSetting = () => {
           setRoomNum(res.data)
           console.log("방 생성 성공 //////////////////////////");
           dispatch(infoActions.getRoomNum(res.data))
-          dispatch(infoActions.isCreateRoom(false))
+          // dispatch(infoActions.isCreateRoom(false))
         }
       })
       .catch((e) => {
@@ -172,23 +173,20 @@ const RoomSetting = () => {
     });
   };
 
+  const handleClose = () => {
+    setOpen(false);
+  };
   
   //// 입장하기
   const handleSubmit = () => {
     if (roomState.title.length < 1) {
       // alert("작성자는 최소 1글자 이상 입력해주세요.")
-      // focus
       titleInput.current.focus();
       return;
     }
 
-    // if (roomState.password.length < 4) {
-    //   passwordInput.current.focus();
-    //   return;
-    // }
-
     // console.log(roomState);
-     // 앉으면 방만들기
+    // 앉으면 방만들기
     createRoom(roomState)
   }
   
@@ -196,88 +194,123 @@ const RoomSetting = () => {
     enterRoom(RoomNum, roomState, currentChair)
   }, [RoomNum])
 
+
+  //////////////////////////////////////////
+  const addhashtag = (newChips) => {
+    console.log(roomState.hashtag);
+    setChips(newChips)
+  }
+  
+  ///공개방인지 비공개방인지 판단
+  function EnableDisablePassword() {
+    console.log(document.getElementById("Public"));
+    if (document.getElementById("Public").checked) {
+      document.getElementById("password").disabled = false;
+    } else {
+      console.log("not pwd");
+      document.getElementById("password").disabled = true;
+    }
+  }
+
+
+
   return (
-    <GameSettingContainer>
-      <Typography variant="h3">Settings</Typography>
-      <Typography variant="h7">테이블에 처음으로 앉으셨습니다.<br />테이블 설정을 진행해주세요.</Typography>
-      <form>
-        <TextField
-          margin="normal"
-          required
-          fullWidth
-          id="title"
-          label="제목을 입력주세요"
-          autoComplete="text"
-          autoFocus
-
-          ref={titleInput}
-          name="title"
-          value={roomState.title}
-          onChange={handleChangeState}
-        />
-        <br/>
-        <TextField
-          disabled
-          id="outlined-disabled"
-          label="최대 인원"
-          defaultValue="6"
-          fullWidth
-        />
-        <TextField
-          margin="normal"
-          fullWidth
-          id="hashTag"
-          label="관심 있는 해시태그를 입력해주세요"
-          autoComplete="text"
-          autoFocus
-
-          ref={hashtagInput}
-          name="hashtag"
-          value={roomState.hashtag}
-          onChange={handleChangeState}
-        />
-        <Button variant="contained">추가</Button>
-        <br/>
-        <FormControl>
-        <RadioGroup
-          row
-          aria-labelledby="demo-row-radio-buttons-group-label"
-          name="row-radio-buttons-group"
-        >
-          <FormControlLabel value="Public" control={<Radio />} label="공개" />
-          <FormControlLabel value="Private" control={<Radio />} label="비공개" />
-        </RadioGroup>
-        </FormControl>
-        <br/>
-        <TextField
-          margin="normal"
-          fullWidth
-          label="Password"
-          type="password"
-          id="password"
-          autoComplete="current-password"
-
-          ref={passwordInput}
-          name="password"
-          value={roomState.password}
-          onChange={handleChangeState}
-        />
-        <Button
-          // type="submit"
-          fullWidth
-          variant="contained"
-          sx={{ mt: 3, mb: 2 }}
-          onClick={handleSubmit}
-        >
-          입장하기
-        </Button>
-        <Grid item>
-          <Link href="#" variant="body2">
-            더 둘러보기
-          </Link>
+    <div>
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>테이블 설정</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            테이블에 처음으로 앉으셨습니다. 테이블 설정을 진행해주세요.
+          </DialogContentText>
+          <Grid container spacing={2}>
+          <Grid item xs={3}>
+            <Typography variant="h6" sx={{ mt: 3.5 }}>방 제목</Typography>
+          </Grid>
+          <Grid item xs={9}>
+            <TextField
+              borderRadius="70%"
+              margin="normal"
+              required
+              id="title"
+              autoComplete="text"
+              autoFocus
+              fullWidth
+              ref={titleInput}
+              name="title"
+              value={roomState.title}
+              onChange={handleChangeState}
+              style={{ textAlign: "center" }}
+            />
+          </Grid>
         </Grid>
-      </form>
-    </GameSettingContainer>
+        <br />
+        <Grid container spacing={2}>
+          <Grid item xs={3}>
+            <Typography variant="h6" sx={{ mt: 1.5 }}>최대 인원</Typography>
+          </Grid>
+          <Grid item xs={9}>
+            <TextField
+              disabled
+              id="outlined-disabled"
+              defaultValue="6"
+              fullWidth
+              type="number"
+              inputProps={{style: {fontSize: 18}}}
+            />
+          </Grid>
+        </Grid>
+        <br />        
+        <Grid container spacing={2}>
+          <Grid item xs={3}>
+            <Typography variant="h6" sx={{ mt: 3.5 }}>해시태그</Typography>
+          </Grid>
+          <Grid item xs={9}>
+            <TextField
+              margin="normal"
+              fullWidth
+              id="hashTag"
+              placeholder="관심 있는 해시태그를 입력해주세요"
+              autoComplete="text"
+              autoFocus
+              ref={hashtagInput}
+              name="hashtag"
+              value={roomState.hashtag}
+              onChange={handleChangeState}
+            />
+          </Grid>
+        </Grid>
+        <Grid container spacing={2}>
+          <Grid item xs={3}>
+            <Typography sx={{ ml:4, mt:4 }}>공개방</Typography>
+          </Grid>
+          <Grid item xs={1} sx={{ ml:-2, mt: 3, mr:3 }}>
+            <Switch id="Public" defaultChecked sx={{ color: "white" }} onChange={EnableDisablePassword} />
+          </Grid>
+          {/* <Grid item xs={1.5}>
+            <Typography sx={{ mt: 4 }}>비공개방</Typography>
+          </Grid> */}
+          <Grid item xs={7} sx={{ ml:3 }}>
+            <TextField
+              margin="normal"
+              fullWidth
+              type="password"
+              id="password"
+              autoComplete="current-password"
+              ref={passwordInput}
+              name="password"
+              placeholder='password'
+              value={roomState.password}
+              onChange={handleChangeState}
+            />
+          </Grid>
+        </Grid>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleSubmit}>입장하기</Button>
+          <Button onClick={handleClose}>더 둘러보기</Button>
+        </DialogActions>
+      </Dialog>
+    </div>
   );
 }
 

@@ -13374,17 +13374,17 @@
 </data>
  </layer>
  <objectgroup id="17" name="infoObject">
-  <object id="942" x="120" y="116" width="293.333" height="189.333"/>
-  <object id="943" x="453.333" y="120" width="293.333" height="189.333"/>
-  <object id="944" x="812" y="114.667" width="293.333" height="189.333"/>
-  <object id="945" x="118.667" y="352" width="293.333" height="189.333"/>
-  <object id="946" x="449.333" y="353.334" width="293.333" height="189.333"/>
-  <object id="947" x="814.667" y="353.333" width="293.333" height="189.333"/>
-  <object id="948" x="133.333" y="833.333" width="293.333" height="189.333"/>
-  <object id="949" x="470.667" y="834.667" width="293.333" height="189.333"/>
-  <object id="950" x="830.667" y="830.667" width="293.333" height="189.333"/>
-  <object id="951" x="134.667" y="1045.33" width="293.333" height="189.333"/>
-  <object id="953" x="470.667" y="1040" width="293.333" height="189.333"/>
-  <object id="954" x="837.333" y="1042.67" width="293.333" height="189.333"/>
+  <object id="942" x="118" y="105" width="293.333" height="189.333"/>
+  <object id="943" x="440.333" y="101" width="293.333" height="189.333"/>
+  <object id="944" x="790" y="100.667" width="293.333" height="189.333"/>
+  <object id="945" x="118.667" y="343" width="293.333" height="189.333"/>
+  <object id="946" x="437.333" y="343.334" width="293.333" height="189.333"/>
+  <object id="947" x="789.667" y="340.333" width="293.333" height="189.333"/>
+  <object id="948" x="117.333" y="820.333" width="293.333" height="189.333"/>
+  <object id="949" x="443.667" y="824.667" width="293.333" height="189.333"/>
+  <object id="950" x="820.667" y="822.667" width="293.333" height="189.333"/>
+  <object id="951" x="117.667" y="1031.33" width="293.333" height="189.333"/>
+  <object id="953" x="441.667" y="1024" width="293.333" height="189.333"/>
+  <object id="954" x="826.333" y="1028.67" width="293.333" height="189.333"/>
  </objectgroup>
 </map>

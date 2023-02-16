@@ -32,6 +32,8 @@ import mainstreet from '../assets/street/map.json';
 import popup_s from '../assets/street/popup_s.png'
 import popup_m from '../assets/street/popup_m.png'
 
+import QR from '../assets/street/appQR.png'
+
 
 import { getScene, getStreetPosition } from '../redux/gameSlice';
 import { infoActions } from '../redux/infoSlice';
@@ -77,18 +79,6 @@ let infoList = [
         url: 'ssafy',
         shop: true
     },    {
-        title: 'SSAFY 대전캠퍼스',
-        detail: `여기는 대전캠퍼스가 위치한\n삼성화재 유성연수원 교육동입니다.\n이곳에서 SSAFY 친구들과 회식 어떠신가요?\n\n입장 인원 : 16 / 40 \n잔여테이블 : 17 / 20`,
-        padding: 98,
-        url: 'ssafy',
-        shop: true
-    },    {
-        title: 'SSAFY 광주캠퍼스',
-        detail: `여기는 SSAFY 광주캠퍼스가 있는\n삼성전자 광주 사업장입니다.\n이곳에서 SSAFY 친구들과 회식 어떠신가요?\n\n입장 인원 : 16 / 40 \n잔여테이블 : 17 / 20`,
-        padding: 96,
-        url: 'ssafy',
-        shop: true
-    },    {
         title: 'SSAFY 구미캠퍼스',
         detail: `여기는 구미 인동에 위치한\n삼성전자 제2사업장 구미캠퍼스입니다.\n이곳에서 SSAFY 친구들과 회식 어떠신가요?\n\n입장 인원 : 16 / 40 \n잔여테이블 : 17 / 20`,
         padding: 98,
@@ -97,6 +87,19 @@ let infoList = [
     },    {
         title: 'SSAFY 서울캠퍼스',
         detail: `여기는 역삼 캠퍼스에 위치한 멀티스퀘어입니다.\n이곳에서 SSAFY 친구들과 회식 어떠신가요?\n\n입장 인원 : 16 / 40 \n잔여테이블 : 17 / 20`,
+        padding: 96,
+        url: 'ssafy',
+        shop: true
+    },    {
+        
+        title: 'SSAFY 대전캠퍼스',
+        detail: `여기는 대전캠퍼스가 위치한\n삼성화재 유성연수원 교육동입니다.\n이곳에서 SSAFY 친구들과 회식 어떠신가요?\n\n입장 인원 : 16 / 40 \n잔여테이블 : 17 / 20`,
+        padding: 98,
+        url: 'ssafy',
+        shop: true
+    },    {
+        title: 'SSAFY 광주캠퍼스',
+        detail: `여기는 SSAFY 광주캠퍼스가 있는\n삼성전자 광주 사업장입니다.\n이곳에서 SSAFY 친구들과 회식 어떠신가요?\n\n입장 인원 : 16 / 40 \n잔여테이블 : 17 / 20`,
         padding: 96,
         url: 'ssafy',
         shop: true
@@ -140,6 +143,7 @@ class streetScene extends Phaser.Scene {
         
         this.load.image('popup_m', popup_m);
         this.load.image('popup_s', popup_s);
+        this.load.image('QR', QR);
 
         
         // this.load.image('tilestore', stores);
@@ -222,7 +226,7 @@ class streetScene extends Phaser.Scene {
                 // 정보 창 상세내용
                 const detail_style = { font: "10px Arial", fill: '#ffffff',  align: "center"};
                 var detail = this.add.text(buildingObj.x + buildingObj.width / 2 - info.padding, buildingObj.y - 176 / 2 + 40 - 35,  info.detail, detail_style);  
-            }else{
+                }else{
                 var box = this.add.sprite(buildingObj.x + buildingObj.width / 2, buildingObj.y - 40, 'popup_s')
                 const title_style = { font: "15px Arial", fill: '#ffffff'};
                 if(info.title.length > 9){
@@ -234,7 +238,7 @@ class streetScene extends Phaser.Scene {
                 // 정보 창 상세내용
                 const detail_style = { font: "10px Arial", fill: '#ffffff',  align: "center"};
                 var detail = this.add.text(buildingObj.x + buildingObj.width / 2 - info.padding, buildingObj.y - 176 / 2 + 40,  info.detail, detail_style);
-                }
+            }
             box.alpha = 0.7
 
             buildingObj.info = {
@@ -248,6 +252,8 @@ class streetScene extends Phaser.Scene {
 
         // street의 빌딩들의 정보를 객체로 저장
         this.buildings = buildingLayer.objects
+        this.buildings[1].qr = this.add.image(this.buildings[1].x + this.buildings[1].width / 2, this.buildings[1].y - 40 - 95,'QR')
+        this.buildings[1].qr.visible = false
         
         //// 플레이어에 충돌 적용
         // 플레이어 월드 바깥 이동제한
@@ -278,7 +284,7 @@ class streetScene extends Phaser.Scene {
         // console.log(this.player.body.x, this.player.body.y); 
 
         // 맵이동
-        this.buildings.forEach((building) => {
+        this.buildings.forEach((building, i) => {
             // 건물 앞에 서있을 때 인식하기
              if (this.player.body.x > building.x && this.player.body.x < building.x + building.width ) {
                 building.info.title.visible = true;
@@ -293,6 +299,9 @@ class streetScene extends Phaser.Scene {
                     store.dispatch(getScene(building.id))
                     store.dispatch(getStreetPosition(this.player.body.x))
                     console.log(building.id);
+                    if(i===1){
+                        building.qr.visible = true;
+                    }
                 }
             }
             else{
@@ -302,6 +311,9 @@ class streetScene extends Phaser.Scene {
                 // if(building.info.table){
                 //     building.info.table.visible = false;
                 // }
+                if(i===1){
+                    building.qr.visible = false;
+                }
 
             }
 

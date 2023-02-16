@@ -20,7 +20,7 @@ export const infoSlice = createSlice({
       state.tableInfo1 = action.payload;
     },
     isCreateRoom: (state, action) => {
-      state.createRoom = !state.createRoom
+      state.createRoom = action.payload
     },
     getRoomNum: (state, action) => {
       state.roomNumber = action.payload;

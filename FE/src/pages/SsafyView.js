@@ -38,10 +38,10 @@ const SsafyView = () => {
   const currentRoom = useSelector((state) => state.info.roomNumber)
   const currentPassword = useSelector((state) => state.info.roomPassword)
   const currentUid = useSelector((state) => state.auth.uid)
-  const isCreate = useSelector((state) => state.info.createRoom)
+  const isRoom = useSelector((state) => state.info.createRoom)
   const isPublic = useSelector((state) => state.info.publicRoom)
-  // const [isCreate, setIsCreate] = useState(false)
-  console.log(`방만들기 : ${isCreate}`)
+  // const [isRoom, setisRoom] = useState(false)
+  console.log(`방만들기 : ${isRoom}`)
   console.log(`공개방 : ${isPublic}`)
   // const [RoomNum, setRoomNum] = useState()
   
@@ -51,7 +51,7 @@ const SsafyView = () => {
 
   ///// axios ///////////////////////////////////////////////
   // 테이블 정보 가져오기 (1번 구미) - 미리가져옴
-  const getTable1 = function () {
+  const getTable1 = () => {
     axios
       .get(`${url}/1`)
       .then((res) => {
@@ -80,7 +80,7 @@ const SsafyView = () => {
         position: currentChair,
        })
       .then((res) => {
-        console.log('입장성공');
+        console.log('입장성공 ssafyView');
         console.log(res.data);
         if (res.data == "success" && currentRoom) {
           console.log(currentRoom);
@@ -93,6 +93,8 @@ const SsafyView = () => {
         if (e.response && e.response.status === 403) {
           console.log("로그인으로 이동");
           navigate('/')
+        } else if (e == 'banned user') {
+          alert('들어갈 수 없는 방 입니다.')
         }
       });
   };
@@ -117,8 +119,8 @@ const SsafyView = () => {
   //////////////////////////////////////
   // 공개방이고 의자랑 테이블이 넘어오면 미팅 페이지 이동 (103 : 1번건물에 3번 방)
   useEffect(() => {
-    if (currentTable !== -1 && isPublic){
-      enterRoom()
+    if (currentTable !== -1 && isPublic && isRoom){
+      enterRoom(currentRoom,currentUid, currentPassword, currentChair)
     }
   }, [currentChair, currentTable])
   
@@ -141,7 +143,7 @@ const SsafyView = () => {
   return (
     <div>
       <GameViewContainer>
-        {/* {isCreate && <RoomSetting/>} */}
+        {isRoom && <RoomSetting/>}
         {!isPublic && <CheckPw/>}
         {/* <RoomSetting/> */}
       </GameViewContainer>

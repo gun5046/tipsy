@@ -38,7 +38,7 @@ const CheckPw = () => {
       .post(`${url}/entry`, { 
         code: roomNumber,
         id: currentUid,
-        password: checkPassword,
+        password: String(checkPassword),
         position: currentChair,
        })
       .then((res) => {
@@ -47,6 +47,7 @@ const CheckPw = () => {
         if (res.data == "success" && roomNumber) {
           console.log(roomNumber);
           navigate(`/meeting/${roomNumber}`)
+          setCheckPassword('')
         } 
       })
       .catch((e) => {
@@ -57,6 +58,8 @@ const CheckPw = () => {
           navigate('/')
         } else if (e == 'incorrect password') {
           passwordInput.current.focus();
+        } else if (e == 'banned user') {
+          alert('들어갈 수 없는 방 입니다.')
         }
       });
   };
@@ -67,7 +70,7 @@ const CheckPw = () => {
       passwordInput.current.focus();
       return;
     }
-    enterRoom()
+    enterRoom(roomNumber,currentUid,checkPassword,currentChair)
   }
 
 
