@@ -12,7 +12,8 @@ import { useParams } from 'react-router-dom';
 import QrModal from '../components/QrModal';
 import kurentoUtils from 'kurento-utils'
 
-const mySit = 2 //위치 설정
+const rid = 111
+const mySit = 2   //위치 설정
 const pointer = new THREE.Vector2()
 const textboxPointer = new THREE.Vector2(0,0)
 const textboxPointer2 = new THREE.Vector2(0,0)
@@ -52,7 +53,20 @@ const sit = [
   [[-10, 1, -5],[-10, 0, 0],[-7, 1, -10],[0, 2, -10],[0, 0, 0],[5, 1, -5]],
   [[-10, 0, -10],[-10, 0, -4],[-6, 0, -12],[0, 0, -10],[-7, 0, 0],[0,0,0]],
   ] //x,y,z 좌표
-
+const radian = [
+  [0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0],
+  [0, 0, 0.5, 0, -1, -0.4],
+]
 const sendToMediaPipe = async (cam, index) => {
   if (!cam.videoWidth) {
     requestAnimationFrame(() => { sendToMediaPipe(cam, index) });
@@ -438,36 +452,36 @@ function Meeting({match}) {
   cam.lookAt(camera.position)
   cam.name = '00'
   scene.add(cam)
-   //threejs 공간에 띄움
-   const cam2 = cam.clone()
-   cam2.name = '44'
-   cam2.position.set(sit[mySit][4][0], sit[mySit][4][1], sit[mySit][4][2])
-   cam2.lookAt(camera.position)
-   scene.add(cam2)
+  //threejs 공간에 띄움
+  const cam2 = cam.clone()
+  cam2.name = '44'
+  cam2.position.set(sit[mySit][4][0], sit[mySit][4][1], sit[mySit][4][2])
+  cam2.lookAt(camera.position)
+  scene.add(cam2)
 
-   const cam5 = cam.clone()
-   cam5.name = '55'
-   cam5.position.set(sit[mySit][5][0], sit[mySit][5][1], sit[mySit][5][2] )
-   cam5.lookAt(camera.position)
-   scene.add(cam5)
+  const cam5 = cam.clone()
+  cam5.name = '55'
+  cam5.position.set(sit[mySit][5][0], sit[mySit][5][1], sit[mySit][5][2] )
+  cam5.lookAt(camera.position)
+  scene.add(cam5)
 
-   const cam3 = cam.clone()
-   cam3.name = '22'
-   cam3.position.set(sit[mySit][2][0], sit[mySit][2][1], sit[mySit][2][2] )
-   cam3.lookAt(camera.position)
-   //scene.add(cam3)
+  const cam3 = cam.clone()
+  cam3.name = '22'
+  cam3.position.set(sit[mySit][2][0], sit[mySit][2][1], sit[mySit][2][2] )
+  cam3.lookAt(camera.position)
+  scene.add(cam3)
 
-   const cam4 = cam.clone()
-   cam4.name = '11'
-   cam4.position.set(sit[mySit][1][0], sit[mySit][1][1], sit[mySit][1][2])
-   cam4.lookAt(camera.position)
-   scene.add(cam4)
+  const cam4 = cam.clone()
+  cam4.name = '11'
+  cam4.position.set(sit[mySit][1][0], sit[mySit][1][1], sit[mySit][1][2])
+  cam4.lookAt(camera.position)
+  scene.add(cam4)
 
-   const cam6 = cam.clone()
-   cam6.name = '33'
-   cam6.position.set(sit[mySit][3][0], sit[mySit][3][1], sit[mySit][3][2] )
-   cam6.lookAt(camera.position)
-   scene.add(cam6)
+  const cam6 = cam.clone()
+  cam6.name = '33'
+  cam6.position.set(sit[mySit][3][0], sit[mySit][3][1], sit[mySit][3][2] )
+  cam6.lookAt(camera.position)
+  scene.add(cam6)
 	// 광원
   const basicLight = new THREE.HemisphereLight(0xffffff, 0x000000, 1.5)
   scene.add(basicLight) // 몰라도됨
@@ -526,6 +540,7 @@ function Meeting({match}) {
       const sky = new THREE.Mesh(skyGeometry, skyMaterial)
       sky.position.set(0, 0, 0)
       scene.add(sky)
+      sky.rotateY(radian[rid-101][mySit])
     }
     else if (rid < 300 && rid >= 200) {
       const skyTexture = new THREE.TextureLoader().load(`/room/200/200_0.jpg`)
@@ -953,7 +968,7 @@ function Meeting({match}) {
     render()
   }
   connect(11)
-  skybox(107, mySit)
+  skybox(rid, mySit)
   //table('round_wooden_table_01')
   //chairMake("dining_chair_02")
   anju(2)
