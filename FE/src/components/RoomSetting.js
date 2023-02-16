@@ -102,6 +102,7 @@ const RoomSetting = () => {
           setRoomNum(res.data)
           console.log("방 생성 성공 //////////////////////////");
           dispatch(infoActions.getRoomNum(res.data))
+          dispatch(infoActions.isCreateRoom(false))
         }
       })
       .catch((e) => {
@@ -110,6 +111,8 @@ const RoomSetting = () => {
         if (e.response && e.response.status === 403) {
           console.log("로그인으로 이동");
           navigate('/')
+        } else {
+          alert('다시 입력해주세요.')
         }
       });
   }
@@ -155,7 +158,6 @@ const RoomSetting = () => {
             navigate('/')
           }
         });
-        
     };
   /////////////
   
