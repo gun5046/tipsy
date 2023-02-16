@@ -5,6 +5,7 @@ import ssafyConfig from '../phaser/ssafyConfig';
 import axios from "axios";
 import styled from "styled-components"
 import RoomSetting from '../components/RoomSetting';
+import CheckPw from '../components/CheckPw';
 // import Setting from '../components/Setting';
 
 // 리덕스
@@ -38,16 +39,18 @@ const SsafyView = () => {
   const currentPassword = useSelector((state) => state.info.roomPassword)
   const currentUid = useSelector((state) => state.auth.uid)
   const isCreate = useSelector((state) => state.info.createRoom)
+  const isPublic = useSelector((state) => state.info.publicRoom)
   // const [isCreate, setIsCreate] = useState(false)
-  console.log(isCreate)
+  console.log(`방만들기 : ${isCreate}`)
+  console.log(`공개방 : ${isPublic}`)
   // const [RoomNum, setRoomNum] = useState()
   
 
   // 건물번호 1,2,3
   const url = 'http://i8d207.p.ssafy.io:8083/room'
 
-
-  //// 테이블 정보 가져오기 (1번 구미) - 미리가져옴
+  ///// axios ///////////////////////////////////////////////
+  // 테이블 정보 가져오기 (1번 구미) - 미리가져옴
   const getTable1 = function () {
     axios
       .get(`${url}/1`)
@@ -92,11 +95,11 @@ const SsafyView = () => {
           navigate('/')
         }
       });
-      
   };
+  /////////////////////////////////////////////
 
 
-  // 엑시오스 실행
+  // 테이블 정보 가져오기 엑시오스 실행
   useEffect(() => {
     getTable1()
   }, [])
@@ -112,9 +115,9 @@ const SsafyView = () => {
   
   
   //////////////////////////////////////
-  // 방이있고 의자랑 테이블이 넘어오면 미팅 페이지 이동 (103 : 1번건물에 3번 방)
+  // 공개방이고 의자랑 테이블이 넘어오면 미팅 페이지 이동 (103 : 1번건물에 3번 방)
   useEffect(() => {
-    if (currentTable !== -1 && !currentPassword){
+    if (currentTable !== -1 && isPublic){
       enterRoom()
     }
   }, [currentChair, currentTable])
@@ -138,9 +141,11 @@ const SsafyView = () => {
   return (
     <div>
       <GameViewContainer>
-        {isCreate && <RoomSetting/>}
+        {/* {isCreate && <RoomSetting/>} */}
+        {!isPublic && <CheckPw/>}
         {/* <RoomSetting/> */}
       </GameViewContainer>
+      
       <div ref={phaserEl} className="game-container"></div>
     </div>
   );

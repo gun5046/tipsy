@@ -377,6 +377,8 @@ class ssafyScene extends Phaser.Scene {
                 }
                 current_table = -1
             }
+            // store.dispatch(infoActions.isCreateRoom(false));
+            store.dispatch(infoActions.isPublic(true));
 
         } else if (this.cursors.right.isDown) {
             this.player.setVelocityX(speed);
@@ -387,6 +389,8 @@ class ssafyScene extends Phaser.Scene {
                 }
                 current_table = -1
             }
+            // store.dispatch(infoActions.isCreateRoom(false));
+            store.dispatch(infoActions.isPublic(true));
 
         } else if (this.cursors.up.isDown) {
             this.player.setVelocityY(-speed);
@@ -397,7 +401,8 @@ class ssafyScene extends Phaser.Scene {
                 }
                 current_table = -1
             }
-
+            // store.dispatch(infoActions.isCreateRoom(false));
+            store.dispatch(infoActions.isPublic(true));
         } else if (this.cursors.down.isDown) {
             this.player.setVelocityY(speed);
             this.player.anims.play(`${this.characterKey}_run_down`, true);
@@ -407,7 +412,8 @@ class ssafyScene extends Phaser.Scene {
                 }
                 current_table = -1
             }
-
+            // store.dispatch(infoActions.isCreateRoom(false));
+            store.dispatch(infoActions.isPublic(true));
         } else {
             // this.player.anims.stop();
             // console.log(prevVelocity)
@@ -426,7 +432,7 @@ class ssafyScene extends Phaser.Scene {
             // this.player.anims.play(`${this.characterKey}_sit_left`, true);
             // console.log(this.overlapChair)
 
-            // 나중에 의자 모양에 따라 모션이 바뀌는 걸로 조정 !!!!!!!!!!!!!!!!!!!!!!
+            // 의자 모양에 따라 모션이 바뀜 !!!!!!!!!!!!!!!
             switch(sit){
                 case 9: //옆면
                     this.player.anims.play(`${this.characterKey}_sit_right`, true);
@@ -442,12 +448,13 @@ class ssafyScene extends Phaser.Scene {
                     this.player.setPosition(chair_x, chair_y - 4)
                     break
             }
+            
 
             store.dispatch(getChair(current_chair + 1));
             store.dispatch(getTable(current_table + 1));
-            //// 사람없는 곳에 앉으면 리덕스에 true
+            //// 사람없는 곳에 앉으면 리덕스에 true, 공개 방이면 리덕스에 true
             // 0 사람없음
-            if(roomTF[current_table] == 0){
+            if (roomTF[current_table] == 0){
                 store.dispatch(infoActions.isCreateRoom(true));
 
             }
@@ -455,14 +462,14 @@ class ssafyScene extends Phaser.Scene {
             else if (roomTF[current_table] == 1) {
                 store.dispatch(infoActions.isCreateRoom(false));
                 store.dispatch(infoActions.isPublic(true));
-                store.dispatch(getRoomNum(this.table1_axios.code));
+                store.dispatch(infoActions.getRoomNum(this.table1_axios.code));
             } 
             // 2 비공개
-            else {
+            else if (roomTF[current_table] == 2) {
                 store.dispatch(infoActions.isCreateRoom(false));
                 store.dispatch(infoActions.isPublic(false));
-                store.dispatch(getPassword(this.table1_axios.password));
-                store.dispatch(getRoomNum(this.table1_axios.code));              
+                store.dispatch(infoActions.getPassword(this.table1_axios.password));
+                store.dispatch(infoActions.getRoomNum(this.table1_axios.code));              
             }
         }
 
