@@ -159,44 +159,46 @@ class OrderingActivity : AppCompatActivity() {
     fun buttonSetOnClick(){
         for(i in 0..14){
             btnList[i].setOnClickListener {
-                if(start && count == btnList[i].text.toString().toInt()){
-                    GlobalApplication.sp.play(rightId, 1f, 1f, 0, 0, 1f)
-                    if(count == 15){
-                        timer.cancel()
-                        sendResult()
-                        binding.timerBackground.visibility = View.VISIBLE
-                        binding.waiting.visibility = View.VISIBLE
-                        wait = CoroutineScope(Dispatchers.IO).launch {
-                            while (true){
-                                runOnUiThread {
-                                    ObjectAnimator.ofFloat(binding.waiting, "alpha", 1f, 0f).apply {
-                                        duration = 500
-                                        start()
+                if(start){
+                    if(count == btnList[i].text.toString().toInt()){
+                        GlobalApplication.sp.play(rightId, 1f, 1f, 0, 0, 1f)
+                        if(count == 15){
+                            timer.cancel()
+                            sendResult()
+                            binding.timerBackground.visibility = View.VISIBLE
+                            binding.waiting.visibility = View.VISIBLE
+                            wait = CoroutineScope(Dispatchers.IO).launch {
+                                while (true){
+                                    runOnUiThread {
+                                        ObjectAnimator.ofFloat(binding.waiting, "alpha", 1f, 0f).apply {
+                                            duration = 500
+                                            start()
+                                        }
                                     }
-                                }
-                                delay(500)
-                                runOnUiThread {
-                                    ObjectAnimator.ofFloat(binding.waiting, "alpha", 0f, 1f).apply {
-                                        duration = 500
-                                        start()
+                                    delay(500)
+                                    runOnUiThread {
+                                        ObjectAnimator.ofFloat(binding.waiting, "alpha", 0f, 1f).apply {
+                                            duration = 500
+                                            start()
+                                        }
                                     }
+                                    delay(500)
                                 }
-                                delay(500)
                             }
+                            //서버에 데이터 보내고 다른 데이터 받을 때 까지 대기 필요
                         }
-                        //서버에 데이터 보내고 다른 데이터 받을 때 까지 대기 필요
+                        count++
+                        ObjectAnimator.ofFloat(btnList[i], "scaleX", 1.0f, 0f).apply {
+                            duration = 500
+                            start()
+                        }
+                        ObjectAnimator.ofFloat(btnList[i], "scaleY", 1.0f, 0f).apply {
+                            duration = 500
+                            start()
+                        }
+                    } else {
+                        GlobalApplication.sp.play(failId, 1f, 1f, 0, 0, 1f)
                     }
-                    count++
-                    ObjectAnimator.ofFloat(btnList[i], "scaleX", 1.0f, 0f).apply {
-                        duration = 500
-                        start()
-                    }
-                    ObjectAnimator.ofFloat(btnList[i], "scaleY", 1.0f, 0f).apply {
-                        duration = 500
-                        start()
-                    }
-                } else {
-                    GlobalApplication.sp.play(failId, 1f, 1f, 0, 0, 1f)
                 }
             }
         }
