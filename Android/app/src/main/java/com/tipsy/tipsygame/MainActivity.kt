@@ -51,9 +51,9 @@ class MainActivity : AppCompatActivity() {
                 result -> if(result.contents != null){
                     //방 번호가 존재하지 않으면 조치 필요
             GlobalApplication.roomNumber = result.contents
-            checkRoom(GlobalApplication.roomNumber)
-//            val intent = Intent(this@MainActivity, GameRoomActivity::class.java)
-//            startActivity(intent)
+//            checkRoom(GlobalApplication.roomNumber)
+            val intent = Intent(this@MainActivity, GameRoomActivity::class.java)
+            startActivity(intent)
             }
         }
         binding.qrTestBtn.setOnClickListener {
@@ -70,10 +70,10 @@ class MainActivity : AppCompatActivity() {
 
             } else {
                 GlobalApplication.roomNumber = binding.roomNumberText.text.toString()
-                checkRoom(GlobalApplication.roomNumber)
+//                checkRoom(GlobalApplication.roomNumber)
                 binding.roomNumberText.text.clear()
-//                val intent = Intent(this@MainActivity, GameRoomActivity::class.java)
-//                startActivity(intent)
+                val intent = Intent(this@MainActivity, GameRoomActivity::class.java)
+                startActivity(intent)
             }
         }
         binding.gameListBtn.setOnClickListener {
