@@ -28,7 +28,7 @@ function App() {
           <Route path='/QR' element={<QRcode/>}/>
           <Route path='/' element={<Preview/>}/>
           <Route path='/login' element={<Login/>}/>
-          <Route path='/mypage' element={<Mypage/>}/>
+          {/* <Route path='/mypage' element={<Mypage/>}/> */}
           <Route path='/temp' element= {<Temp/>}/>
           <Route path='/meeting/:id' element= {<Meeting/>}/>
           <Route path='/setting' element= {<RoomSetting/>}/>

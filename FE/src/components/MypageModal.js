@@ -12,6 +12,9 @@ import Stack from '@mui/material/Stack';
 import Chip from '@mui/material/Chip';
 
 import TextField from '@mui/material/TextField';
+import { authSubmit } from "../redux/authSlice";
+import { infoActions } from "../redux/infoSlice";
+import { useDispatch } from 'react-redux';
 
 const style = {
   position: 'absolute',
@@ -29,6 +32,8 @@ const style = {
 let overlap = false
 const MypageModal =() => {
 
+    const dispatch = useDispatch()
+
     //수정여부 확인
     const [isUpdate, setIsUpdate] = useState(true)
     //특수 문자 정규표현식
@@ -36,8 +41,8 @@ const MypageModal =() => {
 
     const [newInterest, setNewInterest] = useState('')
     //입력받은 유저 정보
-    const props = useSelector((state) => state.auth)
-    const [state, setState] = useState(props)
+    const currentUser = useSelector((state) => state.auth)
+    const [state, setState] = useState(currentUser)
     //관심사 배열
     const [interest, setInterest] = useState(state.interest.split(","))
     //관심사 입력시 정보 변경
@@ -81,7 +86,7 @@ const MypageModal =() => {
 
     //관심사 입력 인풋값 바꿈
     const changeInput = (e) => {
-    setNewInterest(e.target.value)
+        setNewInterest(e.target.value)
     }
 
     //서버와 통신 
@@ -112,14 +117,44 @@ const MypageModal =() => {
         }
     })
     }
+    
+    
+    //제출 
+    const submit = () => {
+        console.log(state)
+        if (overlap) {
+            // axios.post('http://127.0.0.1:8081/user/account', state)
+            axios.put( 'http://i8d207.p.ssafy.io:8081//user/mypage/modify', state)
+            .then((res) => {
+                console.log(res)
+                dispatch(authSubmit(state))
+                setIsUpdate(!isUpdate)
+                alert('제출 완료')
+                dispatch(infoActions.isMyPage(false))
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+        } else {
+            alert('중복체크')
+            }
+        }
+
     const updateData = () => {
         setIsUpdate(!isUpdate)
+       
     }
 
-
+    const updateSubmit = () => {
+        submit()
+    }
+    
     const [open, setOpen] = useState(true);
 
-    const handleClose = () => setOpen(false);
+    const handleClose = () => {
+        setOpen(false);
+        dispatch(infoActions.isMyPage(false))
+    }
 
     return (
         isUpdate?(
@@ -135,14 +170,14 @@ const MypageModal =() => {
                             Mypage
                         </Typography>
                         <Avatar 
-                            src = {props.image} 
+                            src = {currentUser.image} 
                             sx = {{ width: 100, height: 100, top: '10px', left: '38%',}} 
                         />
                         <Typography id="modal-modal-description" sx={{ mt: 2 }} align="center" variant="h6">
                             {state.nickname}
                         </Typography>
                         <Typography gutterBottom variant="body1" align="center" sx={{ mt: 2 }}>
-                            #hashtag
+                            # 관심사
                         </Typography>
                         <Stack direction="row" spacing={1} justifyContent="center">
                             {
@@ -201,8 +236,8 @@ const MypageModal =() => {
                     </div>
                 </div>
                 <div sx={{ mt: 2 }}>
+                    <Button onClick={updateSubmit}>수정하기</Button>
                     <Button onClick={handleClose}>취소하기</Button>
-                    <Button onClick={updateData}>수정하기</Button>
                 </div>
 
                 </Box>

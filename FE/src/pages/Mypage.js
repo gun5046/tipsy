@@ -1,15 +1,18 @@
 import React, { useState } from "react";
 import './Mypage.css'
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { selectCurrentAuth } from "../redux/authSlice";
 import axios from "axios";
 import MypageModal from "../components/MypageModal";
+import { authSubmit } from "../redux/authSlice";
+import { infoActions } from "../redux/infoSlice";
 
 
 let overlap = false
 function Mypage() {
+  const dispatch = useDispatch()
   //수정여부 확인
   const [isUpdate, setIsUpdate] = useState(true)
   //특수 문자 정규표현식
@@ -100,35 +103,41 @@ function Mypage() {
       }
     })
   }
-  const updateData = () => {
-    setIsUpdate(!isUpdate)
-  }
-/*   const navi = useNavigate()
+  
+  // const navi = useNavigate()
+
   //제출 
   const submit = () => {
     console.log(state)
     if (overlap) {
-      axios.post('http://127.0.0.1:8081/user/account', state)
-      //axios.post( 'http://i8d207.p.ssafy.io:8081/user/account', state )
+      // axios.post('http://127.0.0.1:8081/user/account', state)
+      axios.post( 'http://i8d207.p.ssafy.io:8081/user/account', state )
       .then((res) => {
         console.log(res)
-        store.dispatch({type:'submit', state:state })
+        dispatch(authSubmit(state))
+        dispatch(infoActions.isMyPage(false))
         alert('제출 완료')
       })
       .then(res =>{
         axios.post(`http://127.0.0.1:8081/user/check`, res.data.userVo)
         .then((res) => {
-          navi('/map')
+          dispatch(infoActions.isMyPage(false))
+          // navi('/map')
         })
       })
       .catch((err) => {
         console.log(err)
-        navi('/mypage')
+        // navi('/mypage')
       })
     } else {
       alert('중복체크')
     }
-  } */
+  }
+
+  const updateData = () => {
+    setIsUpdate(!isUpdate)
+    submit()
+  }
 
   return (
     isUpdate?(

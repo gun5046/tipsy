@@ -186,7 +186,7 @@ class barScene extends Phaser.Scene {
         const layer4 = map.createLayer('stairLayer', Generic, 0, 0)
         const layer5 = map.createLayer('funitureLayer', [bar_furniture_deco, bar_furniture, Classroom_and_library], 0, 0)
         const layer6 = map.createLayer('tableLayer', [Generic, bar_floor_table_deco, bar_furniture_deco, bar_furniture], 0, 0)
-        const layer7 = map.createLayer('subwallLayer', [Room_Builder_Office, Room_Builder_Walls], 0, 0)
+        const layer7 = map.createLayer('subwallLayer', [Room_Builder_Office, Room_Builder_Walls], 0, 0).setDepth(40)
 
         //// 타일에 충돌(Collision) 적용
         // Tiled에서 생성한 collides 적용
