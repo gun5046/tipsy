@@ -1,0 +1,17 @@
+.Profile img {
+    width: 100px;
+    height: 100px;
+    border-radius: 70%
+}
+
+.Profile div {
+    width: 150px;
+    height: 400px;
+    justify-content: center;
+    display: 'none';
+    position: "fixed";
+    background-color:'white';
+}
+.Profile {
+    justify-items: end;
+}
