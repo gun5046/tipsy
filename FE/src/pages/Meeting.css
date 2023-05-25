@@ -1,0 +1,72 @@
+#profileBox {
+    background-color: #402b4b;
+    opacity: 0.85;
+    border-radius: 10px;
+    display: none;
+    position: fixed;
+    text-align: center;
+    width: 400px;
+}
+
+#profileBox img {
+    border-radius:  50%;
+    opacity: 1;
+    height: 90px;
+    width: 90px;
+}
+
+#profileBox #nickname2 {
+    font-size: 32px;
+    font-weight: 500;
+    color: white;
+}
+#profileBox #interest {
+    color: white;
+    font-size: 28px;
+    margin: 4px;
+}
+#profileBox span {
+    color: white;
+}
+
+#profileBox button {
+    margin: 5px;
+    border-color: #c671f3;
+    border-width: 2px;
+    border-radius: 5px;
+    background-color:transparent;
+    color: white;
+}
+#profileBox #friend{
+    /* border-color: #c671f3;
+    border-width: 2px;
+    border-radius: 5px; */
+    background-color: #c671f3;
+    color: white;
+    border: none;
+}
+#profileBox #closeBtn {
+    float: right;
+}
+
+#textBox {
+    background-color: #000000;
+    opacity: 0.7;
+    border-radius: 10px;
+}
+
+#textBox button{
+    width: 100%;
+    background-color: transparent;
+    color: white;
+    border-width: 0px;
+    padding: 0px;
+    height: 24px;
+}
+#pTag {
+    position: fixed;
+    left: 45%;
+    top: 10%;
+    font-size: 40px;
+    color: white;
+}
