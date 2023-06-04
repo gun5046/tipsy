@@ -102,7 +102,7 @@ const MypageModal =() => {
         return
     }
 
-    axios.get( 'http://i8d207.p.ssafy.io:8081/user/nickname',  {
+    axios.get( 'http://domain-url/user/nickname',  {
         params: {
         nickname: state.nickname
         }
@@ -124,7 +124,7 @@ const MypageModal =() => {
         console.log(state)
         if (overlap) {
             // axios.post('http://127.0.0.1:8081/user/account', state)
-            axios.put( 'http://i8d207.p.ssafy.io:8081//user/mypage/modify', state)
+            axios.put( 'http://i8d207.p.tipsy.io:8081//user/mypage/modify', state)
             .then((res) => {
                 console.log(res)
                 dispatch(authSubmit(state))

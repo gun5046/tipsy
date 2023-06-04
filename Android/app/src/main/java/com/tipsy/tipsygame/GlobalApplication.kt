@@ -35,7 +35,7 @@ class GlobalApplication: Application() {
         .build()
 
         fun connectStomp(){
-            val url = "ws://i8d207.p.ssafy.io:8082/ws/chat/websocket"
+            val url = "ws://Required-URL/ws/chat/websocket"
             if(stompClient == null){
                 Log.d(TAG, "connectStomp: ")
                 stompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, url)
@@ -58,11 +58,11 @@ class GlobalApplication: Application() {
         super.onCreate()
         KakaoSdk.init(this, "c1a2c1e479177783ffcdc37e927517ea")
         retrofit = Retrofit.Builder()
-            .baseUrl("http://i8d207.p.ssafy.io:8081")
+            .baseUrl("domain-url")
             .addConverterFactory(JacksonConverterFactory.create())
             .build()
         gRetrofit = Retrofit.Builder()
-            .baseUrl("http://i8d207.p.ssafy.io:8082")
+            .baseUrl("domain-url")
             .addConverterFactory(ScalarsConverterFactory.create())
             .build()
     }

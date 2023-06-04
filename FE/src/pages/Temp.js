@@ -12,7 +12,7 @@ for (const param of searchParams) {
 function Temp(){
   const dispatch = useDispatch()
 	const navigate = useNavigate()
-  axios.get(`http://i8d207.p.ssafy.io:8081/user/login?code=${code}`)
+  axios.get(`http://i8d207.p.tipsy.io:8081/user/login?code=${code}`)
   // axios.get(`http://127.0.0.1:8081/user/login?code=${code}`)
   .then(res =>{
     if(!res.data.userCheck){

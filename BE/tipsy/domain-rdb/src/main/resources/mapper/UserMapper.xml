@@ -2,7 +2,7 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ssafy.domainrdb.dao.user.UserDao">
+<mapper namespace="com.team.domainrdb.dao.user.UserDao">
 	<select id = "findByKakaoID" resultType="UserVo">
 		<![CDATA[
 			select * from user where kakao_id = #{id}

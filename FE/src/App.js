@@ -12,7 +12,7 @@ import Mypage from './pages/Mypage';
 import Temp from './pages/Temp';
 import Meeting from './pages/Meeting';
 
-import SsafyView from "./pages/SsafyView";
+import TipsyView from "./pages/TipsyView";
 import BarView from "./pages/BarView";
 import StreetView from "./pages/StreetView";
 import RoomSetting from "./components/RoomSetting";
@@ -23,7 +23,7 @@ function App() {
       <div className="App">
         <Routes>
           <Route path='/mainstreet' element={<StreetView/>}/>
-          <Route path='/ssafymap' element={<SsafyView/>}/>
+          <Route path='/tipsymap' element={<TipsyView/>}/>
           <Route path='/barmap' element={<BarView/>}/>
           <Route path='/QR' element={<QRcode/>}/>
           <Route path='/' element={<Preview/>}/>

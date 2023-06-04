@@ -97,7 +97,7 @@ const Login = ()=> {
       return
     }
 
-    axios.get( 'http://i8d207.p.ssafy.io:8081/user/nickname',  {
+    axios.get( 'http://i8d207.p.tipsy.io:8081/user/nickname',  {
       params: {
         nickname: state.nickname
       }
@@ -118,7 +118,7 @@ const Login = ()=> {
     console.log(state)
     if (overlap) {
       // axios.post('http://127.0.0.1:8081/user/account', state)
-      axios.post( 'http://i8d207.p.ssafy.io:8081/user/account', state )
+      axios.post( 'http://i8d207.p.tipsy.io:8081/user/account', state )
       .then((res) => {
         console.log(res)
         dispatch(authSubmit(res))
@@ -126,7 +126,7 @@ const Login = ()=> {
       })
       .then(res =>{
         // axios.post(`http://127.0.0.1:8081/user/check`, res.data.userVo)
-        axios.post(`http://i8d207.p.ssafy.io:8081/user/check`, res.data.userVo)
+        axios.post(`http://i8d207.p.tipsy.io:8081/user/check`, res.data.userVo)
         .then((res) => {
           navi('/mainstreet')
         })

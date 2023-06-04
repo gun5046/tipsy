@@ -82,7 +82,7 @@ class LoginActivity : AppCompatActivity() {
                         dialogBinding.messageText.text = "웹에서 회원가입을 해주세요"
                         val dialog = builder.show()
                         dialogBinding.button.setOnClickListener {
-                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("http://i8d207.p.ssafy.io/"))
+                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("domain-url/"))
                             startActivity(intent)
                             dialog.dismiss()
                         }

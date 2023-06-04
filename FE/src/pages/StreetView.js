@@ -40,7 +40,7 @@ const StreetView = () => {
   
 
   //// axios
-  const url = "http://i8d207.p.ssafy.io:8083/room";
+  const url = "http://domain-url:8083/room";
 
   //// 스트릿 건물 정보 가져오기
   const getBuilding = () => {
@@ -96,8 +96,8 @@ const StreetView = () => {
   //// 페이지 이동
   useEffect(() => {
     // console.log(changeScene)
-    if (changeScene ==='ssafy') {
-      navigate('/ssafymap')
+    if (changeScene ==='tipsy') {
+      navigate('/tipsymap')
     } else if (changeScene ==='bar'){
       navigate('/barmap')
     } 

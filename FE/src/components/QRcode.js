@@ -2,12 +2,12 @@ import React from "react";
 import { QRCodeSVG } from "qrcode.react";
 
 const QRcode = (props) => {
-    // console.log(`http://i8d207.p.ssafy.io/meeting/${props.paramsNum}`)
+    // console.log(`http://domain-url/meeting/${props.paramsNum}`)
     return (
         <div>
             <QRCodeSVG
                 // value={"http://localhost:8080/"}
-                // value ={`http://i8d207.p.ssafy.io/meeting/${props.paramsNum}`}
+                // value ={`http://domain-url/meeting/${props.paramsNum}`}
                 value ={`${props.paramsNum}`}
                 size={200}
                 bgColor={"#ffffff"}

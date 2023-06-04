@@ -73,42 +73,42 @@ let infoList = [
         url: 'pub',
         shop: true
     },    {
-        title: 'SSAFY 부울경캠퍼스',
-        detail: `여기는 SSAFY 부울경캠퍼스가 위치한\n삼성전기 부산사업장입니다.\n이곳에서 SSAFY 친구들과 회식 어떠신가요?\n\n입장 인원 : 16 / 40 \n잔여테이블 : 17 / 20`,
+        title: 'Tipsy 부울경캠퍼스',
+        detail: `여기는 tipsy 부울경캠퍼스가 위치한\n삼성전기 부산사업장입니다.\n이곳에서 tipsy 친구들과 회식 어떠신가요?\n\n입장 인원 : 16 / 40 \n잔여테이블 : 17 / 20`,
         padding: 96,
-        url: 'ssafy',
+        url: 'tipsy',
         shop: true
     },    {
-        title: 'SSAFY 구미캠퍼스',
-        detail: `여기는 구미 인동에 위치한\n삼성전자 제2사업장 구미캠퍼스입니다.\n이곳에서 SSAFY 친구들과 회식 어떠신가요?\n\n입장 인원 : 16 / 40 \n잔여테이블 : 17 / 20`,
+        title: 'tipsy 구미캠퍼스',
+        detail: `여기는 구미 인동에 위치한\n삼성전자 제2사업장 구미캠퍼스입니다.\n이곳에서 tipsy 친구들과 회식 어떠신가요?\n\n입장 인원 : 16 / 40 \n잔여테이블 : 17 / 20`,
         padding: 98,
-        url: 'ssafy',
+        url: 'tipsy',
         shop: true
     },    {
-        title: 'SSAFY 서울캠퍼스',
-        detail: `여기는 역삼 캠퍼스에 위치한 멀티스퀘어입니다.\n이곳에서 SSAFY 친구들과 회식 어떠신가요?\n\n입장 인원 : 16 / 40 \n잔여테이블 : 17 / 20`,
+        title: 'tipsy 서울캠퍼스',
+        detail: `여기는 역삼 캠퍼스에 위치한 멀티스퀘어입니다.\n이곳에서 tipsy 친구들과 회식 어떠신가요?\n\n입장 인원 : 16 / 40 \n잔여테이블 : 17 / 20`,
         padding: 96,
-        url: 'ssafy',
+        url: 'tipsy',
         shop: true
     },    {
         
-        title: 'SSAFY 대전캠퍼스',
-        detail: `여기는 대전캠퍼스가 위치한\n삼성화재 유성연수원 교육동입니다.\n이곳에서 SSAFY 친구들과 회식 어떠신가요?\n\n입장 인원 : 16 / 40 \n잔여테이블 : 17 / 20`,
+        title: 'tipsy 대전캠퍼스',
+        detail: `여기는 대전캠퍼스가 위치한\n삼성화재 유성연수원 교육동입니다.\n이곳에서 tipsy 친구들과 회식 어떠신가요?\n\n입장 인원 : 16 / 40 \n잔여테이블 : 17 / 20`,
         padding: 98,
-        url: 'ssafy',
+        url: 'tipsy',
         shop: true
     },    {
-        title: 'SSAFY 광주캠퍼스',
-        detail: `여기는 SSAFY 광주캠퍼스가 있는\n삼성전자 광주 사업장입니다.\n이곳에서 SSAFY 친구들과 회식 어떠신가요?\n\n입장 인원 : 16 / 40 \n잔여테이블 : 17 / 20`,
+        title: 'tipsy 광주캠퍼스',
+        detail: `여기는 tipsy 광주캠퍼스가 있는\n삼성전자 광주 사업장입니다.\n이곳에서 tipsy 친구들과 회식 어떠신가요?\n\n입장 인원 : 16 / 40 \n잔여테이블 : 17 / 20`,
         padding: 96,
-        url: 'ssafy',
+        url: 'tipsy',
         shop: true
     }
 ]
 
 
 // let current_building = -1;
-// let buildingInfo = ['mypage', 'bar', 'pub', 'BU', 'daejeon', 'GJ', 'seoul', 'ssafy', 'hotel']
+// let buildingInfo = ['mypage', 'bar', 'pub', 'BU', 'daejeon', 'GJ', 'seoul', 'tipsy', 'hotel']
 
 
 class streetScene extends Phaser.Scene {

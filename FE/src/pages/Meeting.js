@@ -36,8 +36,8 @@ function Meeting({match}) {
     onPointerDownLat = 0,
     phi = 0,
     theta = 0;
-  // let ws = new WebSocket('wss://i8d207.p.ssafy.io:8443/groupcall');
-  let ws = new WebSocket('ws://'+'i8d207.p.ssafy.io:8443'+'/groupcall');
+  // let ws = new WebSocket('wss://domain-url:8443/groupcall');
+  let ws = new WebSocket('ws://'+'domain-url'+'/groupcall');
   let participants = {};
   // let name = localStorage.getItem("state");
   let name = useSelector((state) => state.auth.uid) + ',' + useSelector((state) => state.auth.nickname) + ',' + (useSelector((state) => state.game.chair)-1);
@@ -264,7 +264,7 @@ function Meeting({match}) {
           onicecandidate: participant.onIceCandidate.bind(participant)
         }
     options.configuration = {
-            iceServers : [{"urls":"stun:i8d207.p.ssafy.io"},{"urls":"turn:i8d207.p.ssafy.io","username":"tipsy","credential":"ssafy"}]
+            iceServers : [{"urls":"stun:domain-ur"},{"urls":"turn:domain-url","username":"tipsy","credential":"tipsy"}]
           };
         
     participant.rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerSendonly(options,
@@ -302,7 +302,7 @@ function Meeting({match}) {
         onicecandidate: participant.onIceCandidate.bind(participant)
       }
     options.configuration = {
-            iceServers : [{"urls":"stun:i8d207.p.ssafy.io"},{"urls":"turn:i8d207.p.ssafy.io","username":"tipsy","credential":"ssafy"}]
+            iceServers : [{"urls":"stun:domain-url"},{"urls":"turn:domain-url","username":"tipsy","credential":"tipsy"}]
           };
     participant.rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerRecvonly(options,
         function (error) {
@@ -741,7 +741,7 @@ function Meeting({match}) {
 
   }
   function connect(rid) {
-    const socket = new SockJS('http://i8d207.p.ssafy.io:8082/ws/chat')
+    const socket = new SockJS('domain-url')
     const client = Stomp.over(socket);
     client.connect({},(frame)=>{
       client.subscribe(`/topic/play/liar-game/${rid}`, message =>{

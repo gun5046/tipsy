@@ -45,7 +45,7 @@ const BarView = () => {
   // const [RoomNum, setRoomNum] = useState()
 
   // 건물번호 1,2,3
-  const url = 'http://i8d207.p.ssafy.io:8083/room'
+  const url = 'http://i8d207.p.tipsy.io:8083/room'
 
  
   ///// axios ///////////////////////////////////////////////
@@ -79,7 +79,7 @@ const BarView = () => {
         position: currentChair,
        })
       .then((res) => {
-        // console.log('입장성공 ssafyView');
+        // console.log('입장성공 tipsyView');
         if (res.data !== "exist") {
           // console.log(roomNumber);
           navigate(`/meeting/${roomNumber}`)

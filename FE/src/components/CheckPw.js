@@ -23,7 +23,7 @@ const CheckPw = () => {
   const currentChair = useSelector((state) => state.game.chair)
   const currentTable = useSelector((state) => state.game.table)
   const currentUid = useSelector((state) => state.auth.uid)
-  const url = 'http://i8d207.p.ssafy.io:8083/room'
+  const url = 'http://i8d207.p.tipsy.io:8083/room'
 
   // author, content 이벤트핸들러 합치기
   const handleChangeState = (e) => {
